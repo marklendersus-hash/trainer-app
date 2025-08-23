@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#16a34a" />
+    <link rel="manifest" href="manifest.json" />
+    <title>Trainer Datenbank</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body, html {
+          font-family: 'Inter', sans-serif;
+          background-color: #1f2937;
+          color: #1f2937;
+      }
+      .dark body, .dark html {
+          background-color: #1f2937;
+          color: #f3f4f6;
+      }
+      .modal-backdrop {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+      }
+      .modal-backdrop.visible {
+          opacity: 1;
+      }
+      .modal-content, .modal-content-formation {
+          background-color: white;
+          padding: 2rem;
+          border-radius: 1rem;
+          max-width: 90%;
+          max-height: 90%;
+          overflow: auto;
+          position: relative;
+          z-index: 1001;
+      }
+      .dark .modal-content, .dark .modal-content-formation {
+          background-color: #374151;
+      }
+      .nav-shadow {
+          box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+      }
+      .kalender-tag.heute {
+          border: 2px solid #22c55e;
+          background-color: #dcfce7;
+          color: #16a34a;
+      }
+      .dark .kalender-tag.heute {
+          background-color: #15803d;
+          color: #dcfce7;
+      }
+      .kalender-tag:not(.heute) {
+          transition: background-color 0.2s;
+      }
+      .kalender-tag:not(.heute):hover {
+          background-color: #f3f4f6;
+      }
+      .dark .kalender-tag:not(.heute):hover {
+          background-color: #4b5563;
+      }
+      .profile-img {
+          width: 48px;
+          height: 48px;
+          object-fit: cover;
+      }
+      .profile-img-detail {
+          width: 120px;
+          height: 120px;
+          object-fit: cover;
+      }
+      .accordion-content {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease;
+      }
+      .accordion-content.open {
+          max-height: 500px;
+      }
+      .accordion-header i {
+          transition: transform 0.3s ease;
+      }
+      .accordion-header.open i {
+          transform: rotate(180deg);
+      }
+      .btn {
+          transition: background-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      #darkModeToggle {
+          background-color: #4b5563;
+      }
+      .dark #darkModeToggle {
+          background-color: #d1d5db;
+      }
+      #darkModeToggle span {
+          transform: translateX(1.25rem);
+      }
+      .dark #darkModeToggle span {
+          transform: translateX(0);
+      }
+      .football-pitch {
+          background-color: #16a34a;
+          border-color: #fff;
+      }
+      .pitch-line {
+          position: absolute;
+          background-color: white;
+      }
+      .center-line {
+          top: 50%;
+          left: 0;
+          right: 0;
+          height: 2px;
+          transform: translateY(-50%);
+      }
+      .center-circle {
+          top: 50%;
+          left: 50%;
+          width: 100px;
+          height: 100px;
+          border: 2px solid white;
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+      }
+      .penalty-box {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 70%;
+          height: 35%;
+          border: 2px solid white;
+          border-top: none;
+      }
+      .penalty-box.top { top: 0; }
+      .penalty-box.bottom { bottom: 0; border-bottom: none; }
+      .top-arc, .bottom-arc {
+          position: absolute;
+          left: 50%;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          border: 2px solid white;
+          transform: translateX(-50%);
+      }
+      .top-arc {
+          top: 35%;
+          border-top-color: transparent;
+          border-left-color: transparent;
+          border-right-color: transparent;
+      }
+      .bottom-arc {
+          bottom: 35%;
+          border-bottom-color: transparent;
+          border-left-color: transparent;
+          border-right-color: transparent;
+      }
+      .modal-content-formation {
+          background-color: #f3f4f6;
+          display: flex;
+          flex-direction: column;
+          min-height: 80vh;
+          max-height: 95vh;
+          width: 90vw;
+          max-width: 1200px;
+      }
+      .dark .modal-content-formation {
+          background-color: #1f2937;
+      }
+      .player-marker {
+          position: absolute;
+          width: 60px;
+          height: 60px;
+          background-color: #2563eb;
+          color: white;
+          border-radius: 50%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-size: 12px;
+          cursor: grab;
+          user-select: none;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          transform: translate(-50%, -50%);
+          touch-action: none;
+      }
+      .player-marker.placeholder {
+          opacity: 0.6;
+      }
+      .player-marker .player-name {
+          font-weight: bold;
+      }
+      .player-marker .player-number {
+          font-size: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-container"></div>
+    <div id="modal-container"></div>
+    <script type="module" src="utils.js"></script>
+    <script type="module" src="state.js"></script>
+    <script type="module" src="api.js"></script>
+    <script type="module" src="render.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
