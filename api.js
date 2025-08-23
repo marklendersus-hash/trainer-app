@@ -7,7 +7,7 @@ import { state } from './state.js';
 import { showModal, closeModal } from './views/modals.js';
 
 // --- VERSION & KONFIGURATION ---
-export const APP_VERSION = `Version 2025-08-22-001 B2-Storage`;
+export const APP_VERSION = `Version 2025-08-23-999 B2-Storage`;
 
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
@@ -26,35 +26,48 @@ export const auth = getAuth(app);
 setLogLevel('debug');
 
 
-// *** NEUE HELFERFUNKTION FÜR DEN B2 UPLOAD ***
-// Diese Funktion sendet eine Datei an unsere neue Serverless Function.
+// Dies ist die NEUE Funktion, die du in deine `api.js`-Datei einfügen musst.
+// Sie ersetzt die alte `uploadFileToB2` Funktion.
+
 async function uploadFileToB2(file) {
+    // Prüfen, ob eine Datei vorhanden ist.
     if (!file || file.size === 0) {
         return null;
     }
-    // Der Endpunkt unserer Serverless Function.
-    // Wenn du bei Vercel hostest, ist der Pfad `/api/upload`.
+
+    // Der Endpunkt unserer Serverless Function. 
+    // Da die Funktion im selben Projekt liegt, können wir einen relativen Pfad verwenden.
     const uploadUrl = '/api/upload';
 
     try {
+        // Sende die Datei per POST-Request an unsere sichere Serverless Function.
         const response = await fetch(uploadUrl, {
             method: 'POST',
             headers: {
-                'Content-Type': file.type, // Wichtig: Dateityp senden
-                'x-file-name': file.name   // Wichtig: Dateinamen senden
+                // Wichtige Metadaten für die Serverless Function.
+                'Content-Type': file.type,
+                'x-file-name': file.name
             },
-            body: file // Die Datei selbst als Body
+            body: file // Die Datei selbst wird als Body gesendet.
         });
 
+        // Verarbeite die Antwort der Serverless Function.
+        const result = await response.json();
+
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Upload failed');
+            // Wenn der Server einen Fehler meldet, werfen wir einen Fehler,
+            // damit er im `catch`-Block behandelt werden kann.
+            throw new Error(result.message || 'Upload fehlgeschlagen');
         }
 
-        const result = await response.json();
-        return result.url; // Gibt die öffentliche URL von B2 zurück
+        // Wenn alles gut ging, gibt die Serverless Function ein JSON-Objekt
+        // mit der öffentlichen URL des Bildes zurück.
+        return result.url;
+
     } catch (error) {
-        console.error("Fehler beim Upload zu B2:", error);
+        console.error("Fehler beim Upload zu B2 via Serverless Function:", error);
+        // Zeige dem Benutzer eine Fehlermeldung.
+        // Die `showModal` Funktion muss in deiner App verfügbar sein.
         showModal("Upload Fehler", `Die Datei konnte nicht hochgeladen werden: ${error.message}`, [{text: 'OK', class: 'bg-red-500'}]);
         return null;
     }
