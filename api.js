@@ -2,9 +2,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, updateDoc, query, getDoc, where, getDocs, writeBatch, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { state } from './state.js';
-import { showModal, closeModal } from './modals.js';
 
-export const APP_VERSION = `Version 2025-08-24-003 B2-Storage`;
+export const APP_VERSION = `Version 2025-08-24-004`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 const firebaseConfig = {
@@ -21,7 +20,7 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 setLogLevel('debug');
 
-async function uploadFileToB2(file) {
+async function uploadFileToB2(file, callbacks) {
     if (!file || file.size === 0) return null;
     const uploadUrl = '/api/upload';
     try {
@@ -38,16 +37,16 @@ async function uploadFileToB2(file) {
         return result.url;
     } catch (error) {
         console.error("Fehler beim Upload zu B2 via Serverless Function:", error);
-        showModal("Upload Fehler", `Die Datei konnte nicht hochgeladen werden: ${error.message}`, [{text: 'OK', class: 'bg-red-500'}]);
+        callbacks.showModal("Upload Fehler", `Die Datei konnte nicht hochgeladen werden: ${error.message}`, [{text: 'OK', class: 'bg-red-500'}]);
         return null;
     }
 }
 
 export const saveSpieler = async (data, id, file, callbacks) => {
-    showModal("Speichern...", '<div class="animate-pulse">Spielerdaten werden verarbeitet...</div>', []);
+    callbacks.showModal("Speichern...", '<div class="animate-pulse">Spielerdaten werden verarbeitet...</div>', []);
     try {
         if (file && file.size > 0) {
-            const newFotoUrl = await uploadFileToB2(file);
+            const newFotoUrl = await uploadFileToB2(file, callbacks);
             if (newFotoUrl) {
                 data.fotoUrl = newFotoUrl;
             } else {
@@ -57,19 +56,19 @@ export const saveSpieler = async (data, id, file, callbacks) => {
         const spielerCollection = collection(db, `artifacts/${appId}/public/data/spieler`);
         if (id) {
             await updateDoc(doc(spielerCollection, id), data);
-            showModal("Erfolg", "Spieler erfolgreich aktualisiert!", [{text: 'OK', class: 'bg-green-500', onClick: () => callbacks.goBack()}]);
+            callbacks.showModal("Erfolg", "Spieler erfolgreich aktualisiert!", [{text: 'OK', class: 'bg-green-500', onClick: () => callbacks.goBack()}]);
         } else {
             await addDoc(spielerCollection, data);
-            showModal("Erfolg", "Spieler erfolgreich hinzugefügt!", [{text: 'OK', class: 'bg-green-500', onClick: () => callbacks.navigateTo('spielerUebersicht', null, true)}]);
+            callbacks.showModal("Erfolg", "Spieler erfolgreich hinzugefügt!", [{text: 'OK', class: 'bg-green-500', onClick: () => callbacks.navigateTo('spielerUebersicht', null, true)}]);
         }
     } catch (error) {
         console.error("saveSpieler: FEHLER beim Speichern:", error);
-        showModal("Fehler", `Fehler beim Speichern des Spielers: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+        callbacks.showModal("Fehler", `Fehler beim Speichern des Spielers: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
     }
 };
 
 export const saveMannschaftInfo = async (form, callbacks) => {
-    showModal("Speichern...", '<div class="animate-pulse">Mannschaftsinfo wird gespeichert...</div>', []);
+    callbacks.showModal("Speichern...", '<div class="animate-pulse">Mannschaftsinfo wird gespeichert...</div>', []);
     const formData = new FormData(form);
     const teamData = {
         name: formData.get('name'),
@@ -78,7 +77,7 @@ export const saveMannschaftInfo = async (form, callbacks) => {
     const file = formData.get('emblem');
     try {
         if (file && file.size > 0) {
-            const newEmblemUrl = await uploadFileToB2(file);
+            const newEmblemUrl = await uploadFileToB2(file, callbacks);
             if (newEmblemUrl) {
                 teamData.emblemUrl = newEmblemUrl;
             } else {
@@ -87,16 +86,16 @@ export const saveMannschaftInfo = async (form, callbacks) => {
         }
         const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
         await setDoc(configDoc, teamData, { merge: true });
-        showModal("Gespeichert", "Mannschaftsinfo erfolgreich aktualisiert.", [{text: 'OK', class: 'bg-green-500'}]);
+        callbacks.showModal("Gespeichert", "Mannschaftsinfo erfolgreich aktualisiert.", [{text: 'OK', class: 'bg-green-500'}]);
     } catch (error) {
         console.error("saveMannschaftInfo: FEHLER beim Speichern der Mannschaftsinfo:", error);
-        showModal("Fehler", `Konnte Mannschaftsinfo nicht speichern: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+        callbacks.showModal("Fehler", `Konnte Mannschaftsinfo nicht speichern: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
     }
 };
 
 export const deleteSpieler = async (id, callbacks) => {
     const spielerCollection = collection(db, `artifacts/${appId}/public/data/spieler`);
-    showModal(
+    callbacks.showModal(
         "Spieler löschen?",
         "Möchten Sie diesen Spieler wirklich endgültig löschen?",
         [
@@ -104,16 +103,16 @@ export const deleteSpieler = async (id, callbacks) => {
             { text: 'Ja, löschen', class: 'bg-red-600', onClick: async () => {
                 try {
                     await deleteDoc(doc(spielerCollection, id));
-                    showModal("Gelöscht", "Spieler wurde gelöscht.", [{text: 'OK', class: 'bg-blue-500', onClick: () => callbacks.navigateTo('spielerUebersicht', null, true)}]);
+                    callbacks.showModal("Gelöscht", "Spieler wurde gelöscht.", [{text: 'OK', class: 'bg-blue-500', onClick: () => callbacks.navigateTo('spielerUebersicht', null, true)}]);
                 } catch (error) {
-                    showModal("Fehler", `Fehler beim Löschen des Spielers: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+                    callbacks.showModal("Fehler", `Fehler beim Löschen des Spielers: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
                 }
             }}
         ]
     );
 };
 
-export const setAnwesenheit = async (datumString, spielerId, status) => {
+export const setAnwesenheit = async (datumString, spielerId, status, callbacks) => {
     const trainingCollection = collection(db, `artifacts/${appId}/public/data/trainingseinheiten`);
     const docRef = doc(trainingCollection, datumString);
     try {
@@ -127,14 +126,14 @@ export const setAnwesenheit = async (datumString, spielerId, status) => {
         }
     } catch (error) {
         console.error("setAnwesenheit: FEHLER beim Setzen der Anwesenheit:", error);
-        showModal("Fehler", `Fehler beim Speichern der Anwesenheit: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+        callbacks.showModal("Fehler", `Fehler beim Speichern der Anwesenheit: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
     }
 };
 
 export const saveTrainingDetails = async (datumString, data, callbacks) => {
     const trainingCollection = collection(db, `artifacts/${appId}/public/data/trainingseinheiten`);
     const docRef = doc(trainingCollection, datumString);
-    showModal("Speichern...", '<div class="animate-pulse">Trainingsdetails werden gespeichert...</div>', []);
+    callbacks.showModal("Speichern...", '<div class="animate-pulse">Trainingsdetails werden gespeichert...</div>', []);
     try {
         const docSnap = await getDoc(docRef);
         const dataToSave = { time: data.time || null };
@@ -143,8 +142,334 @@ export const saveTrainingDetails = async (datumString, data, callbacks) => {
         } else {
             await setDoc(docRef, dataToSave);
         }
-        showModal("Gespeichert", "Trainingsdetails wurden gespeichert!", [{text: 'OK', class: 'bg-green-500', onClick: () => callbacks.goBack()}]);
+        callbacks.showModal("Gespeichert", "Trainingsdetails wurden gespeichert!", [{text: 'OK', class: 'bg-green-500', onClick: () => callbacks.goBack()}]);
     } catch(error) {
-        showModal("Fehler", `Fehler beim Speichern der Trainingsdetails: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+        callbacks.showModal("Fehler", `Fehler beim Speichern der Trainingsdetails: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const toggleTrainingCancellation = async (datumString, callbacks) => {
+    const trainingCollection = collection(db, `artifacts/${appId}/public/data/trainingseinheiten`);
+    const training = state.trainingseinheiten.find(t => t.id === datumString);
+    if (!training) return;
+    const newCancelledState = !training.cancelled;
+    const actionText = newCancelledState ? 'abgesagt' : 'reaktiviert';
+    const docRef = doc(trainingCollection, datumString);
+    try {
+        await updateDoc(docRef, { cancelled: newCancelledState });
+        callbacks.showModal("Erfolg", `Training wurde erfolgreich ${actionText}.`, [{text: 'OK', class: 'bg-green-500'}]);
+    } catch (error) {
+        callbacks.showModal("Fehler", `Das Training konnte nicht ${actionText} werden: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const deleteTraining = async (datumString, callbacks) => {
+    const trainingCollection = collection(db, `artifacts/${appId}/public/data/trainingseinheiten`);
+    callbacks.showModal(
+        "Training löschen?",
+        "Möchten Sie diesen Trainingstag wirklich löschen?",
+        [
+            { text: 'Abbrechen', class: 'bg-gray-500' },
+            { text: 'Ja, löschen', class: 'bg-red-600', onClick: async () => {
+                try {
+                    await deleteDoc(doc(trainingCollection, datumString));
+                    callbacks.showModal("Gelöscht", "Trainingstag wurde gelöscht.", [{text: 'OK', class: 'bg-blue-500', onClick: () => callbacks.navigateTo('home', null, true)}]);
+                } catch (error) {
+                    callbacks.showModal("Fehler", `Fehler beim Löschen des Trainingstags: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+                }
+            }}
+        ]
+    );
+};
+
+export const saveMatchtag = async(datumString, data, callbacks) => {
+    const matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
+    const docRef = doc(matchtageCollection, datumString);
+    callbacks.showModal("Speichern...", '<div class="animate-pulse">Matchdaten werden gespeichert...</div>', []);
+    try {
+        const docSnap = await getDoc(docRef);
+        const dataToSave = {
+            gegner: data.gegner,
+            spielort: data.spielort,
+            toreHeim: data.toreHeim,
+            toreAuswaerts: data.toreAuswaerts,
+            spielArt: data.spielArt,
+            time: data.time || null
+        };
+        if (docSnap.exists()) {
+            await updateDoc(docRef, dataToSave);
+        } else {
+            await setDoc(docRef, dataToSave);
+        }
+        callbacks.showModal("Gespeichert", "Matchdaten wurden gespeichert!", [{text: 'OK', class: 'bg-green-500', onClick: () => callbacks.goBack()}]);
+    } catch(error) {
+        callbacks.showModal("Fehler", `Fehler beim Speichern des Matchtags: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const updateSpielerMatchDetails = async (datumString, spielerId, field, value, callbacks) => {
+    const matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
+    const docRef = doc(matchtageCollection, datumString);
+    const key = `aufstellung.${spielerId}.${field}`;
+    if(field === 'spielminuten' || field === 'tore' || field === 'vorlagen') {
+        value = value === '' ? null : parseInt(value);
+    }
+    try {
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+            await setDoc(docRef, { aufstellung: { [spielerId]: { [field]: value } } });
+        } else {
+            await updateDoc(docRef, { [key]: value });
+        }
+    } catch (error) {
+        callbacks.showModal("Fehler", `Fehler beim Update der Aufstellung: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const toggleMatchCancellation = async (datumString, callbacks) => {
+    const matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
+    const matchtag = state.matchtage.find(s => s.id === datumString);
+    if (!matchtag) return;
+    const newCancelledState = !matchtag.cancelled;
+    const actionText = newCancelledState ? 'abgesagt' : 'reaktiviert';
+    const docRef = doc(matchtageCollection, datumString);
+    try {
+        await updateDoc(docRef, { cancelled: newCancelledState });
+        callbacks.showModal("Erfolg", `Match wurde erfolgreich ${actionText}.`, [{text: 'OK', class: 'bg-green-500'}]);
+    } catch (error) {
+        callbacks.showModal("Fehler", `Das Match konnte nicht ${actionText} werden: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const deleteMatchtag = async (datumString, callbacks) => {
+    const matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
+    callbacks.showModal(
+        "Matchtag löschen?",
+        "Möchten Sie diesen Matchtag wirklich löschen?",
+        [
+            { text: 'Abbrechen', class: 'bg-gray-500' },
+            { text: 'Ja, löschen', class: 'bg-red-600', onClick: async () => {
+                try {
+                    await deleteDoc(doc(matchtageCollection, datumString));
+                    callbacks.showModal("Gelöscht", "Matchtag wurde gelöscht.", [{text: 'OK', class: 'bg-blue-500', onClick: () => callbacks.navigateTo('home', null, true)}]);
+                } catch (error) {
+                    callbacks.showModal("Fehler", `Fehler beim Löschen des Matchtags: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+                }
+            }}
+        ]
+    );
+};
+
+export const saveTrainingSchedule = async (form, callbacks) => {
+    const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
+    const trainingCollection = collection(db, `artifacts/${appId}/public/data/trainingseinheiten`);
+    callbacks.showModal("Speichern...", '<div class="animate-pulse">Trainingsplan wird gespeichert...</div>', []);
+    const formData = new FormData(form);
+    const trainingSchedule = {};
+    const checkedDays = formData.getAll('wochentag');
+    checkedDays.forEach(tag => {
+        const time = formData.get(`zeit_${tag}`);
+        if (time) {
+            trainingSchedule[tag] = time;
+        }
+    });
+    const trainingEndDate = formData.get('trainingEndDate');
+
+    try {
+        await setDoc(configDoc, { trainingSchedule, trainingEndDate }, { merge: true });
+        await generateRecurringTrainings(trainingSchedule, trainingEndDate, trainingCollection, db);
+        callbacks.showModal("Gespeichert", "Trainingsplan erfolgreich aktualisiert und Kalender wurde synchronisiert.", [{text: 'OK', class: 'bg-green-500'}]);
+    } catch (error) {
+        callbacks.showModal("Fehler", `Konnte Trainingsplan nicht speichern: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const generateRecurringTrainings = async (schedule, endDateString, trainingCollection, db) => {
+    if (!endDateString || Object.keys(schedule).length === 0) {
+        const q_del = query(trainingCollection, where("autogenerated", "==", true));
+        const querySnapshot_del = await getDocs(q_del);
+        if (querySnapshot_del.empty) return;
+        const batch_del = writeBatch(db);
+        querySnapshot_del.forEach((doc) => batch_del.delete(doc.ref));
+        await batch_del.commit();
+        return;
+    }
+    
+    const q = query(trainingCollection, where("autogenerated", "==", true));
+    const querySnapshot = await getDocs(q);
+    const batch = writeBatch(db);
+    querySnapshot.forEach((doc) => batch.delete(doc.ref));
+    await batch.commit();
+
+    const newBatch = writeBatch(db);
+    const startDate = new Date();
+    startDate.setHours(0,0,0,0);
+    const endDate = new Date(endDateString);
+    endDate.setHours(0,0,0,0);
+    const dayMapping = { 0: 'Sonntag', 1: 'Montag', 2: 'Dienstag', 3: 'Mittwoch', 4: 'Donnerstag', 5: 'Freitag', 6: 'Samstag' };
+    let currentDate = startDate;
+    
+    while (currentDate <= endDate) {
+        const dayName = dayMapping[currentDate.getDay()];
+        if (schedule[dayName]) {
+            const dateStr = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
+            const docRef = doc(trainingCollection, dateStr);
+            const trainingData = {
+                teilnehmer: {},
+                autogenerated: true,
+                time: schedule[dayName]
+            };
+            newBatch.set(docRef, trainingData, { merge: true });
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    await newBatch.commit();
+};
+
+export const exportData = (dataType, callbacks) => {
+    let dataToExport = {};
+    switch (dataType) {
+        case 'spieler': dataToExport = { spieler: state.spieler }; break;
+        case 'training': dataToExport = { trainingseinheiten: state.trainingseinheiten }; break;
+        case 'matchtage': dataToExport = { matchtage: state.matchtage }; break;
+        default:
+            dataToExport = {
+                teamInfo: state.teamInfo,
+                spieler: state.spieler,
+                trainingseinheiten: state.trainingseinheiten,
+                matchtage: state.matchtage
+            };
+            break;
+    }
+    const jsonString = JSON.stringify(dataToExport, null, 2);
+    const blob = new Blob([jsonString], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `trainer-app-backup-${dataType}-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    callbacks.closeModal();
+};
+
+export const importJSONData = async (jsonString, callbacks) => {
+    const spielerCollection = collection(db, `artifacts/${appId}/public/data/spieler`);
+    const trainingCollection = collection(db, `artifacts/${appId}/public/data/trainingseinheiten`);
+    const matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
+    const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
+    callbacks.showModal("Importieren...", '<div class="animate-pulse">Daten werden importiert...</div>', []);
+    try {
+        const importedData = JSON.parse(jsonString);
+        const batch = writeBatch(db);
+        if (importedData.teamInfo) {
+            batch.set(configDoc, importedData.teamInfo, { merge: true });
+        }
+        if (importedData.spieler && Array.isArray(importedData.spieler)) {
+            for (const player of importedData.spieler) {
+                const docRef = player.id ? doc(spielerCollection, player.id) : doc(spielerCollection);
+                const { id, ...data } = player;
+                batch.set(docRef, data, { merge: true });
+            }
+        }
+        if (importedData.trainingseinheiten && Array.isArray(importedData.trainingseinheiten)) {
+            for (const training of importedData.trainingseinheiten) {
+                const docRef = doc(trainingCollection, training.id);
+                const { id, ...data } = training;
+                batch.set(docRef, data, { merge: true });
+            }
+        }
+        const matchData = importedData.matchtage || importedData.spieltage;
+        if (matchData && Array.isArray(matchData)) {
+            for (const matchtag of matchData) {
+                const docRef = doc(matchtageCollection, matchtag.id);
+                const { id, ...data } = matchtag;
+                batch.set(docRef, data, { merge: true });
+            }
+        }
+        await batch.commit();
+        callbacks.showModal("Import abgeschlossen", "Daten erfolgreich importiert!", [{text: 'OK', class: 'bg-blue-500'}]);
+    } catch (error) {
+        callbacks.showModal("Importfehler", `Ein Fehler ist beim Importieren der Daten aufgetreten: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const deleteAllData = async (callbacks) => {
+    const spielerCollection = collection(db, `artifacts/${appId}/public/data/spieler`);
+    const trainingCollection = collection(db, `artifacts/${appId}/public/data/trainingseinheiten`);
+    const matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
+    const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
+    
+    callbacks.showModal("Löschen...", '<div class="animate-pulse">Alle Daten werden gelöscht...</div>', []);
+
+    try {
+        const collections = [spielerCollection, trainingCollection, matchtageCollection];
+        for (const col of collections) {
+            const snapshot = await getDocs(col);
+            const batch = writeBatch(db);
+            snapshot.docs.forEach(doc => batch.delete(doc.ref));
+            await batch.commit();
+        }
+        await deleteDoc(configDoc);
+        callbacks.showModal("Gelöscht", "Alle Daten wurden gelöscht.", [{text: 'OK', class: 'bg-blue-500'}]);
+    } catch (error) {
+        callbacks.showModal("Fehler", `Fehler beim Löschen aller Daten: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const deleteCollectionData = async (collectionRef, collectionName, callbacks) => {
+    callbacks.showModal("Löschen...", `<div class="animate-pulse">${collectionName} werden gelöscht...</div>`, []);
+    try {
+        const snapshot = await getDocs(collectionRef);
+        const batch = writeBatch(db);
+        snapshot.docs.forEach(doc => batch.delete(doc.ref));
+        await batch.commit();
+        callbacks.showModal("Gelöscht", `${collectionName} wurden gelöscht.`, [{text: 'OK', class: 'bg-blue-500'}]);
+    } catch (error) {
+        callbacks.showModal("Fehler", `Fehler beim Löschen von ${collectionName}: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const deleteMannschaftInfo = async (callbacks) => {
+    callbacks.showModal("Löschen...", '<div class="animate-pulse">Mannschaftsinfo wird gelöscht...</div>', []);
+    const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
+    try {
+        await deleteDoc(configDoc);
+        callbacks.showModal("Gelöscht", "Die Mannschaftsinfo wurde gelöscht.", [{text: 'OK', class: 'bg-blue-500'}]);
+    } catch (error) {
+        callbacks.showModal("Fehler", `Fehler beim Löschen der Mannschaftsinfo: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const saveFormation = async (matchtagId, formationData, callbacks) => {
+    const matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
+    const docRef = doc(matchtageCollection, matchtagId);
+    const updates = {};
+    const currentMatchtag = state.matchtage.find(s => s.id === matchtagId);
+    state.spieler.forEach(player => {
+        const playerId = player.id;
+        const currentPos = currentMatchtag?.aufstellung?.[playerId]?.position;
+        const newFormationData = formationData[playerId];
+
+        if (newFormationData && newFormationData.posX !== null && newFormationData.posY !== null) {
+            updates[`aufstellung.${playerId}.posX`] = newFormationData.posX;
+            updates[`aufstellung.${playerId}.posY`] = newFormationData.posY;
+            if (currentPos !== 'Startelf' && currentPos !== 'Ersatzbank') {
+                updates[`aufstellung.${playerId}.position`] = 'Startelf';
+            }
+        } else {
+            if (currentPos === 'Startelf' || currentPos === 'Ersatzbank') {
+                updates[`aufstellung.${playerId}.position`] = 'Nicht dabei';
+                updates[`aufstellung.${playerId}.posX`] = null;
+                updates[`aufstellung.${playerId}.posY`] = null;
+            }
+        }
+    });
+    try {
+        await updateDoc(docRef, updates);
+    } catch (error) {
+        console.error("saveFormation: FEHLER beim Aktualisieren der Formation in Firestore:", error);
+        callbacks.showModal("Fehler", `Fehler beim Speichern der Formation: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+        throw error;
     }
 };
