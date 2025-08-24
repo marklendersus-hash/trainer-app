@@ -643,6 +643,35 @@ const renderHome = (callbacks) => {
 // =================================================================
 // SPIELER-VIEW LOGIK
 // =================================================================
+const createSpielerCardHtml = (spieler, totalTrainings) => {
+    const attendedTrainings = getTrainingsAnzahlGesamt(spieler.id, state);
+    const percentage = totalTrainings > 0 ? Math.round((attendedTrainings / totalTrainings) * 100) : 0;
+    const fotoHtml = spieler.fotoUrl 
+        ? `<img src="${spieler.fotoUrl}" class="profile-img rounded-full" onerror="this.src='https://placehold.co/48x48/${placeholderBg()}/${placeholderText()}?text=${spieler.name.charAt(0)}';">`
+        : `<div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-2xl">${spieler.position === 'Torwart' ? '' : ''}</div>`;
+
+    return `
+        <div onclick="window.app.navigateTo('spielerDetail', '${spieler.id}')" class="bg-white p-4 rounded-xl shadow-lg flex items-center space-x-4 cursor-pointer hover:bg-gray-50 card dark:bg-gray-800 dark:hover:bg-gray-700">
+            ${fotoHtml}
+            <div class="flex-grow">
+                <p class="font-bold">${spieler.name} <span class="text-gray-500 dark:text-gray-400 font-normal">#${spieler.nummer || '?'}</span></p>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    <p class="flex items-center space-x-2">
+                        ${getStatusIndicator(getAktuellerStatus(spieler))}
+                        <span>${getAktuellerStatus(spieler)}</span>
+                    </p>
+                    <p class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm items-center">
+                        <span title="Trainingseinheiten" class="flex items-center gap-1"><i class="fas fa-running text-blue-500"></i> ${attendedTrainings}/${totalTrainings} (${percentage}%)</span>
+                        <span title="Matches" class="flex items-center gap-1"><i class="fas fa-futbol text-yellow-500"></i> ${getMatchAnzahlGesamt(spieler.id, state)}</span>
+                        <span title="Spielminuten" class="flex items-center gap-1"><i class="fas fa-clock text-gray-500"></i> ${getSpielminutenGesamt(spieler.id, state)} min</span>
+                    </p>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+    `;
+};
+
 const renderSpielerUebersicht = (callbacks) => {
     let filteredSpieler = state.spieler.filter(s => s.name.toLowerCase().includes(state.filter.toLowerCase()));
     
