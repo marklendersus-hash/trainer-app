@@ -3,7 +3,7 @@ import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, updateDoc, qu
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { state } from './state.js';
 
-export const APP_VERSION = `Version 2025-08-25-008`;
+export const APP_VERSION = `Version 2025-08-25-009`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 const firebaseConfig = {
@@ -108,6 +108,32 @@ export const deleteSpieler = async (id, callbacks) => {
                     callbacks.showModal("Fehler", `Fehler beim Löschen des Spielers: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
                 }
             }}
+        ]
+    );
+};
+
+export const deleteSpielerFoto = async (spielerId, callbacks) => {
+    callbacks.showModal(
+        "Spielerfoto löschen?",
+        "Möchten Sie das Spielerfoto wirklich löschen? Das Foto wird sofort entfernt und kann nicht wiederhergestellt werden.",
+        [
+            { text: 'Abbrechen', class: 'bg-gray-500' },
+            { 
+                text: 'Ja, löschen', 
+                class: 'bg-red-600', 
+                onClick: async () => {
+                    callbacks.showModal("Löschen...", '<div class="animate-pulse">Foto wird gelöscht...</div>', []);
+                    const spielerDoc = doc(db, `artifacts/${appId}/public/data/spieler`, spielerId);
+                    try {
+                        await updateDoc(spielerDoc, {
+                            fotoUrl: null 
+                        });
+                        callbacks.showModal("Gelöscht", "Das Spielerfoto wurde entfernt.", [{text: 'OK', class: 'bg-blue-500'}]);
+                    } catch (error) {
+                        callbacks.showModal("Fehler", `Fehler beim Löschen des Fotos: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+                    }
+                }
+            }
         ]
     );
 };
