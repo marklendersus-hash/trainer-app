@@ -1,5 +1,5 @@
 import { state, setupDbRefs, setFilter, setStatsFilter, setSort, setHomeCalendarFilter, setTrainingListView, setMatchtagListView } from './state.js';
-import { db, auth, APP_VERSION, saveSpieler, deleteSpieler, deleteSpielerFoto, setAnwesenheit, toggleTrainingCancellation, deleteTraining, saveMatchtag, updateSpielerMatchDetails, toggleMatchCancellation, deleteMatchtag, saveMannschaftInfo, saveTrainingSchedule, generateRecurringTrainings, exportData, importJSONData, deleteAllData, deleteCollectionData, deleteMannschaftInfo, saveFormation, saveTrainingDetails, appId, deleteMannschaftEmblem } from './api.js';
+import { db, auth, APP_VERSION, saveSpieler, deleteSpieler, setAnwesenheit, toggleTrainingCancellation, deleteTraining, saveMatchtag, updateSpielerMatchDetails, toggleMatchCancellation, deleteMatchtag, saveMannschaftInfo, saveTrainingSchedule, generateRecurringTrainings, exportData, importJSONData, deleteAllData, deleteCollectionData, deleteMannschaftInfo, saveFormation, saveTrainingDetails, appId } from './api.js';
 import { render } from './render.js';
 import { fetchHolidaysForYear, formatDateWithWeekday, berechneAlter, parseDateString, getAktuellerStatus, getStatusIndicator, formatDate } from './utils.js';
 import * as firestoreModule from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -407,7 +407,6 @@ const appCallbacks = {
     },
     saveSpieler: (data, id, file) => saveSpieler(data, id, file, appCallbacks),
     deleteSpieler: (id) => deleteSpieler(id, appCallbacks),
-    deleteSpielerFoto: (id) => deleteSpielerFoto(id, appCallbacks),
     setAnwesenheit: (datumString, spielerId, status) => setAnwesenheit(datumString, spielerId, status, appCallbacks),
     toggleTrainingCancellation: (datumString) => toggleTrainingCancellation(datumString, appCallbacks),
     deleteTraining: (datumString) => deleteTraining(datumString, appCallbacks),
@@ -427,7 +426,6 @@ const appCallbacks = {
     deleteAllData: () => deleteAllData(appCallbacks),
     deleteCollectionData: (collectionRef, collectionName) => deleteCollectionData(collectionRef, collectionName, appCallbacks),
     deleteMannschaftInfo: () => deleteMannschaftInfo(appCallbacks),
-    deleteMannschaftEmblem: () => deleteMannschaftEmblem(appCallbacks),
     clearDateField: (inputId) => { document.getElementById(inputId).value = ''; },
     showFormationModal: (matchtagId) => showFormationModal(matchtagId, appCallbacks),
     saveFormation: (matchtagId, formationData) => saveFormation(matchtagId, formationData, appCallbacks),
@@ -462,12 +460,6 @@ const appCallbacks = {
                         }
                         reader.readAsDataURL(file);
                     }
-                });
-            }
-            const deleteFotoBtn = document.getElementById('deleteFotoBtn');
-            if (deleteFotoBtn) {
-                deleteFotoBtn.addEventListener('click', () => {
-                    appCallbacks.deleteSpielerFoto(state.currentId);
                 });
             }
             spielerForm.addEventListener('submit', (e) => {
@@ -535,12 +527,6 @@ const appCallbacks = {
                 e.preventDefault();
                 appCallbacks.saveMannschaftInfo(e.target);
             });
-            const deleteEmblemBtn = document.getElementById('deleteEmblemBtn');
-            if (deleteEmblemBtn) {
-                deleteEmblemBtn.addEventListener('click', () => {
-                    appCallbacks.deleteMannschaftEmblem();
-                });
-            }
         }
         const trainingsForm = document.getElementById('trainingsForm');
         if (trainingsForm) {

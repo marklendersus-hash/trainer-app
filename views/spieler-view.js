@@ -171,11 +171,8 @@ export const renderSpielerForm = (callbacks) => {
                 <input type="hidden" name="id" value="${spielerToEdit.id || ''}">
                 <div>
                     <label class="font-semibold">Profilfoto</label>
-                    <div class="mt-2">${fotoVorschauHtml}</div>
-                    <div class="flex items-center gap-2 mt-2">
-                        <input type="file" name="foto" id="fotoUpload" accept="image/*" class="flex-grow w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-700 file:text-gray-300 hover:file:bg-gray-600">
-                        ${spielerToEdit.fotoUrl ? `<button type="button" id="deleteFotoBtn" class="px-3 py-2 bg-red-600 text-white rounded-lg btn text-sm flex-shrink-0" title="Foto löschen"><i class="fas fa-trash"></i></button>` : ''}
-                    </div>
+                    ${fotoVorschauHtml}
+                    <input type="file" name="foto" id="fotoUpload" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 mt-2 dark:text-gray-400 dark:file:bg-gray-700 dark:file:text-gray-300 dark:hover:file:bg-gray-600">
                 </div>
                 <div>
                     <label class="font-semibold">Name</label>

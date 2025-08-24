@@ -3,7 +3,7 @@ import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, updateDoc, qu
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { state } from './state.js';
 
-export const APP_VERSION = `Version 2025-08-25-009`;
+export const APP_VERSION = `Version 2025-08-25-010`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 const firebaseConfig = {
@@ -42,9 +42,43 @@ async function uploadFileToB2(file, callbacks) {
     }
 }
 
+async function deleteFileFromB2(fileUrl, callbacks) {
+    if (!fileUrl || !fileUrl.includes('https://')) return;
+    // This function assumes a serverless function endpoint '/api/delete-file' exists
+    // which takes a JSON body `{ "url": "file-url-to-delete" }`
+    // and handles the deletion from the B2 bucket.
+    const deleteUrl = '/api/delete-file';
+    try {
+        const response = await fetch(deleteUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: fileUrl })
+        });
+        if (!response.ok) {
+            const result = await response.json();
+            throw new Error(result.message || `Server error: ${response.status}`);
+        }
+        console.log('File deletion requested for:', fileUrl);
+    } catch (error) {
+        console.error("Fehler bei der Anforderung zum Löschen der Datei aus B2:", error);
+        // Non-blocking error for the user
+        callbacks.showModal("Hintergrund-Fehler", `Die alte Bilddatei konnte nicht vom Speicher gelöscht werden. Dies beeinträchtigt nicht die App-Funktionalität.`, [{text: 'OK', class: 'bg-yellow-500'}]);
+    }
+}
+
 export const saveSpieler = async (data, id, file, callbacks) => {
     callbacks.showModal("Speichern...", '<div class="animate-pulse">Spielerdaten werden verarbeitet...</div>', []);
     try {
+        let oldFotoUrl = null;
+        const spielerCollection = collection(db, `artifacts/${appId}/public/data/spieler`);
+
+        if (id && file && file.size > 0) {
+            const spielerDocSnap = await getDoc(doc(spielerCollection, id));
+            if (spielerDocSnap.exists() && spielerDocSnap.data().fotoUrl) {
+                oldFotoUrl = spielerDocSnap.data().fotoUrl;
+            }
+        }
+
         if (file && file.size > 0) {
             const newFotoUrl = await uploadFileToB2(file, callbacks);
             if (newFotoUrl) {
@@ -53,9 +87,12 @@ export const saveSpieler = async (data, id, file, callbacks) => {
                 throw new Error("Spielerfoto konnte nicht hochgeladen werden.");
             }
         }
-        const spielerCollection = collection(db, `artifacts/${appId}/public/data/spieler`);
+
         if (id) {
             await updateDoc(doc(spielerCollection, id), data);
+            if (oldFotoUrl) {
+                await deleteFileFromB2(oldFotoUrl, callbacks);
+            }
             callbacks.showModal("Erfolg", "Spieler erfolgreich aktualisiert!", [{text: 'OK', class: 'bg-green-500', onClick: () => callbacks.goBack()}]);
         } else {
             await addDoc(spielerCollection, data);
@@ -76,7 +113,15 @@ export const saveMannschaftInfo = async (form, callbacks) => {
     };
     const file = formData.get('emblem');
     try {
+        let oldEmblemUrl = null;
+        const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
+
         if (file && file.size > 0) {
+            const configDocSnap = await getDoc(configDoc);
+            if (configDocSnap.exists() && configDocSnap.data().emblemUrl) {
+                oldEmblemUrl = configDocSnap.data().emblemUrl;
+            }
+
             const newEmblemUrl = await uploadFileToB2(file, callbacks);
             if (newEmblemUrl) {
                 teamData.emblemUrl = newEmblemUrl;
@@ -84,8 +129,10 @@ export const saveMannschaftInfo = async (form, callbacks) => {
                 throw new Error("Vereinsemblem konnte nicht hochgeladen werden.");
             }
         }
-        const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
         await setDoc(configDoc, teamData, { merge: true });
+        if (oldEmblemUrl) {
+            await deleteFileFromB2(oldEmblemUrl, callbacks);
+        }
         callbacks.showModal("Gespeichert", "Mannschaftsinfo erfolgreich aktualisiert.", [{text: 'OK', class: 'bg-green-500'}]);
     } catch (error) {
         console.error("saveMannschaftInfo: FEHLER beim Speichern der Mannschaftsinfo:", error);
@@ -95,6 +142,7 @@ export const saveMannschaftInfo = async (form, callbacks) => {
 
 export const deleteSpieler = async (id, callbacks) => {
     const spielerCollection = collection(db, `artifacts/${appId}/public/data/spieler`);
+    const spielerDocRef = doc(spielerCollection, id);
     callbacks.showModal(
         "Spieler löschen?",
         "Möchten Sie diesen Spieler wirklich endgültig löschen?",
@@ -102,7 +150,11 @@ export const deleteSpieler = async (id, callbacks) => {
             { text: 'Abbrechen', class: 'bg-gray-500' },
             { text: 'Ja, löschen', class: 'bg-red-600', onClick: async () => {
                 try {
-                    await deleteDoc(doc(spielerCollection, id));
+                    const spielerDocSnap = await getDoc(spielerDocRef);
+                    if (spielerDocSnap.exists() && spielerDocSnap.data().fotoUrl) {
+                        await deleteFileFromB2(spielerDocSnap.data().fotoUrl, callbacks);
+                    }
+                    await deleteDoc(spielerDocRef);
                     callbacks.showModal("Gelöscht", "Spieler wurde gelöscht.", [{text: 'OK', class: 'bg-blue-500', onClick: () => callbacks.navigateTo('spielerUebersicht', null, true)}]);
                 } catch (error) {
                     callbacks.showModal("Fehler", `Fehler beim Löschen des Spielers: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
@@ -125,6 +177,11 @@ export const deleteSpielerFoto = async (spielerId, callbacks) => {
                     callbacks.showModal("Löschen...", '<div class="animate-pulse">Foto wird gelöscht...</div>', []);
                     const spielerDoc = doc(db, `artifacts/${appId}/public/data/spieler`, spielerId);
                     try {
+                        const spielerDocSnap = await getDoc(spielerDoc);
+                        if (spielerDocSnap.exists() && spielerDocSnap.data().fotoUrl) {
+                            await deleteFileFromB2(spielerDocSnap.data().fotoUrl, callbacks);
+                        }
+
                         await updateDoc(spielerDoc, {
                             fotoUrl: null 
                         });
@@ -513,6 +570,11 @@ export const deleteMannschaftEmblem = async (callbacks) => {
                     callbacks.showModal("Löschen...", '<div class="animate-pulse">Emblem wird gelöscht...</div>', []);
                     const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
                     try {
+                        const configDocSnap = await getDoc(configDoc);
+                        if (configDocSnap.exists() && configDocSnap.data().emblemUrl) {
+                            await deleteFileFromB2(configDocSnap.data().emblemUrl, callbacks);
+                        }
+
                         await updateDoc(configDoc, {
                             emblemUrl: null 
                         });
