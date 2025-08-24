@@ -3,7 +3,7 @@ import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, updateDoc, qu
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { state } from './state.js';
 
-export const APP_VERSION = `Version 2025-08-24-004`;
+export const APP_VERSION = `Version 2025-08-24-005`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 const firebaseConfig = {
