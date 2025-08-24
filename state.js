@@ -23,7 +23,6 @@ export let state = {
     isModalOpen: false, 
     trainingListView: 'all', 
     matchtagListView: 'all'
-    // showNavLabels wurde entfernt
 };
 
 export let userId;
@@ -74,5 +73,3 @@ export const setTrainingListView = (view) => {
 export const setMatchtagListView = (view) => {
     state.matchtagListView = view;
 };
-
-// toggleNavLabels Funktion wurde entfernt

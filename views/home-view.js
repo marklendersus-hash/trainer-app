@@ -1,5 +1,5 @@
-import { state } from '../state.js';
-import { formatDate, parseDateString } from '../utils.js';
+import { state } from './state.js';
+import { formatDate, parseDateString } from './utils.js';
 
 export const renderHome = (callbacks) => {
     const month = state.currentDate.getMonth();
@@ -39,7 +39,6 @@ export const renderHome = (callbacks) => {
             classes += ' bg-gray-100 dark:bg-gray-700/50';
         }
 
-        // *** ANPASSUNG START: Icons für abgesagte Termine geändert ***
         daysHtml += `<div class="${classes}" onclick="window.app.showEventDetailModal('${dateString}')">
                         <span class="${isFeiertag && !isPast ? 'text-red-500 font-bold' : ''} ${isPast ? 'text-gray-400 dark:text-gray-500' : ''}">${day}</span>
                         <div class="event-icons mt-1 flex flex-col items-center space-y-1">
@@ -50,7 +49,6 @@ export const renderHome = (callbacks) => {
                             ${hasMatch && state.showMatchesOnHomeCalendar ? `<i class="fas fa-futbol ${isPast ? 'text-gray-400 dark:text-gray-500' : 'text-yellow-500'}"></i>` : ''}
                         </div>
                     </div>`;
-        // *** ANPASSUNG ENDE ***
     }
 
     const todayString = formatDate(new Date());

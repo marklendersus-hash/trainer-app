@@ -1,11 +1,8 @@
 import { state, setupDbRefs, setFilter, setStatsFilter, setSort, setHomeCalendarFilter, setTrainingListView, setMatchtagListView } from './state.js';
-// 'storage' wurde aus dem folgenden Import entfernt, da es nicht mehr verwendet wird.
 import { db, auth, APP_VERSION, saveSpieler, deleteSpieler, setAnwesenheit, toggleTrainingCancellation, deleteTraining, saveMatchtag, updateSpielerMatchDetails, toggleMatchCancellation, deleteMatchtag, saveMannschaftInfo, saveTrainingSchedule, generateRecurringTrainings, exportData, importJSONData, deleteAllData, deleteCollectionData, deleteMannschaftInfo, saveFormation, saveTrainingDetails, appId } from './api.js';
-// Importiere die Modal-Funktionen direkt von modals.js
-import { showModal, closeModal, showAddEventModal, showExportOptionsModal, showFormationModal, showEventDetailModal, showDeleteOptionsModal, confirmDeletion } from './views/modals.js';
-// Importiere die neue Haupt-render.js
+import { showModal, closeModal, showAddEventModal, showExportOptionsModal, showFormationModal, showEventDetailModal, showDeleteOptionsModal, confirmDeletion } from './modals.js';
 import { render } from './render.js';
-import { fetchHolidaysForYear, parseDateString } from './utils.js';
+import { fetchHolidaysForYear } from './utils.js';
 import * as firestoreModule from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { collection, onSnapshot, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -74,15 +71,10 @@ const appCallbacks = {
         });
     },
     login: async (email, password) => {
-        console.log("Login-Funktion aufgerufen.");
-        console.log("Eingegebene E-Mail:", email);
-        console.log("Eingegebenes Passwort:", password);
-
         const BENUTZER_EMAIL = 'trainer@demo.com';
         const PASSWORT = '1234';
 
         if (email === BENUTZER_EMAIL && password === PASSWORT) {
-            console.log("Zugangsdaten korrekt. Setze Login-Status.");
             sessionStorage.setItem('trainerAppLoggedIn', 'true');
             state.isLoggedIn = true;
             state.currentPage = 'home';
@@ -92,9 +84,7 @@ const appCallbacks = {
             await fetchHolidaysForYear(new Date().getFullYear(), state);
             state.loading = false;
             render(appCallbacks);
-            console.log("Login-Vorgang abgeschlossen, sollte jetzt Home-Seite anzeigen.");
         } else {
-            console.log("Zugangsdaten inkorrekt. Zeige Fehlermeldung.");
             showModal("Anmeldung fehlgeschlagen", "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.", [{text: 'OK', class: 'bg-red-500'}]);
         }
     },
@@ -252,7 +242,7 @@ const appCallbacks = {
     clearDateField: (inputId) => { document.getElementById(inputId).value = ''; },
     showFormationModal: (matchtagId) => showFormationModal(matchtagId, appCallbacks),
     saveFormation: (matchtagId, formationData) => saveFormation(matchtagId, formationData),
-    saveTrainingDetails: (datumString, data) => saveTrainingDetails(datumString, data, appCallbacks), // NEU
+    saveTrainingDetails: (datumString, data) => saveTrainingDetails(datumString, data, appCallbacks),
     showEventDetailModal: (dateString) => showEventDetailModal(dateString, appCallbacks),
     showAddEventModal: (type) => showAddEventModal(type, appCallbacks),
     closeModal: () => closeModal(),
@@ -312,15 +302,12 @@ const appCallbacks = {
                     toreHeim: data.toreHeim === '' ? null : parseInt(data.toreHeim),
                     toreAuswaerts: data.toreAuswaerts === '' ? null : parseInt(data.toreAuswaerts),
                     spielArt: data.spielArt,
-                    time: data.time || null // Stelle sicher, dass die Uhrzeit übergeben wird
+                    time: data.time || null
                 });
             });
-
-            // *** FEHLERBEHEBUNG START: Event Listeners für Heim/Auswärts Buttons ***
             const heimBtn = document.getElementById('heimBtn');
             const auswaertsBtn = document.getElementById('auswaertsBtn');
             const spielortInput = document.querySelector('input[name="spielort"]');
-
             if (heimBtn && auswaertsBtn && spielortInput) {
                 heimBtn.addEventListener('click', () => {
                     spielortInput.value = 'Heim';
@@ -329,7 +316,6 @@ const appCallbacks = {
                     auswaertsBtn.classList.remove('bg-green-600', 'text-white');
                     auswaertsBtn.classList.add('bg-gray-200', 'dark:bg-gray-700');
                 });
-
                 auswaertsBtn.addEventListener('click', () => {
                     spielortInput.value = 'Auswärts';
                     auswaertsBtn.classList.add('bg-green-600', 'text-white');
@@ -338,10 +324,7 @@ const appCallbacks = {
                     heimBtn.classList.add('bg-gray-200', 'dark:bg-gray-700');
                 });
             }
-            // *** FEHLERBEHEBUNG ENDE ***
         }
-
-        // NEUE FUNKTIONALITÄT: Event-Listener für Trainingsdetails speichern
         const trainingDetailForm = document.getElementById('trainingDetailForm');
         if (trainingDetailForm) {
             trainingDetailForm.addEventListener('submit', (e) => {
@@ -351,14 +334,6 @@ const appCallbacks = {
                 appCallbacks.saveTrainingDetails(data.id, { time: data.time });
             });
         }
-
-        document.querySelectorAll('.accordion-header').forEach(header => {
-            header.addEventListener('click', () => {
-                const content = header.nextElementSibling;
-                header.classList.toggle('open');
-                content.classList.toggle('open');
-            });
-        });
         const mannschaftForm = document.getElementById('mannschaftForm');
         if (mannschaftForm) {
             mannschaftForm.addEventListener('submit', (e) => {
@@ -386,171 +361,6 @@ const appCallbacks = {
                 }
             });
         }
-        
-        // Dynamische Event-Listener für Events-Ansichten
-        const addTrainingBtn = document.getElementById('add-training-btn');
-        if (addTrainingBtn) {
-            addTrainingBtn.addEventListener('click', () => {
-                appCallbacks.showAddEventModal('training');
-            });
-        }
-
-        const addMatchBtn = document.getElementById('add-match-btn');
-        if (addMatchBtn) {
-            addMatchBtn.addEventListener('click', () => {
-                appCallbacks.showAddEventModal('match');
-            });
-        }
-        
-        // Event-Listener für die Ansichts-Buttons
-        const showAllTrainingsBtn = document.getElementById('show-all-trainings-btn');
-        if (showAllTrainingsBtn) {
-            showAllTrainingsBtn.addEventListener('click', () => {
-                appCallbacks.setTrainingListView('all');
-            });
-        }
-
-        const showTop10TrainingsBtn = document.getElementById('show-top10-trainings-btn');
-        if (showTop10TrainingsBtn) {
-            showTop10TrainingsBtn.addEventListener('click', () => {
-                appCallbacks.setTrainingListView('top10');
-            });
-        }
-
-        const showAllMatchesBtn = document.getElementById('show-all-matches-btn');
-        if (showAllMatchesBtn) {
-            showAllMatchesBtn.addEventListener('click', () => {
-                appCallbacks.setMatchtagListView('all');
-            });
-        }
-
-        const showTop10MatchesBtn = document.getElementById('show-top10-matches-btn');
-        if (showTop10MatchesBtn) {
-            showTop10MatchesBtn.addEventListener('click', () => {
-                appCallbacks.setMatchtagListView('top10');
-            });
-        }
-        
-        // Dynamische Event-Listener für Match-Statistik-Filter-Buttons
-        const filterMatchesBtn = document.getElementById('filter-matches-btn');
-        if (filterMatchesBtn) {
-            filterMatchesBtn.addEventListener('click', () => {
-                appCallbacks.setStatsFilter('matches');
-            });
-        }
-
-        const filterMinutenBtn = document.getElementById('filter-minuten-btn');
-        if (filterMinutenBtn) {
-            filterMinutenBtn.addEventListener('click', () => {
-                appCallbacks.setStatsFilter('minuten');
-            });
-        }
-
-        const filterToreBtn = document.getElementById('filter-tore-btn');
-        if (filterToreBtn) {
-            filterToreBtn.addEventListener('click', () => {
-                appCallbacks.setStatsFilter('tore');
-            });
-        }
-
-        const filterVorlagenBtn = document.getElementById('filter-vorlagen-btn');
-        if (filterVorlagenBtn) {
-            filterVorlagenBtn.addEventListener('click', () => {
-                appCallbacks.setStatsFilter('vorlagen');
-            });
-        }
-        
-        // Dynamische Event-Listener für Matchtags und Trainings
-        document.querySelectorAll('.training-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const trainingId = e.currentTarget.dataset.id;
-                appCallbacks.navigateTo('trainingDetail', trainingId);
-            });
-        });
-        
-        document.querySelectorAll('.match-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const matchId = e.currentTarget.dataset.id;
-                appCallbacks.navigateTo('matchtagDetail', matchId);
-            });
-        });
-        
-        // Dynamische Event-Listener für Spieler-Links
-        document.querySelectorAll('.spieler-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const spielerId = e.currentTarget.dataset.id;
-                appCallbacks.navigateTo('spielerDetail', spielerId);
-            });
-        });
-        
-        // Dynamische Event-Listener für Anwesenheits-Buttons
-        document.querySelectorAll('.anwesenheit-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const trainingId = state.currentId;
-                const spielerId = e.currentTarget.dataset.spielerId;
-                const status = e.currentTarget.dataset.status;
-                appCallbacks.setAnwesenheit(trainingId, spielerId, status);
-            });
-        });
-        
-        // Dynamische Event-Listener für Match-Positions-Buttons
-        document.querySelectorAll('.match-position-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const matchId = state.currentId;
-                const spielerId = e.currentTarget.dataset.spielerId;
-                const position = e.currentTarget.dataset.position;
-                appCallbacks.updateSpielerMatchDetails(matchId, spielerId, 'position', position);
-            });
-        });
-        
-        // Dynamische Event-Listener für Match-Statistik-Inputs
-        document.querySelectorAll('.match-stat-input').forEach(input => {
-            input.addEventListener('change', (e) => {
-                const matchId = state.currentId;
-                const spielerId = e.currentTarget.dataset.spielerId;
-                const field = e.currentTarget.dataset.field;
-                const value = e.currentTarget.value;
-                appCallbacks.updateSpielerMatchDetails(matchId, spielerId, field, value);
-            });
-        });
-
-        // Dynamische Event-Listener für die "Absagen/Reaktivieren"-Buttons
-        const toggleTrainingBtn = document.getElementById('toggle-training-cancellation');
-        if (toggleTrainingBtn) {
-            toggleTrainingBtn.addEventListener('click', () => {
-                appCallbacks.toggleTrainingCancellation(state.currentId);
-            });
-        }
-
-        const deleteTrainingBtn = document.getElementById('delete-training-btn');
-        if (deleteTrainingBtn) {
-            deleteTrainingBtn.addEventListener('click', () => {
-                appCallbacks.deleteTraining(state.currentId);
-            });
-        }
-
-        const toggleMatchBtn = document.getElementById('toggle-match-cancellation');
-        if (toggleMatchBtn) {
-            toggleMatchBtn.addEventListener('click', () => {
-                appCallbacks.toggleMatchCancellation(state.currentId);
-            });
-        }
-
-        const deleteMatchBtn = document.getElementById('delete-match-btn');
-        if (deleteMatchBtn) {
-            deleteMatchBtn.addEventListener('click', () => {
-                appCallbacks.deleteMatchtag(state.currentId);
-            });
-        }
-        
-        const showFormationBtn = document.getElementById('show-formation-modal');
-        if (showFormationBtn) {
-            showFormationBtn.addEventListener('click', () => {
-                appCallbacks.showFormationModal(state.currentId);
-            });
-        }
-        
     }
 };
 

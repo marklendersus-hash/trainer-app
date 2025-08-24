@@ -1,5 +1,5 @@
-import { state } from '../state.js';
-import { getAktuellerStatus, getStatusIndicator, formatDate, formatDateWithWeekday, getMatchAnzahlGesamt, getSpielminutenGesamt, getToreGesamt, getVorlagenGesamt, getTrainingsAnzahlGesamt } from '../utils.js';
+import { state } from './state.js';
+import { getAktuellerStatus, getStatusIndicator, formatDate, formatDateWithWeekday, getMatchAnzahlGesamt, getSpielminutenGesamt, getToreGesamt, getVorlagenGesamt, getTrainingsAnzahlGesamt } from './utils.js';
 
 const createTrainingCardHtml = (training, aktiveSpielerCount) => {
     const anwesendCount = Object.values(training.teilnehmer || {}).filter(s => s === 'Anwesend').length;
@@ -234,7 +234,7 @@ export const renderTrainingDetail = (callbacks) => {
                 <input type="hidden" name="id" value="${state.currentId}">
                 <div>
                     <label class="font-semibold">Uhrzeit</label>
-                    <input type="time" name="time" value="${selectedTraining.time || ''}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                    <input type="time" name="time" value="${selectedTraining.time || ''}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
                 </div>
                 <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg btn">Trainingsdetails speichern</button>
             </form>
@@ -309,9 +309,9 @@ export const renderMatchtagDetail = (callbacks) => {
                 </div>
                 ${showStats ? `
                 <div class="flex flex-wrap items-center gap-2 mt-2 border-t dark:border-gray-700 pt-2">
-                    <input type="number" placeholder="Min" data-field="spielminuten" data-spieler-id="${spieler.id}" value="${aufstellung.spielminuten || ''}" class="w-14 p-1 border rounded-md bg-gray-100 dark:bg-gray-700 dark:border-gray-600 match-stat-input" title="Minuten">
-                    <input type="number" placeholder="T" data-field="tore" data-spieler-id="${spieler.id}" value="${aufstellung.tore || ''}" class="w-12 p-1 border rounded-md bg-gray-100 dark:bg-gray-700 dark:border-gray-600 match-stat-input" title="Tore">
-                    <input type="number" placeholder="V" data-field="vorlagen" data-spieler-id="${spieler.id}" value="${aufstellung.vorlagen || ''}" class="w-12 p-1 border rounded-md bg-gray-100 dark:bg-gray-700 dark:border-gray-600 match-stat-input" title="Vorlagen">
+                    <input type="number" placeholder="Min" data-field="spielminuten" data-spieler-id="${spieler.id}" value="${aufstellung.spielminuten || ''}" class="w-14 p-1 border rounded-md bg-gray-100 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 match-stat-input" title="Minuten">
+                    <input type="number" placeholder="T" data-field="tore" data-spieler-id="${spieler.id}" value="${aufstellung.tore || ''}" class="w-12 p-1 border rounded-md bg-gray-100 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 match-stat-input" title="Tore">
+                    <input type="number" placeholder="V" data-field="vorlagen" data-spieler-id="${spieler.id}" value="${aufstellung.vorlagen || ''}" class="w-12 p-1 border rounded-md bg-gray-100 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 match-stat-input" title="Vorlagen">
                 </div>
                 ` : ''}
             </div>
@@ -349,26 +349,26 @@ export const renderMatchtagDetail = (callbacks) => {
                 </div>
                 <div>
                     <label class="font-semibold">Gegner</label>
-                    <input type="text" name="gegner" value="${matchtag.gegner || ''}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                    <input type="text" name="gegner" value="${matchtag.gegner || ''}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
                 </div>
                 <div class="flex items-center gap-4">
                     <div class="flex-1">
                         <label class="font-semibold text-sm">Tore Heim</label>
-                        <input type="number" name="toreHeim" value="${matchtag.toreHeim === null || matchtag.toreHeim === undefined ? '' : matchtag.toreHeim}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 rounded-lg text-center">
+                        <input type="number" name="toreHeim" value="${matchtag.toreHeim === null || matchtag.toreHeim === undefined ? '' : matchtag.toreHeim}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg text-center">
                     </div>
                     <span class="text-2xl font-bold mt-6">:</span>
                     <div class="flex-1">
                         <label class="font-semibold text-sm">Tore Gast</label>
-                        <input type="number" name="toreAuswaerts" value="${matchtag.toreAuswaerts === null || matchtag.toreAuswaerts === undefined ? '' : matchtag.toreAuswaerts}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 rounded-lg text-center">
+                        <input type="number" name="toreAuswaerts" value="${matchtag.toreAuswaerts === null || matchtag.toreAuswaerts === undefined ? '' : matchtag.toreAuswaerts}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg text-center">
                     </div>
                 </div>
                 <div>
                     <label class="font-semibold">Uhrzeit</label>
-                    <input type="time" name="time" value="${matchtag.time || ''}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                    <input type="time" name="time" value="${matchtag.time || ''}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
                 </div>
                 <div>
                     <label class="font-semibold">Matchart</label>
-                    <select name="spielArt" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                    <select name="spielArt" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
                         <option value="Ligamatch" ${matchtag.spielArt === 'Ligamatch' || matchtag.spielArt === 'Ligaspiel' ? 'selected' : ''}>Ligamatch</option>
                         <option value="Freundschaftsmatch" ${matchtag.spielArt === 'Freundschaftsmatch' || matchtag.spielArt === 'Freundschaftsspiel' ? 'selected' : ''}>Freundschaftsmatch</option>
                         <option value="Pokalmatch" ${matchtag.spielArt === 'Pokalmatch' || matchtag.spielArt === 'Pokalspiel' ? 'selected' : ''}>Pokalmatch</option>
