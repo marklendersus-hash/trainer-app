@@ -7,7 +7,7 @@ import { state } from './state.js';
 import { showModal, closeModal } from './views/modals.js';
 
 // --- VERSION & KONFIGURATION ---
-export const APP_VERSION = `Version 2025-08-23-999 B2-Storage`;
+export const APP_VERSION = `Version 2025-08-24-001 B2-Storage`;
 
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
