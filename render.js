@@ -4,22 +4,24 @@ import { renderSpielerUebersicht, renderSpielerDetail, renderSpielerForm } from 
 import { renderTrainingUebersicht, renderMatchtagUebersicht, renderTrainingDetail, renderMatchtagDetail } from './views/events-view.js';
 import { renderEinstellungen } from './views/einstellungen-view.js';
 
-// Remove the incorrect import:
-// import { addModalListeners } from './views/modals.js';
-
 const appContainer = document.getElementById('app-container');
 
 export const render = (callbacks) => {
     appContainer.innerHTML = '';
-    
-
 
     const header = (title) => {
         const displayTitle = state.teamInfo.name || title;
         const displayTitle2 = state.teamInfo.name2 || '';
+
+        // KORRIGIERTER TEIL:
+        // Die Logik hier wurde verbessert. Wir rendern jetzt immer sowohl das Bild als auch einen Fallback-Container.
+        // Das 'onerror' Event am Bild versteckt das kaputte Bild und zeigt den Fallback an.
+        // Wir benutzen 'nextElementSibling' statt 'nextSibling', was zuverlässiger ist.
         const emblemHtml = state.teamInfo.emblemUrl
-            ? `<img src="${state.teamInfo.emblemUrl}" class="w-8 h-8 rounded-full object-cover mr-3 flex-shrink-0" onerror="this.style.display='none'; this.nextSibling.style.display='flex';">`
-            : `<div class="w-8 h-8 rounded-full bg-gray-500 flex-shrink-0"></div>`;
+            ? `<img src="${state.teamInfo.emblemUrl}" class="w-8 h-8 rounded-full object-cover mr-3 flex-shrink-0" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+               <div class="w-8 h-8 rounded-full bg-gray-500 flex-shrink-0 mr-3 hidden items-center justify-center"></div>`
+            : `<div class="w-8 h-8 rounded-full bg-gray-500 flex-shrink-0 mr-3 flex items-center justify-center"></div>`;
+
         const titleClass = (displayTitle.length > 15) ? 'text-base font-bold' : 'text-lg font-bold';
 
         return `
@@ -66,7 +68,7 @@ export const render = (callbacks) => {
                         </button>
                     </div>`;
         };
-        let leftButtonHtml = showBack 
+        let leftButtonHtml = showBack
             ? `<div class="flex-1 flex justify-center items-center"><button onclick="window.app.goBack()" class="flex flex-col items-center justify-center text-gray-600 hover:text-green-600 ${buttonSizeClass} rounded-full hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-gray-700" title="Zurück"><i class="fas fa-arrow-left text-xl"></i><span class="text-xs mt-1">Zurück</span></button></div>`
             : navButton('home', 'fa-home', 'Home');
         return `
@@ -82,7 +84,7 @@ export const render = (callbacks) => {
             </div>
         `;
     };
-    
+
     if (state.loading) {
         appContainer.innerHTML = `<div class="flex justify-center items-center h-screen">
             <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-green-500"></div>
