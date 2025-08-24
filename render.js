@@ -13,11 +13,11 @@ const renderEinstellungen = () => {
         ? `<img id="emblemVorschau" src="${state.teamInfo.emblemUrl}" class="w-24 h-24 rounded-full mx-auto object-cover">`
         : `<img id="emblemVorschau" src="#" alt="Vorschau" class="w-24 h-24 rounded-full mx-auto object-cover hidden">`;
     return `
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4">
+        <div class="p-6 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold text-center">Darstellung</h2>
             <p class="text-center text-gray-500 dark:text-gray-400">Der Dunkelmodus ist standardmäßig aktiviert.</p>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4">
+        <div class="p-6 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold text-center">Mannschaft</h2>
             <form id="mannschaftForm" class="space-y-3">
                 <div>
@@ -36,7 +36,7 @@ const renderEinstellungen = () => {
                 <button type="submit" class="w-full py-3 mt-4 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">Mannschaftsinfo Speichern</button>
             </form>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4">
+        <div class="p-6 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold text-center">Regelmäßige Trainingseinheiten</h2>
             <form id="trainingsForm" class="space-y-3">
                 ${
@@ -45,7 +45,7 @@ const renderEinstellungen = () => {
                         const isChecked = !!schedule[tag];
                         const timeValue = schedule[tag] || '';
                         return `
-                            <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-700/50">
                                 <label for="training_${tag}" class="flex items-center space-x-3 flex-grow cursor-pointer">
                                     <input type="checkbox" id="training_${tag}" name="wochentag" value="${tag}" ${isChecked ? 'checked' : ''} class="h-5 w-5 rounded text-green-600 focus:ring-green-500">
                                     <span>${tag}</span>
@@ -62,7 +62,7 @@ const renderEinstellungen = () => {
                 <button type="submit" class="w-full py-3 mt-4 font-medium text-white uppercase bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 btn">Trainingsplan Speichern & Kalender Aktualisieren</button>
             </form>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-4">
+        <div class="p-6 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold text-center">Datenverwaltung</h2>
             <input type="file" id="jsonImportInput" accept=".json" class="hidden">
             <button onclick="window.app.importData()" class="w-full py-3 font-medium text-white uppercase bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 btn">Daten Importieren (JSON)</button>
@@ -99,7 +99,7 @@ const createTrainingCardHtml = (training, aktiveSpielerCount) => {
     }
 
     return `
-        <div data-id="${training.id}" class="flex justify-between items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer training-card">
+        <div data-id="${training.id}" class="flex justify-between items-center p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer training-card">
             <div>
                 <p class="font-semibold">${formatDateWithWeekday(training.id)} ${training.time ? `(${training.time} Uhr)` : ''}</p>
                 <p class="text-sm ${statusColor} flex items-center gap-1"><i class="fas ${statusIcon}"></i> ${statusText}</p>
@@ -133,7 +133,7 @@ const createMatchtagCardHtml = (matchtag) => {
         }
     }
     return `
-        <div data-id="${matchtag.id}" class="flex justify-between items-center p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer match-card">
+        <div data-id="${matchtag.id}" class="flex justify-between items-center p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer match-card">
             <div>
                 <p class="font-semibold">${formatDateWithWeekday(matchtag.id)} ${matchtag.time ? `(${matchtag.time} Uhr)` : ''}</p>
                 <p class="text-sm ${resultColor} flex items-center gap-1"><i class="fas ${resultIcon}"></i> ${resultText}</p>
@@ -156,7 +156,7 @@ const createTop10CardHtml = (spieler, index, statText, baseClass) => {
 };
 
 const renderTrainingUebersicht = (callbacks) => {
-    const addButtonHtml = `<div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg">
+    const addButtonHtml = `<div class="p-4 rounded-xl border border-gray-700">
         <button id="add-training-btn" class="w-full py-3 font-medium text-white uppercase bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 btn flex items-center justify-center gap-2">
             <i class="fas fa-plus"></i>
             Training hinzufügen
@@ -166,10 +166,10 @@ const renderTrainingUebersicht = (callbacks) => {
     let content = addButtonHtml;
 
     content += `
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg mb-4">
+        <div class="p-4 rounded-xl border border-gray-700 mb-4">
             <div class="flex justify-between items-center gap-2">
-                <button id="show-all-trainings-btn" class="px-4 py-2 rounded-lg btn ${state.trainingListView === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700'}">Alle Trainingseinheiten</button>
-                <button id="show-top10-trainings-btn" class="px-4 py-2 rounded-lg btn ${state.trainingListView === 'top10' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700'}">Top 10 Training-Statistik</button>
+                <button id="show-all-trainings-btn" class="px-4 py-2 rounded-lg btn ${state.trainingListView === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Alle Trainingseinheiten</button>
+                <button id="show-top10-trainings-btn" class="px-4 py-2 rounded-lg btn ${state.trainingListView === 'top10' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Top 10 Training-Statistik</button>
             </div>
         </div>
     `;
@@ -190,16 +190,16 @@ const renderTrainingUebersicht = (callbacks) => {
 
     if (state.trainingListView === 'top10') {
         content += `
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700">
             <h2 class="text-lg font-bold mb-4 text-center">Top 10 Training-Statistik</h2>
             <div class="space-y-2">
-                ${topTrainers.length > 0 ? topTrainers.map((spieler, index) => createTop10CardHtml(spieler, index, `${spieler.trainingCount}/${totalTrainings} (${totalTrainings > 0 ? Math.round((spieler.trainingCount / totalTrainings) * 100) : 0}%)`, 'bg-green-50 dark:bg-green-900/50')).join('') : `<p class="text-center text-gray-500 dark:text-gray-400">Noch keine Trainingsdaten vorhanden.</p>`}
+                ${topTrainers.length > 0 ? topTrainers.map((spieler, index) => createTop10CardHtml(spieler, index, `${spieler.trainingCount}/${totalTrainings} (${totalTrainings > 0 ? Math.round((spieler.trainingCount / totalTrainings) * 100) : 0}%)`, 'bg-green-900/50')).join('') : `<p class="text-center text-gray-500 dark:text-gray-400">Noch keine Trainingsdaten vorhanden.</p>`}
             </div>
         </div>
         `;
     } else if (state.trainingListView === 'all') {
         content += `
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700">
             <h2 class="text-lg font-bold mb-4 text-center">Alle Trainingseinheiten</h2>
             <div class="space-y-2">
                 ${[...state.trainingseinheiten].sort((a, b) => a.id.localeCompare(b.id)).map(training => createTrainingCardHtml(training, aktiveSpielerCount)).join('')}
@@ -211,7 +211,7 @@ const renderTrainingUebersicht = (callbacks) => {
 };
 
 const renderMatchtagUebersicht = (callbacks) => {
-    const addButtonHtml = `<div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg">
+    const addButtonHtml = `<div class="p-4 rounded-xl border border-gray-700">
         <button id="add-match-btn" class="w-full py-3 font-medium text-white uppercase bg-yellow-500 rounded-lg shadow-lg hover:bg-yellow-600 btn flex items-center justify-center gap-2">
             <i class="fas fa-plus"></i>
             Match hinzufügen
@@ -221,10 +221,10 @@ const renderMatchtagUebersicht = (callbacks) => {
     let content = addButtonHtml;
 
     content += `
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg mb-4">
+        <div class="p-4 rounded-xl border border-gray-700 mb-4">
             <div class="flex justify-between items-center gap-2">
-                <button id="show-all-matches-btn" class="px-4 py-2 rounded-lg btn ${state.matchtagListView === 'all' ? 'bg-yellow-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}">Alle Matchtage</button>
-                <button id="show-top10-matches-btn" class="px-4 py-2 rounded-lg btn ${state.matchtagListView === 'top10' ? 'bg-yellow-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}">Top 10 Match-Statistik</button>
+                <button id="show-all-matches-btn" class="px-4 py-2 rounded-lg btn ${state.matchtagListView === 'all' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Alle Matchtage</button>
+                <button id="show-top10-matches-btn" class="px-4 py-2 rounded-lg btn ${state.matchtagListView === 'top10' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Top 10 Match-Statistik</button>
             </div>
         </div>
     `;
@@ -246,25 +246,25 @@ const renderMatchtagUebersicht = (callbacks) => {
 
     if (state.matchtagListView === 'top10') {
         content += `
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700">
             <h2 class="text-lg font-bold mb-4 text-center"> Top 10 Match-Statistik</h2>
             <div class="flex justify-center flex-wrap gap-2 mb-4">
-                <button id="filter-matches-btn" class="px-3 py-1 text-sm rounded-full btn ${state.statsFilter === 'matches' ? 'bg-yellow-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}">Matches</button>
-                <button id="filter-minuten-btn" class="px-3 py-1 text-sm rounded-full btn ${state.statsFilter === 'minuten' ? 'bg-yellow-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}">Minuten</button>
-                <button id="filter-tore-btn" class="px-3 py-1 text-sm rounded-full btn ${state.statsFilter === 'tore' ? 'bg-yellow-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}">Tore</button>
-                <button id="filter-vorlagen-btn" class="px-3 py-1 text-sm rounded-full btn ${state.statsFilter === 'vorlagen' ? 'bg-yellow-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}">Vorlagen</button>
+                <button id="filter-matches-btn" class="px-3 py-1 text-sm rounded-full btn ${state.statsFilter === 'matches' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Matches</button>
+                <button id="filter-minuten-btn" class="px-3 py-1 text-sm rounded-full btn ${state.statsFilter === 'minuten' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Minuten</button>
+                <button id="filter-tore-btn" class="px-3 py-1 text-sm rounded-full btn ${state.statsFilter === 'tore' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Tore</button>
+                <button id="filter-vorlagen-btn" class="px-3 py-1 text-sm rounded-full btn ${state.statsFilter === 'vorlagen' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Vorlagen</button>
             </div>
             <div class="space-y-2">
-                ${topSpieler.length > 0 ? topSpieler.map((spieler, index) => createTop10CardHtml(spieler, index, spieler.stat, 'bg-yellow-50 dark:bg-yellow-900/50')).join('') : `<p class="text-center text-gray-500 dark:text-gray-400">Noch keine Matchdaten vorhanden.</p>`}
+                ${topSpieler.length > 0 ? topSpieler.map((spieler, index) => createTop10CardHtml(spieler, index, spieler.stat, 'bg-yellow-900/50')).join('') : `<p class="text-center text-gray-500 dark:text-gray-400">Noch keine Matchdaten vorhanden.</p>`}
             </div>
         </div>
         `;
     } else if (state.matchtagListView === 'all') {
         content += `
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700">
             <h2 class="text-lg font-bold mb-4 text-center">Alle Matchtage</h2>
             <div class="space-y-2">
-                ${[...state.matchtage].sort((a, b) => b.id.localeCompare(a.id)).map(matchtag => createMatchtagCardHtml(matchtag)).join('')}
+                ${[...state.matchtage].sort((a, b) => a.id.localeCompare(b.id)).map(matchtag => createMatchtagCardHtml(matchtag)).join('')}
                 ${state.matchtage.length === 0 ? '<p class="text-center text-gray-500 dark:text-gray-400">Noch keine Matchtage vorhanden.</p>' : ''}
             </div>
         </div>
@@ -303,7 +303,7 @@ const renderTrainingDetail = (callbacks) => {
     `;
 
     return `
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold text-center">Anwesenheit am ${formatDateWithWeekday(state.currentId)}</h2>
             <form id="trainingDetailForm" class="space-y-4">
                 <input type="hidden" name="id" value="${state.currentId}">
@@ -328,13 +328,13 @@ const renderTrainingDetail = (callbacks) => {
                     const aktuellerStatus = getAktuellerStatus(spieler);
                     const isAbwesend = ['Urlaub', 'Verletzt', 'Krank', 'Gesperrt'].includes(aktuellerStatus);
                     return `
-                    <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-700/50">
                         <button data-id="${spieler.id}" class="font-semibold text-left hover:text-blue-600 dark:hover:text-blue-400 flex items-center cursor-pointer spieler-link">${getStatusIndicator(aktuellerStatus)} <span class="ml-2">${spieler.name}</span></button>
                         ${isAbwesend ? `<div class="text-sm italic text-gray-500 dark:text-gray-400">${aktuellerStatus}</div>` : `
                         <div class="flex space-x-1">
-                            <button data-status="Anwesend" data-spieler-id="${spieler.id}" class="w-8 h-8 rounded-full text-sm font-bold anwesenheit-btn ${selectedTraining.teilnehmer?.[spieler.id] === 'Anwesend' ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-600'}" title="Anwesend">A</button>
-                            <button data-status="Abwesend" data-spieler-id="${spieler.id}" class="w-8 h-8 rounded-full text-sm font-bold anwesenheit-btn ${selectedTraining.teilnehmer?.[spieler.id] === 'Abwesend' ? 'bg-red-500 text-white' : 'bg-gray-200 dark:bg-gray-600'}" title="Abwesend">B</button>
-                            <button data-status="Unentschuldigt" data-spieler-id="${spieler.id}" class="w-8 h-8 rounded-full text-sm font-bold anwesenheit-btn ${selectedTraining.teilnehmer?.[spieler.id] === 'Unentschuldigt' ? 'bg-gray-500 text-white' : 'bg-gray-200 dark:bg-gray-600'}" title="Unentschuldigt">U</button>
+                            <button data-status="Anwesend" data-spieler-id="${spieler.id}" class="w-8 h-8 rounded-full text-sm font-bold anwesenheit-btn ${selectedTraining.teilnehmer?.[spieler.id] === 'Anwesend' ? 'bg-green-500 text-white' : 'bg-gray-600'}" title="Anwesend">A</button>
+                            <button data-status="Abwesend" data-spieler-id="${spieler.id}" class="w-8 h-8 rounded-full text-sm font-bold anwesenheit-btn ${selectedTraining.teilnehmer?.[spieler.id] === 'Abwesend' ? 'bg-red-500 text-white' : 'bg-gray-600'}" title="Abwesend">B</button>
+                            <button data-status="Unentschuldigt" data-spieler-id="${spieler.id}" class="w-8 h-8 rounded-full text-sm font-bold anwesenheit-btn ${selectedTraining.teilnehmer?.[spieler.id] === 'Unentschuldigt' ? 'bg-gray-500 text-white' : 'bg-gray-600'}" title="Unentschuldigt">U</button>
                         </div>
                         `}
                     </div>
@@ -377,9 +377,9 @@ const renderMatchtagDetail = (callbacks) => {
                 <div class="flex justify-between items-center">
                     <button data-id="${spieler.id}" class="font-semibold text-left hover:text-blue-600 dark:hover:text-blue-400 flex items-center cursor-pointer spieler-link">${getStatusIndicator(getAktuellerStatus(spieler))} <span class="ml-2">${spieler.name}</span></button>
                     <div class="flex space-x-1">
-                        <button data-position="Startelf" data-spieler-id="${spieler.id}" class="px-2 py-1 text-xs rounded btn match-position-btn ${position === 'Startelf' ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-600'}" title="Startelf">S11</button>
-                        <button data-position="Ersatzbank" data-spieler-id="${spieler.id}" class="px-2 py-1 text-xs rounded btn match-position-btn ${position === 'Ersatzbank' ? 'bg-yellow-500 text-white' : 'bg-gray-200 dark:bg-gray-600'}" title="Ersatzbank">Bank</button>
-                        <button data-position="Nicht dabei" data-spieler-id="${spieler.id}" class="px-2 py-1 text-xs rounded btn match-position-btn ${position === 'Nicht dabei' || !position ? 'bg-gray-400 text-white' : 'bg-gray-200 dark:bg-gray-600'}" title="Nicht im Kader">Kader</button>
+                        <button data-position="Startelf" data-spieler-id="${spieler.id}" class="px-2 py-1 text-xs rounded btn match-position-btn ${position === 'Startelf' ? 'bg-green-500 text-white' : 'bg-gray-600'}" title="Startelf">S11</button>
+                        <button data-position="Ersatzbank" data-spieler-id="${spieler.id}" class="px-2 py-1 text-xs rounded btn match-position-btn ${position === 'Ersatzbank' ? 'bg-yellow-500 text-white' : 'bg-gray-600'}" title="Ersatzbank">Bank</button>
+                        <button data-position="Nicht dabei" data-spieler-id="${spieler.id}" class="px-2 py-1 text-xs rounded btn match-position-btn ${position === 'Nicht dabei' || !position ? 'bg-gray-400 text-white' : 'bg-gray-600'}" title="Nicht im Kader">Kader</button>
                     </div>
                 </div>
                 ${showStats ? `
@@ -400,7 +400,7 @@ const renderMatchtagDetail = (callbacks) => {
                 ${isAvailable
                     ? spielerListe.map(spielerAufstellungHtml).join('')
                     : spielerListe.map(spieler => `
-                        <div class="p-2 rounded-lg border bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 dark:border-gray-700">
+                        <div class="p-2 rounded-lg border bg-gray-700/50 text-gray-400 dark:border-gray-700">
                             <button data-id="${spieler.id}" class="font-semibold text-left hover:text-blue-600 dark:hover:text-blue-400 flex items-center cursor-pointer spieler-link">${getStatusIndicator(getAktuellerStatus(spieler))} <span class="ml-2">${spieler.name}</span> <span class="italic ml-2">(${getAktuellerStatus(spieler)})</span></button>
                         </div>
                     `).join('')
@@ -410,7 +410,7 @@ const renderMatchtagDetail = (callbacks) => {
     `;
 
     return `
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold mb-4">Matchdaten für ${formatDateWithWeekday(state.currentId)}</h2>
             <form id="matchtagForm" class="space-y-4">
                 <input type="hidden" name="id" value="${state.currentId}">
@@ -418,8 +418,8 @@ const renderMatchtagDetail = (callbacks) => {
                     <label class="font-semibold">Spielort</label>
                     <div class="flex gap-2 mt-1">
                         <input type="hidden" name="spielort" value="${matchtag.spielort || 'Heim'}">
-                        <button type="button" id="heimBtn" class="flex-1 py-2 rounded-lg btn ${matchtag.spielort !== 'Auswärts' ? 'bg-green-600 text-white' : 'bg-gray-200 dark:bg-gray-700'}">Heim</button>
-                        <button type="button" id="auswaertsBtn" class="flex-1 py-2 rounded-lg btn ${matchtag.spielort === 'Auswärts' ? 'bg-green-600 text-white' : 'bg-gray-200 dark:bg-gray-700'}">Auswärts</button>
+                        <button type="button" id="heimBtn" class="flex-1 py-2 rounded-lg btn ${matchtag.spielort !== 'Auswärts' ? 'bg-green-600 text-white' : 'bg-gray-700'}">Heim</button>
+                        <button type="button" id="auswaertsBtn" class="flex-1 py-2 rounded-lg btn ${matchtag.spielort === 'Auswärts' ? 'bg-green-600 text-white' : 'bg-gray-700'}">Auswärts</button>
                     </div>
                 </div>
                 <div>
@@ -452,13 +452,13 @@ const renderMatchtagDetail = (callbacks) => {
                 <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg btn">Matchdaten speichern</button>
             </form>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700">
             <button id="show-formation-modal" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn flex items-center justify-center gap-2">
                 <i class="fas fa-chalkboard-teacher"></i>
                 Formation
             </button>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-lg space-y-4 dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700 space-y-4">
             ${kaderKategorieHtml('Startelf', kader.startelf)}
             ${kaderKategorieHtml('Ersatzbank', kader.ersatzbank)}
             ${kaderKategorieHtml('Nicht im Kader', kader.nichtImKader)}
@@ -510,17 +510,17 @@ const renderHome = (callbacks) => {
         const isPast = date < today;
 
         if (isPast) {
-            classes += ' bg-gray-100 dark:bg-gray-700/50';
+            classes += ' bg-gray-700/50';
         }
 
         daysHtml += `<div class="${classes}" onclick="window.app.showEventDetailModal('${dateString}')">
-                        <span class="${isFeiertag && !isPast ? 'text-red-500 font-bold' : ''} ${isPast ? 'text-gray-400 dark:text-gray-500' : ''}">${day}</span>
+                        <span class="${isFeiertag && !isPast ? 'text-red-500 font-bold' : ''} ${isPast ? 'text-gray-500' : ''}">${day}</span>
                         <div class="event-icons mt-1 flex flex-col items-center space-y-1">
-                            ${hatGeburtstag && state.showGeburtstageOnHomeCalendar ? `<i class="fas fa-birthday-cake ${isPast ? 'text-gray-400 dark:text-gray-500' : 'text-pink-500'}"></i>` : ''}
-                            ${isTrainingCancelled ? `<i class="fas fa-times-circle ${isPast ? 'text-gray-400 dark:text-gray-500' : 'text-blue-500'}" title="Training Abgesagt"></i>` : ''}
-                            ${isMatchCancelled ? `<i class="fas fa-times-circle ${isPast ? 'text-gray-400 dark:text-gray-500' : 'text-yellow-500'}" title="Match Abgesagt"></i>` : ''}
-                            ${hasTraining && state.showTrainingsOnHomeCalendar ? `<i class="fas fa-running ${isPast ? 'text-gray-400 dark:text-gray-500' : 'text-blue-500'}"></i>` : ''}
-                            ${hasMatch && state.showMatchesOnHomeCalendar ? `<i class="fas fa-futbol ${isPast ? 'text-gray-400 dark:text-gray-500' : 'text-yellow-500'}"></i>` : ''}
+                            ${hatGeburtstag && state.showGeburtstageOnHomeCalendar ? `<i class="fas fa-birthday-cake ${isPast ? 'text-gray-500' : 'text-pink-500'}"></i>` : ''}
+                            ${isTrainingCancelled ? `<i class="fas fa-times-circle ${isPast ? 'text-gray-500' : 'text-blue-500'}" title="Training Abgesagt"></i>` : ''}
+                            ${isMatchCancelled ? `<i class="fas fa-times-circle ${isPast ? 'text-gray-500' : 'text-yellow-500'}" title="Match Abgesagt"></i>` : ''}
+                            ${hasTraining && state.showTrainingsOnHomeCalendar ? `<i class="fas fa-running ${isPast ? 'text-gray-500' : 'text-blue-500'}"></i>` : ''}
+                            ${hasMatch && state.showMatchesOnHomeCalendar ? `<i class="fas fa-futbol ${isPast ? 'text-gray-500' : 'text-yellow-500'}"></i>` : ''}
                         </div>
                     </div>`;
     }
@@ -560,14 +560,14 @@ const renderHome = (callbacks) => {
     const isCurrentMonth = new Date().getMonth() === month && new Date().getFullYear() === year;
 
     return `
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700">
             <div class="flex justify-between items-center mb-4">
-                <button onclick="window.app.changeMonth(-1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg btn"><i class="fas fa-chevron-left"></i></button>
+                <button onclick="window.app.changeMonth(-1)" class="px-4 py-2 bg-gray-700 rounded-lg btn"><i class="fas fa-chevron-left"></i></button>
                 <div class="text-center">
                     <h3 class="text-lg font-bold">${monthNames[month]} ${year}</h3>
                     ${!isCurrentMonth ? `<button onclick="window.app.goToToday()" class="text-xs text-blue-500 hover:underline">Heute</button>` : ''}
                 </div>
-                <button onclick="window.app.changeMonth(1)" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg btn"><i class="fas fa-chevron-right"></i></button>
+                <button onclick="window.app.changeMonth(1)" class="px-4 py-2 bg-gray-700 rounded-lg btn"><i class="fas fa-chevron-right"></i></button>
             </div>
             <div class="grid grid-cols-7 gap-2 text-center">
                 ${['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map(tag => `<div class="font-semibold">${tag}</div>`).join('')}
@@ -578,34 +578,34 @@ const renderHome = (callbacks) => {
                     <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 rounded" 
                            ${state.showTrainingsOnHomeCalendar ? 'checked' : ''} 
                            onchange="window.app.setHomeCalendarFilter('trainings', this.checked)">
-                    <span class="ml-2 text-gray-700 dark:text-gray-300">Training</span>
+                    <span class="ml-2 text-gray-300">Training</span>
                 </label>
                 <label class="flex items-center cursor-pointer">
                     <input type="checkbox" class="form-checkbox h-4 w-4 text-yellow-600 rounded" 
                            ${state.showMatchesOnHomeCalendar ? 'checked' : ''} 
                            onchange="window.app.setHomeCalendarFilter('matches', this.checked)">
-                    <span class="ml-2 text-gray-700 dark:text-gray-300">Matches</span>
+                    <span class="ml-2 text-gray-300">Matches</span>
                 </label>
                 <label class="flex items-center cursor-pointer">
                     <input type="checkbox" class="form-checkbox h-4 w-4 text-pink-600 rounded" 
                            ${state.showGeburtstageOnHomeCalendar ? 'checked' : ''} 
                            onchange="window.app.setHomeCalendarFilter('geburtstage', this.checked)">
-                    <span class="ml-2 text-gray-700 dark:text-gray-300">Geburtstage</span>
+                    <span class="ml-2 text-gray-300">Geburtstage</span>
                 </label>
             </div>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700">
             <h2 class="text-lg font-bold mb-2 text-center"><i class="fas fa-calendar-alt mr-2"></i>Nächste Termine</h2>
             <div class="space-y-2">
                 ${nextEventGroups.length > 0 ? nextEventGroups.map(([date, events]) => {
                     const eventDate = parseDateString(date);
                     const isToday = formatDate(new Date()) === date;
                     return `
-                    <div class="flex items-center py-1 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onclick="window.app.showEventDetailModal('${date}')">
+                    <div class="flex items-center py-1 px-2 rounded-lg hover:bg-gray-700/50 cursor-pointer" onclick="window.app.showEventDetailModal('${date}')">
                         <div class="text-center mr-4 flex-shrink-0 w-16">
-                            <p class="font-bold ${isToday ? 'text-green-600 dark:text-green-400' : ''}">${eventDate.toLocaleDateString('de-DE', { weekday: 'short' })}</p>
-                            <p class="text-2xl font-bold ${isToday ? 'text-green-600 dark:text-green-400' : ''}">${eventDate.getDate()}</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">${eventDate.toLocaleDateString('de-DE', { month: 'short' })}</p>
+                            <p class="font-bold ${isToday ? 'text-green-400' : ''}">${eventDate.toLocaleDateString('de-DE', { weekday: 'short' })}</p>
+                            <p class="text-2xl font-bold ${isToday ? 'text-green-400' : ''}">${eventDate.getDate()}</p>
+                            <p class="text-sm text-gray-400">${eventDate.toLocaleDateString('de-DE', { month: 'short' })}</p>
                         </div>
                         <div class="flex-grow border-l dark:border-gray-600 pl-4">
                             ${events.map(event => {
@@ -626,14 +626,14 @@ const renderHome = (callbacks) => {
                                 return `
                                 <div class="flex items-center gap-3 mb-2">
                                     <span class="text-xl w-6 text-center">${icon}</span>
-                                    <p class="font-semibold text-gray-800 dark:text-gray-200">${event.title}</p>
+                                    <p class="font-semibold text-gray-200">${event.title}</p>
                                 </div>
                                 `;
                             }).join('')}
                         </div>
                     </div>
                     `;
-                }).join('<hr class="my-2 dark:border-gray-700">') : '<p class="text-center text-gray-500 dark:text-gray-400">Keine anstehenden Termine.</p>'}
+                }).join('<hr class="my-2 dark:border-gray-700">') : '<p class="text-center text-gray-400">Keine anstehenden Termine.</p>'}
             </div>
         </div>
     `;
@@ -648,14 +648,14 @@ const createSpielerCardHtml = (spieler, totalTrainings) => {
     const percentage = totalTrainings > 0 ? Math.round((attendedTrainings / totalTrainings) * 100) : 0;
     const fotoHtml = spieler.fotoUrl 
         ? `<img src="${spieler.fotoUrl}" class="profile-img rounded-full" onerror="this.src='https://placehold.co/48x48/${placeholderBg()}/${placeholderText()}?text=${spieler.name.charAt(0)}';">`
-        : `<div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-2xl">${spieler.position === 'Torwart' ? '' : ''}</div>`;
+        : `<div class="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-2xl">${spieler.position === 'Torwart' ? '' : ''}</div>`;
 
     return `
-        <div onclick="window.app.navigateTo('spielerDetail', '${spieler.id}')" class="bg-white p-4 rounded-xl shadow-lg flex items-center space-x-4 cursor-pointer hover:bg-gray-50 card dark:bg-gray-800 dark:hover:bg-gray-700">
+        <div onclick="window.app.navigateTo('spielerDetail', '${spieler.id}')" class="p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:bg-gray-700/50 card border border-gray-700">
             ${fotoHtml}
             <div class="flex-grow">
-                <p class="font-bold">${spieler.name} <span class="text-gray-500 dark:text-gray-400 font-normal">#${spieler.nummer || '?'}</span></p>
-                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <p class="font-bold">${spieler.name} <span class="text-gray-400 font-normal">#${spieler.nummer || '?'}</span></p>
+                <div class="text-sm text-gray-400 mt-1">
                     <p class="flex items-center space-x-2">
                         ${getStatusIndicator(getAktuellerStatus(spieler))}
                         <span>${getAktuellerStatus(spieler)}</span>
@@ -705,7 +705,7 @@ const renderSpielerUebersicht = (callbacks) => {
     const sortButton = (key, text) => {
         const isActive = state.sortBy === key;
         const icon = isActive ? (state.sortAsc ? '' : '') : '';
-        return `<button onclick="window.app.setSort('${key}')" class="px-3 py-1 text-sm rounded-full btn ${isActive ? 'bg-green-600 text-white' : 'bg-gray-200 dark:bg-gray-700'}">${text} ${icon}</button>`;
+        return `<button onclick="window.app.setSort('${key}')" class="px-3 py-1 text-sm rounded-full btn ${isActive ? 'bg-green-600 text-white' : 'bg-gray-700'}">${text} ${icon}</button>`;
     };
 
     const todayStringForTotal = formatDate(new Date());
@@ -713,14 +713,14 @@ const renderSpielerUebersicht = (callbacks) => {
     const totalTrainings = pastTrainingsForTotal.length;
 
     return `
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
+        <div class="p-4 rounded-xl border border-gray-700">
             <button onclick="window.app.navigateTo('spielerForm')" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn flex items-center justify-center gap-2">
                 <i class="fas fa-plus"></i>
                 Neuen Spieler hinzufügen
             </button>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow-lg dark:bg-gray-800">
-            <h3 class="text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">Sortieren nach:</h3>
+        <div class="p-4 rounded-xl border border-gray-700">
+            <h3 class="text-sm font-bold text-gray-400 mb-2">Sortieren nach:</h3>
             <div class="flex justify-center flex-wrap gap-2">
                 ${sortButton('name', 'Name')}
                 ${sortButton('status', 'Status')}
@@ -730,9 +730,9 @@ const renderSpielerUebersicht = (callbacks) => {
         </div>
         <div class="space-y-3">
             ${filteredSpieler.length > 0 ? filteredSpieler.map(spieler => createSpielerCardHtml(spieler, totalTrainings)).join('') : `
-            <div class="bg-white p-6 rounded-xl shadow-lg text-center text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+            <div class="p-6 rounded-xl text-center text-gray-400 border border-gray-700">
                 <p>Noch keine Spieler vorhanden.</p>
-                <p class="mt-2">Fügen Sie einen neuen Spieler über den <span class="inline-block mx-1 px-2 py-1 bg-green-100 text-green-700 rounded-md font-bold">+</span> Button hinzu oder importieren Sie Daten in den Einstellungen.</p>
+                <p class="mt-2">Fügen Sie einen neuen Spieler über den <span class="inline-block mx-1 px-2 py-1 bg-green-900 text-green-300 rounded-md font-bold">+</span> Button hinzu oder importieren Sie Daten in den Einstellungen.</p>
             </div>
             `}
         </div>
@@ -746,7 +746,7 @@ const renderSpielerDetail = (callbacks) => {
     }
     const fotoDetailHtml = spieler.fotoUrl 
         ? `<img id="fotoDetail" src="${spieler.fotoUrl}" class="profile-img-detail rounded-full mx-auto" onerror="this.src='https://placehold.co/120x120/${placeholderBg()}/${placeholderText()}?text=${spieler.name.charAt(0)}';">`
-        : `<div class="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-6xl mx-auto">${spieler.position === 'Torwart' ? '' : ''}</div>`;
+        : `<div class="w-32 h-32 rounded-full bg-gray-700 flex items-center justify-center text-6xl mx-auto">${spieler.position === 'Torwart' ? '' : ''}</div>`;
     
     let abwesenheitInfo = '';
     const aktuellerStatus = getAktuellerStatus(spieler);
@@ -762,26 +762,26 @@ const renderSpielerDetail = (callbacks) => {
     const geburtstagDate = parseDateString(spieler.geburtstag);
 
     return `
-        <div class="bg-white p-6 rounded-xl shadow-lg text-center dark:bg-gray-800">
+        <div class="p-6 rounded-xl text-center border border-gray-700">
             ${fotoDetailHtml}
             <h2 class="text-2xl font-bold mt-4">${spieler.name} #${spieler.nummer || '?'}</h2>
-            <p class="text-gray-600 dark:text-gray-400">${spieler.position}</p>
+            <p class="text-gray-400">${spieler.position}</p>
             <div class="mt-2 flex justify-center items-center space-x-2">
                 ${getStatusIndicator(aktuellerStatus)}
                 <span>${aktuellerStatus}</span>
             </div>
             ${abwesenheitInfo}
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-lg space-y-3 dark:bg-gray-800">
+        <div class="p-6 rounded-xl space-y-3 border border-gray-700">
             <h3 class="font-bold text-lg border-b dark:border-gray-700 pb-2">Informationen</h3>
             <p><strong>Alter:</strong> ${berechneAlter(spieler.geburtstag) || 'N/A'}</p>
             <p><strong>Geburtstag:</strong> ${geburtstagDate ? geburtstagDate.toLocaleDateString('de-DE') : 'N/A'}</p>
             <p><strong>Telefon:</strong> ${spieler.telefon || 'N/A'}</p>
             <p><strong>Email:</strong> ${spieler.email || 'N/A'}</p>
             <p><strong>Notizen:</strong></p>
-            <p class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">${spieler.notiz || 'Keine Notizen.'}</p>
+            <p class="bg-gray-700 p-3 rounded-lg">${spieler.notiz || 'Keine Notizen.'}</p>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-lg space-y-3 dark:bg-gray-800">
+        <div class="p-6 rounded-xl space-y-3 border border-gray-700">
             <h3 class="font-bold text-lg border-b dark:border-gray-700 pb-2">Statistiken</h3>
             <p><strong>Trainings:</strong> ${getTrainingsAnzahlGesamt(spieler.id, state)}</p>
             <p><strong>Matches:</strong> ${getMatchAnzahlGesamt(spieler.id, state)}</p>
@@ -805,7 +805,7 @@ const renderSpielerForm = (callbacks) => {
 
     return `
         <form id="spielerForm">
-            <div class="bg-white p-6 rounded-xl shadow-lg space-y-3 dark:bg-gray-800">
+            <div class="p-6 rounded-xl space-y-3 border border-gray-700">
                 <h2 class="text-xl font-bold text-center">Stammdaten</h2>
                 <input type="hidden" name="id" value="${spielerToEdit.id || ''}">
                 <div>
@@ -838,7 +838,7 @@ const renderSpielerForm = (callbacks) => {
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-lg space-y-3 dark:bg-gray-800">
+            <div class="p-6 rounded-xl space-y-3 border border-gray-700">
                 <h2 class="text-xl font-bold text-center">Status & Abwesenheiten</h2>
                 <div>
                     <label class="font-semibold">Manueller Status</label>
@@ -876,7 +876,7 @@ const renderSpielerForm = (callbacks) => {
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-lg space-y-3 dark:bg-gray-800">
+            <div class="p-6 rounded-xl space-y-3 border border-gray-700">
                 <h2 class="text-xl font-bold text-center">Notizen</h2>
                 <div>
                     <textarea name="notiz" rows="3" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">${spielerToEdit.notiz || ''}</textarea>
@@ -904,16 +904,16 @@ export const render = (callbacks) => {
         const titleClass = (displayTitle.length > 15) ? 'text-base font-bold' : 'text-lg font-bold';
 
         return `
-        <header class="bg-white text-gray-800 p-4 sticky top-0 z-50 flex items-center justify-between text-center h-16 border-b-2 border-green-600 dark:bg-gray-800 dark:text-gray-200 dark:border-green-500">
-            ${state.isLoggedIn ? `<button onclick="window.app.navigateTo('einstellungen', null, true)" class="flex flex-col items-center justify-center text-gray-600 hover:text-green-600 w-12 h-12 rounded-full hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-gray-700 absolute top-2 left-2" title="Einstellungen"><i class="fas fa-cog text-xl"></i></button>` : ''}
+        <header class="bg-gray-800 text-gray-200 p-4 sticky top-0 z-50 flex items-center justify-between text-center h-16 border-b-2 border-green-500">
+            ${state.isLoggedIn ? `<button onclick="window.app.navigateTo('einstellungen', null, true)" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-gray-700 transition-colors absolute top-2 left-2" title="Einstellungen"><i class="fas fa-cog text-xl"></i></button>` : ''}
             <div class="flex items-center justify-center flex-grow">
                 ${emblemHtml}
                 <div>
                     <h1 class="${titleClass} whitespace-nowrap">${displayTitle}</h1>
-                    ${displayTitle2 ? `<h2 class="text-sm text-gray-500 dark:text-gray-400 leading-tight whitespace-nowrap">${displayTitle2}</h2>` : ''}
+                    ${displayTitle2 ? `<h2 class="text-sm text-gray-400 leading-tight whitespace-nowrap">${displayTitle2}</h2>` : ''}
                 </div>
             </div>
-            ${state.isLoggedIn ? `<button onclick="window.app.logout()" class="flex flex-col items-center justify-center text-gray-600 hover:text-green-600 w-12 h-12 rounded-full hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-gray-700 absolute top-2 right-2" title="Ausloggen"><i class="fas fa-sign-out-alt text-xl"></i></button>` : ''}
+            ${state.isLoggedIn ? `<button onclick="window.app.logout()" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-gray-700 transition-colors absolute top-2 right-2" title="Ausloggen"><i class="fas fa-sign-out-alt text-xl"></i></button>` : ''}
         </header>`;
     };
 
@@ -930,20 +930,20 @@ export const render = (callbacks) => {
                 'einstellungen': ['einstellungen']
             };
             const isActive = activePages[page]?.includes(state.currentPage);
-            const activeClass = 'text-green-600 dark:text-green-400';
+            const activeClass = 'text-green-400';
             return `<div class="flex-1 flex justify-center items-center">
-                        <button onclick="window.app.navigateTo('${page}', null, true)" class="flex flex-col items-center justify-center text-gray-600 hover:text-green-600 ${buttonSizeClass} rounded-full hover:bg-gray-100 transition-colors ${isActive ? activeClass : ''} dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-gray-700" title="${title}">
+                        <button onclick="window.app.navigateTo('${page}', null, true)" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 ${buttonSizeClass} rounded-full hover:bg-gray-700 transition-colors ${isActive ? activeClass : ''}" title="${title}">
                             <i class="fas ${icon} text-xl"></i>
                             <span class="text-xs mt-1">${title}</span>
                         </button>
                     </div>`;
         };
         let leftButtonHtml = showBack
-            ? `<div class="flex-1 flex justify-center items-center"><button onclick="window.app.goBack()" class="flex flex-col items-center justify-center text-gray-600 hover:text-green-600 ${buttonSizeClass} rounded-full hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-gray-700" title="Zurück"><i class="fas fa-arrow-left text-xl"></i><span class="text-xs mt-1">Zurück</span></button></div>`
+            ? `<div class="flex-1 flex justify-center items-center"><button onclick="window.app.goBack()" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 ${buttonSizeClass} rounded-full hover:bg-gray-700 transition-colors" title="Zurück"><i class="fas fa-arrow-left text-xl"></i><span class="text-xs mt-1">Zurück</span></button></div>`
             : navButton('home', 'fa-home', 'Home');
         return `
             <div class="fixed bottom-0 left-0 right-0 z-40 p-4">
-                <div class="bg-gradient-to-b from-gray-50 to-white border border-gray-200/75 shadow-lg rounded-full px-2 py-2 w-full max-w-sm mx-auto dark:from-gray-700 dark:to-gray-800 dark:border-gray-600/75">
+                <div class="bg-gradient-to-b from-gray-700 to-gray-800 border border-gray-600/75 shadow-lg rounded-full px-2 py-2 w-full max-w-sm mx-auto">
                     <div class="flex justify-around items-center">
                         ${leftButtonHtml}
                         ${navButton('trainingUebersicht', 'fa-running', 'Training')}
@@ -961,9 +961,9 @@ export const render = (callbacks) => {
         switch (state.currentPage) {
             case 'login':
                 pageContent = `
-                    <div class="min-h-screen flex flex-col justify-center items-center p-4 dark:bg-gray-900">
+                    <div class="min-h-screen flex flex-col justify-center items-center p-4 bg-gray-900">
                         <div class="w-full max-w-md">
-                            <div class="bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg text-center dark:bg-gray-800/80">
+                            <div class="bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg text-center">
                                 <div class="flex justify-center mb-6">
                                     ${state.teamInfo.emblemUrl
                                         ? `<img src="${state.teamInfo.emblemUrl}" class="w-20 h-20 rounded-full object-cover shadow-md" onerror="this.style.display='none';">`
