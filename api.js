@@ -3,7 +3,7 @@ import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, updateDoc, qu
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { state } from './state.js';
 
-export const APP_VERSION = `Version 2025-08-25-007`;
+export const APP_VERSION = `Version 2025-08-25-008`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 const firebaseConfig = {
@@ -474,3 +474,28 @@ export const saveFormation = async (matchtagId, formationData, callbacks) => {
     }
 };
 
+export const deleteMannschaftEmblem = async (callbacks) => {
+    callbacks.showModal(
+        "Vereinsemblem löschen?",
+        "Möchten Sie das Vereinsemblem wirklich löschen? Das Emblem wird sofort entfernt und kann nicht wiederhergestellt werden.",
+        [
+            { text: 'Abbrechen', class: 'bg-gray-500' },
+            { 
+                text: 'Ja, löschen', 
+                class: 'bg-red-600', 
+                onClick: async () => {
+                    callbacks.showModal("Löschen...", '<div class="animate-pulse">Emblem wird gelöscht...</div>', []);
+                    const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
+                    try {
+                        await updateDoc(configDoc, {
+                            emblemUrl: null 
+                        });
+                        callbacks.showModal("Gelöscht", "Das Vereinsemblem wurde entfernt.", [{text: 'OK', class: 'bg-blue-500'}]);
+                    } catch (error) {
+                        callbacks.showModal("Fehler", `Fehler beim Löschen des Emblems: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+                    }
+                }
+            }
+        ]
+    );
+};
