@@ -680,6 +680,95 @@ const appCallbacks = {
                 }
             });
         }
+        
+        // KORREKTUR: Alle fehlenden Event Listeners wieder hinzugefügt
+        const addTrainingBtn = document.getElementById('add-training-btn');
+        if (addTrainingBtn) {
+            addTrainingBtn.addEventListener('click', () => appCallbacks.showAddEventModal('training'));
+        }
+
+        const addMatchBtn = document.getElementById('add-match-btn');
+        if (addMatchBtn) {
+            addMatchBtn.addEventListener('click', () => appCallbacks.showAddEventModal('match'));
+        }
+        
+        const showAllTrainingsBtn = document.getElementById('show-all-trainings-btn');
+        if (showAllTrainingsBtn) {
+            showAllTrainingsBtn.addEventListener('click', () => appCallbacks.setTrainingListView('all'));
+        }
+
+        const showTop10TrainingsBtn = document.getElementById('show-top10-trainings-btn');
+        if (showTop10TrainingsBtn) {
+            showTop10TrainingsBtn.addEventListener('click', () => appCallbacks.setTrainingListView('top10'));
+        }
+
+        const showAllMatchesBtn = document.getElementById('show-all-matches-btn');
+        if (showAllMatchesBtn) {
+            showAllMatchesBtn.addEventListener('click', () => appCallbacks.setMatchtagListView('all'));
+        }
+
+        const showTop10MatchesBtn = document.getElementById('show-top10-matches-btn');
+        if (showTop10MatchesBtn) {
+            showTop10MatchesBtn.addEventListener('click', () => appCallbacks.setMatchtagListView('top10'));
+        }
+        
+        document.querySelectorAll('.training-card').forEach(card => {
+            card.addEventListener('click', (e) => appCallbacks.navigateTo('trainingDetail', e.currentTarget.dataset.id));
+        });
+        
+        document.querySelectorAll('.match-card').forEach(card => {
+            card.addEventListener('click', (e) => appCallbacks.navigateTo('matchtagDetail', e.currentTarget.dataset.id));
+        });
+        
+        document.querySelectorAll('.spieler-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                appCallbacks.navigateTo('spielerDetail', e.currentTarget.dataset.id);
+            });
+        });
+        
+        document.querySelectorAll('.anwesenheit-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                appCallbacks.setAnwesenheit(state.currentId, e.currentTarget.dataset.spielerId, e.currentTarget.dataset.status);
+            });
+        });
+        
+        document.querySelectorAll('.match-position-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                appCallbacks.updateSpielerMatchDetails(state.currentId, e.currentTarget.dataset.spielerId, 'position', e.currentTarget.dataset.position);
+            });
+        });
+        
+        document.querySelectorAll('.match-stat-input').forEach(input => {
+            input.addEventListener('change', (e) => {
+                appCallbacks.updateSpielerMatchDetails(state.currentId, e.currentTarget.dataset.spielerId, e.currentTarget.dataset.field, e.currentTarget.value);
+            });
+        });
+
+        const toggleTrainingBtn = document.getElementById('toggle-training-cancellation');
+        if (toggleTrainingBtn) {
+            toggleTrainingBtn.addEventListener('click', () => appCallbacks.toggleTrainingCancellation(state.currentId));
+        }
+
+        const deleteTrainingBtn = document.getElementById('delete-training-btn');
+        if (deleteTrainingBtn) {
+            deleteTrainingBtn.addEventListener('click', () => appCallbacks.deleteTraining(state.currentId));
+        }
+
+        const toggleMatchBtn = document.getElementById('toggle-match-cancellation');
+        if (toggleMatchBtn) {
+            toggleMatchBtn.addEventListener('click', () => appCallbacks.toggleMatchCancellation(state.currentId));
+        }
+
+        const deleteMatchBtn = document.getElementById('delete-match-btn');
+        if (deleteMatchBtn) {
+            deleteMatchBtn.addEventListener('click', () => appCallbacks.deleteMatchtag(state.currentId));
+        }
+        
+        const showFormationBtn = document.getElementById('show-formation-modal');
+        if (showFormationBtn) {
+            showFormationBtn.addEventListener('click', () => appCallbacks.showFormationModal(state.currentId));
+        }
     }
 };
 
