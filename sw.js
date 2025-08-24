@@ -1,20 +1,23 @@
-const CACHE_NAME = 'trainer-db-cache-v3'; // Increased version to force update
+const CACHE_NAME = 'trainer-db-cache-v4'; // Increased version to force update
 const urlsToCache = [
     '/',
     '/index.html',
     '/manifest.json',
     '/icons/icon-192x192.png',
     '/icons/icon-512x512.png',
+    // Haupt-Skripte
     './utils.js',
     './state.js',
     './render.js',
     './api.js',
     './app.js',
-    './modals.js',
-    './home-view.js',
-    './spieler-view.js',
-    './events-view.js',
-    './einstellungen-view.js',
+    // Neue View-Skripte
+    './views/layout-view.js',
+    './views/home-view.js',
+    './views/spieler-view.js',
+    './views/events-view.js',
+    './views/einstellungen-view.js',
+    // Externe Bibliotheken
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js',
@@ -46,4 +49,3 @@ self.addEventListener('fetch', event => {
         caches.match(event.request).then(response => response || fetch(event.request))
     );
 });
-
