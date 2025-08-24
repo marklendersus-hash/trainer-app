@@ -1012,3 +1012,4 @@ export const render = (callbacks) => {
         callbacks.addEventListeners();
     }
 };
+

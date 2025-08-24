@@ -164,3 +164,4 @@ export const renderHome = (callbacks) => {
         </div>
     `;
 };
+

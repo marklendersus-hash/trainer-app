@@ -395,3 +395,4 @@ export const renderMatchtagDetail = (callbacks) => {
         </div>
     `;
 };
+

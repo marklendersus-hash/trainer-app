@@ -519,3 +519,4 @@ export const showEventDetailModal = (dateString, callbacks) => {
     modalContainer.appendChild(modal);
     setTimeout(() => modal.classList.add('visible'), 10);
 };
+

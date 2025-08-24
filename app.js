@@ -774,3 +774,4 @@ const appCallbacks = {
 
 window.app = appCallbacks;
 window.app.init();
+

@@ -73,3 +73,5 @@ export const setTrainingListView = (view) => {
 export const setMatchtagListView = (view) => {
     state.matchtagListView = view;
 };
+
+

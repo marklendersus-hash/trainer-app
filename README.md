@@ -74,3 +74,4 @@ Eine umfassende Web-Anwendung zur Verwaltung von Fußballmannschaften, die Train
 - **Abhängigkeiten:**
     - Firebase Web SDK
     - AWS S3 Client SDK (für die Kompatibilität mit Backblaze B2)
+

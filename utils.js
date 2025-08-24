@@ -126,3 +126,4 @@ export const fetchHolidaysForYear = async (year, state) => {
         console.error("Fehler bei der Feiertags-API:", error);
     }
 };
+
