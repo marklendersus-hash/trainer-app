@@ -190,18 +190,38 @@ const confirmDeletion = (type, callbacks) => {
 
 const showFormationModal = (matchtagId, callbacks) => { /* ... showFormationModal logic ... */ };
 
-const showCalendarDayModal = (dateString, callbacks) => {
+const showCreateEventModal = (dateString, callbacks) => {
+    showModal(
+        'Neues Ereignis erstellen',
+        'Was möchten Sie für diesen Tag erstellen?',
+        [
+            {
+                text: 'Training',
+                class: 'bg-blue-600',
+                onClick: () => callbacks.navigateTo('trainingDetail', dateString)
+            },
+            {
+                text: 'Match',
+                class: 'bg-yellow-600',
+                onClick: () => callbacks.navigateTo('matchtagDetail', dateString)
+            },
+            { text: 'Abbrechen', class: 'bg-gray-500' }
+        ]
+    );
+};
+
+const showEventDetailModal = (dateString, callbacks) => {
     const training = state.trainingseinheiten.find(t => t.id === dateString && !t.cancelled);
     const match = state.matchtage.find(s => s.id === dateString && !s.cancelled);
     const geburtstage = state.spieler.filter(p => p.geburtstag && p.geburtstag.slice(5) === dateString.slice(5));
 
-    let title = `Ereignisse am ${formatDateWithWeekday(dateString)}`;
+    let title = `Details für ${formatDateWithWeekday(dateString)}`;
     let content = '';
+    let buttons = [];
 
-    // --- Display existing events ---
     if (geburtstage.length > 0) {
         content += `
-            <div class="mb-3 text-left">
+            <div class="mb-2 text-left">
                 <p class="font-bold text-pink-500"><i class="fas fa-birthday-cake mr-2"></i>Geburtstag(e)</p>
                 <p>${geburtstage.map(p => p.name).join(', ')}</p>
             </div>
@@ -210,11 +230,16 @@ const showCalendarDayModal = (dateString, callbacks) => {
 
     if (training) {
         content += `
-            <div class="mb-3 text-left">
+            <div class="mb-2 text-left">
                 <p class="font-bold text-blue-500"><i class="fas fa-running mr-2"></i>Training</p>
                 <p>Zeit: ${training.time || 'Nicht festgelegt'}</p>
             </div>
         `;
+        buttons.push({
+            text: 'Training bearbeiten',
+            class: 'bg-blue-600',
+            onClick: () => callbacks.navigateTo('trainingDetail', dateString)
+        });
     }
 
     if (match) {
@@ -225,34 +250,33 @@ const showCalendarDayModal = (dateString, callbacks) => {
             matchDetails += ` | <strong>Ergebnis:</strong> ${match.toreHeim}:${match.toreAuswaerts}`;
         }
         content += `
-            <div class="mb-3 text-left">
+            <div class="mb-2 text-left">
                 <p class="font-bold text-yellow-500"><i class="fas fa-futbol mr-2"></i>Match</p>
                 <p class="text-sm">${matchDetails}</p>
             </div>
         `;
+        buttons.push({
+            text: 'Match bearbeiten',
+            class: 'bg-yellow-600',
+            onClick: () => callbacks.navigateTo('matchtagDetail', dateString)
+        });
     }
 
-    if (content === '') {
-        content = '<p class="text-center text-gray-500 my-2">Keine Ereignisse an diesem Tag.</p>';
-    }
-    
-    content += '<hr class="my-2 border-gray-600">';
+    buttons.push({ text: 'Schließen', class: 'bg-gray-500' });
 
-    // --- Action Buttons ---
-    let actionButtons = '';
-    if (training) {
-        actionButtons += `<button class="w-full py-2 mb-2 bg-blue-600 text-white rounded-lg btn" onclick="window.app.navigateTo('trainingDetail', '${dateString}'); window.app.closeModal();">Training bearbeiten</button>`;
-    }
-    if (match) {
-        actionButtons += `<button class="w-full py-2 mb-2 bg-yellow-600 text-white rounded-lg btn" onclick="window.app.navigateTo('matchtagDetail', '${dateString}'); window.app.closeModal();">Match bearbeiten</button>`;
-    }
+    showModal(title, content, buttons);
+};
 
-    actionButtons += `<button class="w-full py-2 mb-2 bg-green-600 text-white rounded-lg btn" onclick="window.app.navigateTo('trainingDetail', '${dateString}'); window.app.closeModal();">Neues Training erstellen</button>`;
-    actionButtons += `<button class="w-full py-2 bg-green-600 text-white rounded-lg btn" onclick="window.app.navigateTo('matchtagDetail', '${dateString}'); window.app.closeModal();">Neues Match erstellen</button>`;
-    
-    content += actionButtons;
+const handleCalendarDayClick = (dateString, callbacks) => {
+    const trainingOnDay = state.trainingseinheiten.find(t => t.id === dateString && !t.cancelled);
+    const matchOnDay = state.matchtage.find(s => s.id === dateString && !s.cancelled);
+    const geburtstagOnDay = state.spieler.some(p => p.geburtstag && p.geburtstag.slice(5) === dateString.slice(5));
 
-    showModal(title, content, [{ text: 'Schließen', class: 'bg-gray-500' }]);
+    if (trainingOnDay || matchOnDay || geburtstagOnDay) {
+        showEventDetailModal(dateString, callbacks);
+    } else {
+        showCreateEventModal(dateString, callbacks);
+    }
 };
 
 
@@ -494,7 +518,7 @@ const appCallbacks = {
     showFormationModal: (matchtagId) => showFormationModal(matchtagId, appCallbacks),
     saveFormation: (matchtagId, formationData) => saveFormation(matchtagId, formationData, appCallbacks),
     saveTrainingDetails: (datumString, data) => saveTrainingDetails(datumString, data, appCallbacks),
-    handleCalendarDayClick: (dateString) => showCalendarDayModal(dateString, appCallbacks),
+    handleCalendarDayClick: (dateString) => handleCalendarDayClick(dateString, appCallbacks),
     showAddEventModal: (type) => showAddEventModal(type, appCallbacks),
     closeModal: () => closeModal(),
     showModal: (title, message, buttons) => showModal(title, message, buttons),
