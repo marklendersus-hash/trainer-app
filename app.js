@@ -35,7 +35,7 @@ const showModal = (title, message, buttons = [{text: 'Schließen', class: 'bg-bl
         <div class="modal-content text-center">
             <h3 class="text-lg font-bold mb-4">${title}</h3>
             <div class="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">${message}</div>
-            <div class="flex space-x-2 mt-6">
+            <div class="flex flex-col space-y-2 mt-6">
                 ${buttonsHtml}
             </div>
         </div>
