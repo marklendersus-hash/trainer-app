@@ -221,7 +221,49 @@ const handleCalendarDayClick = (dateString, callbacks) => {
     }
 };
 
-const showEventDetailModal = (dateString, callbacks) => { /* ... showEventDetailModal logic ... */ };
+const showEventDetailModal = (dateString, callbacks) => {
+    const training = state.trainingseinheiten.find(t => t.id === dateString && !t.cancelled);
+    const match = state.matchtage.find(s => s.id === dateString && !s.cancelled);
+
+    let title = '';
+    let content = '';
+    let buttons = [];
+
+    if (training) {
+        title = `Training am ${formatDateWithWeekday(dateString)}`;
+        content = `<p><strong>Zeit:</strong> ${training.time || 'Nicht festgelegt'}</p>`;
+        buttons.push({
+            text: 'Bearbeiten',
+            class: 'bg-blue-600',
+            onClick: () => callbacks.navigateTo('trainingDetail', dateString)
+        });
+    }
+
+    if (match) {
+        title = `Match am ${formatDateWithWeekday(dateString)}`;
+        content += `
+            <div class="mt-2">
+                <p><strong>Gegner:</strong> ${match.gegner || 'Unbekannt'}</p>
+                <p><strong>Spielort:</strong> ${match.spielort || 'Unbekannt'}</p>
+                <p><strong>Zeit:</strong> ${match.time || 'Nicht festgelegt'}</p>
+                ${(match.toreHeim !== null && match.toreAuswaerts !== null) ? `<p><strong>Ergebnis:</strong> ${match.toreHeim} : ${match.toreAuswaerts}</p>` : ''}
+            </div>
+        `;
+        buttons.push({
+            text: 'Bearbeiten',
+            class: 'bg-yellow-600',
+            onClick: () => callbacks.navigateTo('matchtagDetail', dateString)
+        });
+    }
+    
+    if (training && match) {
+        title = `Ereignisse am ${formatDateWithWeekday(dateString)}`;
+    }
+
+    buttons.push({ text: 'Schließen', class: 'bg-gray-500' });
+
+    showModal(title, content, buttons);
+};
 
 
 // =================================================================
