@@ -115,16 +115,15 @@ const showAddEventModal = (type, callbacks) => {
 const showDeleteOptionsModal = (callbacks) => {
     showModal(
         "Welche Daten möchten Sie löschen?",
-        `
-            <div class="space-y-3">
-                <button onclick="window.app.confirmDeletion('all')" class="w-full py-3 font-medium text-white uppercase bg-red-600 rounded-lg shadow-lg hover:bg-red-700 btn">Alle App-Daten</button>
-                <button onclick="window.app.confirmDeletion('spieler')" class="w-full py-3 font-medium text-white uppercase bg-yellow-600 rounded-lg shadow-lg hover:bg-yellow-700 btn">Nur Spielerdaten</button>
-                <button onclick="window.app.confirmDeletion('training')" class="w-full py-3 font-medium text-white uppercase bg-yellow-600 rounded-lg shadow-lg hover:bg-yellow-700 btn">Nur Trainingsdaten</button>
-                <button onclick="window.app.confirmDeletion('matchtage')" class="w-full py-3 font-medium text-white uppercase bg-yellow-600 rounded-lg shadow-lg hover:bg-yellow-700 btn">Nur Matchdaten</button>
-                <button onclick="window.app.confirmDeletion('mannschaft')" class="w-full py-3 font-medium text-white uppercase bg-yellow-600 rounded-lg shadow-lg hover:bg-yellow-700 btn">Nur Mannschaftsinfo</button>
-            </div>
-        ` ,
-        [{ text: 'Abbrechen', class: 'bg-gray-500' }]
+        "Diese Aktion kann nicht rückgängig gemacht werden.",
+        [
+            { text: 'Alle App-Daten', class: 'bg-red-600', onClick: () => callbacks.confirmDeletion('all') },
+            { text: 'Nur Spielerdaten', class: 'bg-yellow-600', onClick: () => callbacks.confirmDeletion('spieler') },
+            { text: 'Nur Trainingsdaten', class: 'bg-yellow-600', onClick: () => callbacks.confirmDeletion('training') },
+            { text: 'Nur Matchdaten', class: 'bg-yellow-600', onClick: () => callbacks.confirmDeletion('matchtage') },
+            { text: 'Nur Mannschaftsinfo', class: 'bg-yellow-600', onClick: () => callbacks.confirmDeletion('mannschaft') },
+            { text: 'Abbrechen', class: 'bg-gray-500' }
+        ]
     );
 };
 
