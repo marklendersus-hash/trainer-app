@@ -102,6 +102,7 @@ export const saveMannschaftInfo = async (form, callbacks) => {
     const teamData = {
         name: formData.get('name'),
         name2: formData.get('name2'),
+        emblemUrl: state.teamInfo.emblemUrl || null
     };
     const file = formData.get('emblem');
     try {
