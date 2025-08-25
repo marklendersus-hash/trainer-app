@@ -216,25 +216,15 @@ const showEventDetailModal = (dateString, callbacks) => {
     const geburtstage = state.spieler.filter(p => p.geburtstag && p.geburtstag.slice(5) === dateString.slice(5));
 
     let title = `Details für ${formatDateWithWeekday(dateString)}`;
-    let content = '';
+    let content = '<div class="space-y-1 text-left">';
     let buttons = [];
 
     if (geburtstage.length > 0) {
-        content += `
-            <div class="text-left">
-                <p class="font-bold text-pink-500"><i class="fas fa-birthday-cake mr-2"></i>Geburtstag(e)</p>
-                <p>${geburtstage.map(p => p.name).join(', ')}</p>
-            </div>
-        `;
+        content += `<p><i class="fas fa-birthday-cake fa-fw text-pink-500 mr-2"></i><strong>Geburtstag:</strong> ${geburtstage.map(p => p.name).join(', ')}</p>`;
     }
 
     if (training) {
-        content += `
-            <div class="text-left">
-                <p class="font-bold text-blue-500"><i class="fas fa-running mr-2"></i>Training</p>
-                <p>Zeit: ${training.time || 'Nicht festgelegt'}</p>
-            </div>
-        `;
+        content += `<p><i class="fas fa-running fa-fw text-blue-500 mr-2"></i><strong>Training:</strong> ${training.time || 'Nicht festgelegt'}</p>`;
         buttons.push({
             text: 'Training bearbeiten',
             class: 'bg-blue-600',
@@ -243,24 +233,19 @@ const showEventDetailModal = (dateString, callbacks) => {
     }
 
     if (match) {
-        let matchDetails = `<strong>Gegner:</strong> ${match.gegner || '?'}`;
-        matchDetails += ` | <strong>Ort:</strong> ${match.spielort || '?'}`;
-        matchDetails += ` | <strong>Zeit:</strong> ${match.time || '?'}`;
+        let matchDetails = `Gegner: ${match.gegner || '?'} (${match.spielort || '?'})`;
         if (match.toreHeim !== null && match.toreAuswaerts !== null) {
-            matchDetails += ` | <strong>Ergebnis:</strong> ${match.toreHeim}:${match.toreAuswaerts}`;
+            matchDetails += ` | Ergebnis: ${match.toreHeim}:${match.toreAuswaerts}`;
         }
-        content += `
-            <div class="text-left">
-                <p class="font-bold text-yellow-500"><i class="fas fa-futbol mr-2"></i>Match</p>
-                <p class="text-sm">${matchDetails}</p>
-            </div>
-        `;
+        content += `<p><i class="fas fa-futbol fa-fw text-yellow-500 mr-2"></i><strong>Match:</strong> ${matchDetails}</p>`;
         buttons.push({
             text: 'Match bearbeiten',
             class: 'bg-yellow-600',
             onClick: () => callbacks.navigateTo('matchtagDetail', dateString)
         });
     }
+    
+    content += '</div>';
 
     if (!training && !match && geburtstage.length > 0) {
         buttons.push({
