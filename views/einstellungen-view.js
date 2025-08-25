@@ -58,9 +58,11 @@ export const renderEinstellungen = () => {
         <div class="p-6 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold text-center">Datenverwaltung</h2>
             <input type="file" id="jsonImportInput" accept=".json" class="hidden">
-            <button onclick="window.app.importData()" class="w-full py-3 font-medium text-white uppercase bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 btn">Daten Importieren (JSON)</button>
-            <button onclick="window.app.showExportOptionsModal()" class="w-full py-3 font-medium text-white uppercase bg-gray-600 rounded-lg shadow-lg hover:bg-gray-700 btn">Daten Exportieren (JSON)</button>
-            <button onclick="window.app.showDeleteOptionsModal()" class="w-full py-3 font-medium text-white uppercase bg-red-600 rounded-lg shadow-lg hover:bg-red-700 btn mt-4">Daten löschen</button>
+            <div class="flex gap-2 mb-4">
+                <button onclick="window.app.importData()" class="flex-1 py-3 font-medium text-white uppercase bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 btn">Daten Import.</button>
+                <button onclick="window.app.showExportOptionsModal()" class="flex-1 py-3 font-medium text-white uppercase bg-gray-600 rounded-lg shadow-lg hover:bg-gray-700 btn">Daten Export.</button>
+            </div>
+            <button onclick="window.app.showDeleteOptionsModal()" class="w-full py-3 font-medium text-white uppercase bg-red-600 rounded-lg shadow-lg hover:bg-red-700 btn">Daten löschen</button>
         </div>
     `;
 };
