@@ -516,38 +516,7 @@ export const deleteMannschaftInfo = async (callbacks) => {
     }
 };
 
-export const saveFormation = async (matchtagId, formationData, callbacks) => {
-    const matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
-    const docRef = doc(matchtageCollection, matchtagId);
-    const updates = {};
-    const currentMatchtag = state.matchtage.find(s => s.id === matchtagId);
-    state.spieler.forEach(player => {
-        const playerId = player.id;
-        const currentPos = currentMatchtag?.aufstellung?.[playerId]?.position;
-        const newFormationData = formationData[playerId];
 
-        if (newFormationData && newFormationData.posX !== null && newFormationData.posY !== null) {
-            updates[`aufstellung.${playerId}.posX`] = newFormationData.posX;
-            updates[`aufstellung.${playerId}.posY`] = newFormationData.posY;
-            if (currentPos !== 'Startelf' && currentPos !== 'Ersatzbank') {
-                updates[`aufstellung.${playerId}.position`] = 'Startelf';
-            }
-        } else {
-            if (currentPos === 'Startelf' || currentPos === 'Ersatzbank') {
-                updates[`aufstellung.${playerId}.position`] = 'Nicht dabei';
-                updates[`aufstellung.${playerId}.posX`] = null;
-                updates[`aufstellung.${playerId}.posY`] = null;
-            }
-        }
-    });
-    try {
-        await updateDoc(docRef, updates);
-    } catch (error) {
-        console.error("saveFormation: FEHLER beim Aktualisieren der Formation in Firestore:", error);
-        callbacks.showModal("Fehler", `Fehler beim Speichern der Formation: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
-        throw error;
-    }
-};
 
 export const deleteMannschaftEmblem = async (callbacks) => {
     callbacks.showModal(
