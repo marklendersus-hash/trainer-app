@@ -221,7 +221,7 @@ const showEventDetailModal = (dateString, callbacks) => {
 
     if (geburtstage.length > 0) {
         content += `
-            <div class="mb-2 text-left">
+            <div class="text-left">
                 <p class="font-bold text-pink-500"><i class="fas fa-birthday-cake mr-2"></i>Geburtstag(e)</p>
                 <p>${geburtstage.map(p => p.name).join(', ')}</p>
             </div>
@@ -230,7 +230,7 @@ const showEventDetailModal = (dateString, callbacks) => {
 
     if (training) {
         content += `
-            <div class="mb-2 text-left">
+            <div class="text-left">
                 <p class="font-bold text-blue-500"><i class="fas fa-running mr-2"></i>Training</p>
                 <p>Zeit: ${training.time || 'Nicht festgelegt'}</p>
             </div>
@@ -250,7 +250,7 @@ const showEventDetailModal = (dateString, callbacks) => {
             matchDetails += ` | <strong>Ergebnis:</strong> ${match.toreHeim}:${match.toreAuswaerts}`;
         }
         content += `
-            <div class="mb-2 text-left">
+            <div class="text-left">
                 <p class="font-bold text-yellow-500"><i class="fas fa-futbol mr-2"></i>Match</p>
                 <p class="text-sm">${matchDetails}</p>
             </div>
