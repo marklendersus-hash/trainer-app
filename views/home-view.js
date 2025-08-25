@@ -39,7 +39,7 @@ export const renderHome = (callbacks) => {
             classes += ' bg-gray-700/50';
         }
 
-        daysHtml += `<div class="${classes}" onclick="window.app.showEventDetailModal('${dateString}')">
+        daysHtml += `<div class="${classes}" onclick="window.app.handleCalendarDayClick('${dateString}')">
                         <span class="${isFeiertag && !isPast ? 'text-red-500 font-bold' : ''} ${isPast ? 'text-gray-500' : ''}">${day}</span>
                         <div class="event-icons mt-1 flex flex-col items-center space-y-1">
                             ${hatGeburtstag && state.showGeburtstageOnHomeCalendar ? `<i class="fas fa-birthday-cake ${isPast ? 'text-gray-500' : 'text-pink-500'}"></i>` : ''}

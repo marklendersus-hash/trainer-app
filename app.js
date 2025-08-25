@@ -123,7 +123,7 @@ const showDeleteOptionsModal = (callbacks) => {
                 <button onclick="window.app.confirmDeletion('matchtage')" class="w-full py-3 font-medium text-white uppercase bg-yellow-600 rounded-lg shadow-lg hover:bg-yellow-700 btn">Nur Matchdaten</button>
                 <button onclick="window.app.confirmDeletion('mannschaft')" class="w-full py-3 font-medium text-white uppercase bg-yellow-600 rounded-lg shadow-lg hover:bg-yellow-700 btn">Nur Mannschaftsinfo</button>
             </div>
-        `,
+        ` ,
         [{ text: 'Abbrechen', class: 'bg-gray-500' }]
     );
 };
@@ -138,7 +138,7 @@ const showExportOptionsModal = (callbacks) => {
                 <button onclick="window.app.exportData('training')" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">Nur Trainingsdaten</button>
                 <button onclick="window.app.exportData('matchtage')" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">Nur Matchdaten</button>
             </div>
-        `,
+        ` ,
         [{ text: 'Abbrechen', class: 'bg-gray-500' }]
     );
 };
@@ -189,6 +189,38 @@ const confirmDeletion = (type, callbacks) => {
 };
 
 const showFormationModal = (matchtagId, callbacks) => { /* ... showFormationModal logic ... */ };
+
+const showCreateEventModal = (dateString, callbacks) => {
+    showModal(
+        'Neues Ereignis erstellen',
+        'Was möchten Sie für diesen Tag erstellen?',
+        [
+            {
+                text: 'Training',
+                class: 'bg-blue-600',
+                onClick: () => callbacks.navigateTo('trainingDetail', dateString)
+            },
+            {
+                text: 'Match',
+                class: 'bg-yellow-600',
+                onClick: () => callbacks.navigateTo('matchtagDetail', dateString)
+            },
+            { text: 'Abbrechen', class: 'bg-gray-500' }
+        ]
+    );
+};
+
+const handleCalendarDayClick = (dateString, callbacks) => {
+    const trainingOnDay = state.trainingseinheiten.find(t => t.id === dateString && !t.cancelled);
+    const matchOnDay = state.matchtage.find(s => s.id === dateString && !s.cancelled);
+
+    if (trainingOnDay || matchOnDay) {
+        callbacks.showEventDetailModal(dateString);
+    } else {
+        showCreateEventModal(dateString, callbacks);
+    }
+};
+
 const showEventDetailModal = (dateString, callbacks) => { /* ... showEventDetailModal logic ... */ };
 
 
@@ -430,6 +462,7 @@ const appCallbacks = {
     showFormationModal: (matchtagId) => showFormationModal(matchtagId, appCallbacks),
     saveFormation: (matchtagId, formationData) => saveFormation(matchtagId, formationData, appCallbacks),
     saveTrainingDetails: (datumString, data) => saveTrainingDetails(datumString, data, appCallbacks),
+    handleCalendarDayClick: (dateString) => handleCalendarDayClick(dateString, appCallbacks),
     showEventDetailModal: (dateString) => showEventDetailModal(dateString, appCallbacks),
     showAddEventModal: (type) => showAddEventModal(type, appCallbacks),
     closeModal: () => closeModal(),
