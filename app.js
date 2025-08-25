@@ -613,16 +613,11 @@ const appCallbacks = {
         const emblemUpload = document.getElementById('emblemUpload');
         if (emblemUpload) {
             emblemUpload.addEventListener('change', (e) => {
-                showModal('Debug', 'Change event fired!'); 
-
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (event) => {
                         const vorschau = document.getElementById('emblemVorschau');
-                        
-                        showModal('Debug', `FileReader loaded. Vorschau element found: ${!!vorschau}.`);
-
                         if (vorschau) {
                             vorschau.src = event.target.result;
                             vorschau.classList.remove('hidden');

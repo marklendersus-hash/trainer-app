@@ -68,7 +68,7 @@ export default async function handler(request, response) {
     );
 
     // Erstelle die öffentliche URL für die gerade hochgeladene Datei.
-    const publicUrl = `https://${B2_BUCKET_NAME}.${B2_ENDPOINT}/${fileKey}`;
+    const publicUrl = `https://${B2_ENDPOINT}/${B2_BUCKET_NAME}/${fileKey}`;
 
     // Sende die öffentliche URL als erfolgreiche Antwort an die App zurück.
     return response.status(200).json({ url: publicUrl });
