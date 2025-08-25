@@ -130,15 +130,14 @@ const showDeleteOptionsModal = (callbacks) => {
 const showExportOptionsModal = (callbacks) => {
     showModal(
         "Welche Daten möchten Sie exportieren?",
-        `
-            <div class="space-y-3">
-                <button onclick="window.app.exportData('all')" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">Alle Daten</button>
-                <button onclick="window.app.exportData('spieler')" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">Nur Spielerdaten</button>
-                <button onclick="window.app.exportData('training')" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">Nur Trainingsdaten</button>
-                <button onclick="window.app.exportData('matchtage')" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">Nur Matchdaten</button>
-            </div>
-        ` ,
-        [{ text: 'Abbrechen', class: 'bg-gray-500' }]
+        "Wählen Sie die zu exportierenden Daten aus.",
+        [
+            { text: 'Alle Daten', class: 'bg-green-600', onClick: () => callbacks.exportData('all') },
+            { text: 'Nur Spielerdaten', class: 'bg-green-600', onClick: () => callbacks.exportData('spieler') },
+            { text: 'Nur Trainingsdaten', class: 'bg-green-600', onClick: () => callbacks.exportData('training') },
+            { text: 'Nur Matchdaten', class: 'bg-green-600', onClick: () => callbacks.exportData('matchtage') },
+            { text: 'Abbrechen', class: 'bg-gray-500' }
+        ]
     );
 };
 
