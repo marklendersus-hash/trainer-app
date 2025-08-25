@@ -377,12 +377,7 @@ export const renderMatchtagDetail = (callbacks) => {
                 <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg btn">Matchdaten speichern</button>
             </form>
         </div>
-        <div class="p-4 rounded-xl border border-gray-700">
-            <button id="show-formation-modal" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn flex items-center justify-center gap-2">
-                <i class="fas fa-chalkboard-teacher"></i>
-                Formation
-            </button>
-        </div>
+        
         <div class="p-4 rounded-xl border border-gray-700 space-y-4">
             ${kaderKategorieHtml('Startelf', kader.startelf)}
             ${kaderKategorieHtml('Ersatzbank', kader.ersatzbank)}

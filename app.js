@@ -1,5 +1,5 @@
 import { state, setupDbRefs, setFilter, setStatsFilter, setSort, setHomeCalendarFilter, setTrainingListView, setMatchtagListView } from './state.js';
-import { db, auth, APP_VERSION, saveSpieler, deleteSpieler, setAnwesenheit, toggleTrainingCancellation, deleteTraining, saveMatchtag, updateSpielerMatchDetails, toggleMatchCancellation, deleteMatchtag, saveMannschaftInfo, saveTrainingSchedule, generateRecurringTrainings, exportData, importJSONData, deleteAllData, deleteCollectionData, deleteMannschaftInfo, saveFormation, saveTrainingDetails, appId } from './api.js';
+import { db, auth, APP_VERSION, saveSpieler, deleteSpieler, setAnwesenheit, toggleTrainingCancellation, deleteTraining, saveMatchtag, updateSpielerMatchDetails, toggleMatchCancellation, deleteMatchtag, saveMannschaftInfo, saveTrainingSchedule, generateRecurringTrainings, exportData, importJSONData, deleteAllData, deleteCollectionData, deleteMannschaftInfo, saveTrainingDetails, appId } from './api.js';
 import { render } from './render.js';
 import { fetchHolidaysForYear, formatDateWithWeekday, berechneAlter, parseDateString, getAktuellerStatus, getStatusIndicator, formatDate } from './utils.js';
 import * as firestoreModule from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -187,8 +187,6 @@ const confirmDeletion = (type, callbacks) => {
         );
     }
 };
-
-const showFormationModal = (matchtagId, callbacks) => { /* ... showFormationModal logic ... */ };
 
 const showCreateEventModal = (dateString, callbacks) => {
     showModal(
@@ -513,8 +511,6 @@ const appCallbacks = {
     deleteCollectionData: (collectionRef, collectionName) => deleteCollectionData(collectionRef, collectionName, appCallbacks),
     deleteMannschaftInfo: () => deleteMannschaftInfo(appCallbacks),
     clearDateField: (inputId) => { document.getElementById(inputId).value = ''; },
-    showFormationModal: (matchtagId) => showFormationModal(matchtagId, appCallbacks),
-    saveFormation: (matchtagId, formationData) => saveFormation(matchtagId, formationData, appCallbacks),
     saveTrainingDetails: (datumString, data) => saveTrainingDetails(datumString, data, appCallbacks),
     handleCalendarDayClick: (dateString) => handleCalendarDayClick(dateString, appCallbacks),
     showAddEventModal: (type) => showAddEventModal(type, appCallbacks),
@@ -737,11 +733,6 @@ const appCallbacks = {
         const deleteMatchBtn = document.getElementById('delete-match-btn');
         if (deleteMatchBtn) {
             deleteMatchBtn.addEventListener('click', () => appCallbacks.deleteMatchtag(state.currentId));
-        }
-        
-        const showFormationBtn = document.getElementById('show-formation-modal');
-        if (showFormationBtn) {
-            showFormationBtn.addEventListener('click', () => appCallbacks.showFormationModal(state.currentId));
         }
     }
 };
