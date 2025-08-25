@@ -317,20 +317,20 @@ const appCallbacks = {
         }
     },
     setupListeners: () => {
-        const spielerCollection = collection(db, `artifacts/${appId}/public/data/spieler`);
-        const trainingCollection = collection(db, `artifacts/${appId}/public/data/trainingseinheiten`);
-        const matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
+        window.spielerCollection = collection(db, `artifacts/${appId}/public/data/spieler`);
+        window.trainingCollection = collection(db, `artifacts/${appId}/public/data/trainingseinheiten`);
+        window.matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
         const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
 
-        onSnapshot(query(spielerCollection, orderBy("name")), (snapshot) => {
+        onSnapshot(query(window.spielerCollection, orderBy("name")), (snapshot) => {
             state.spieler = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             if(state.isLoggedIn) render(appCallbacks);
         });
-        onSnapshot(query(trainingCollection), (snapshot) => {
+        onSnapshot(query(window.trainingCollection), (snapshot) => {
             state.trainingseinheiten = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             if(state.isLoggedIn) render(appCallbacks);
         });
-        onSnapshot(query(matchtageCollection), (snapshot) => {
+        onSnapshot(query(window.matchtageCollection), (snapshot) => {
             state.matchtage = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             if(state.isLoggedIn) render(appCallbacks);
         });
