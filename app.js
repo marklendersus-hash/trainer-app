@@ -262,6 +262,19 @@ const showEventDetailModal = (dateString, callbacks) => {
         });
     }
 
+    if (!training && !match && geburtstage.length > 0) {
+        buttons.push({
+            text: 'Training erstellen',
+            class: 'bg-green-600',
+            onClick: () => callbacks.navigateTo('trainingDetail', dateString)
+        });
+        buttons.push({
+            text: 'Match erstellen',
+            class: 'bg-green-600',
+            onClick: () => callbacks.navigateTo('matchtagDetail', dateString)
+        });
+    }
+
     buttons.push({ text: 'Schließen', class: 'bg-gray-500' });
 
     showModal(title, content, buttons);
