@@ -2,18 +2,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getFirestore, collection, doc, addDoc, setDoc, deleteDoc, updateDoc, query, getDoc, where, getDocs, writeBatch, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { state } from './state.js';
+import { firebaseConfig } from './config.js';
 
 export const APP_VERSION = `Version 2025-08-25-010`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBCjgKFLqMWg4OC1zaFLner1pyE_4vFNnU",
-  authDomain: "trainer-app-2025-08.firebaseapp.com",
-  projectId: "trainer-app-2025-08",
-  storageBucket: "trainer-app-2025-08.firebasestorage.app",
-  messagingSenderId: "8465381059",
-  appId: "1:8465381059:web:4785e9728abfc79f3e1476"
-};
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
