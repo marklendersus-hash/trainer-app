@@ -608,22 +608,22 @@ const appCallbacks = {
                 e.preventDefault();
                 appCallbacks.saveMannschaftInfo(e.target);
             });
+        }
 
-            const emblemUpload = document.getElementById('emblemUpload');
-            if (emblemUpload) {
-                emblemUpload.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (event) => {
-                            const vorschau = document.getElementById('emblemVorschau');
-                            vorschau.src = event.target.result;
-                            vorschau.classList.remove('hidden');
-                        }
-                        reader.readAsDataURL(file);
+        const emblemUpload = document.getElementById('emblemUpload');
+        if (emblemUpload) {
+            emblemUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const vorschau = document.getElementById('emblemVorschau');
+                        vorschau.src = event.target.result;
+                        vorschau.classList.remove('hidden');
                     }
-                });
-            }
+                    reader.readAsDataURL(file);
+                }
+            });
         }
         const trainingsForm = document.getElementById('trainingsForm');
         if (trainingsForm) {
