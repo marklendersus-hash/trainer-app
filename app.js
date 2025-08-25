@@ -233,10 +233,10 @@ const showCalendarDayModal = (dateString, callbacks) => {
     }
 
     if (content === '') {
-        content = '<p class="text-center text-gray-500 my-4">Keine Ereignisse an diesem Tag.</p>';
+        content = '<p class="text-center text-gray-500 my-2">Keine Ereignisse an diesem Tag.</p>';
     }
     
-    content += '<hr class="my-4 border-gray-600">';
+    content += '<hr class="my-2 border-gray-600">';
 
     // --- Action Buttons ---
     let actionButtons = '';
