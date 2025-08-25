@@ -4,7 +4,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth
 import { state } from './state.js';
 import { firebaseConfig } from './config.js';
 
-export const APP_VERSION = `Version 2025-08-25-010`;
+export const APP_VERSION = `Version 2025-08-25-031`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 export const app = initializeApp(firebaseConfig);
