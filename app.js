@@ -224,40 +224,54 @@ const handleCalendarDayClick = (dateString, callbacks) => {
 const showEventDetailModal = (dateString, callbacks) => {
     const training = state.trainingseinheiten.find(t => t.id === dateString && !t.cancelled);
     const match = state.matchtage.find(s => s.id === dateString && !s.cancelled);
+    const geburtstage = state.spieler.filter(p => p.geburtstag && p.geburtstag.slice(5) === dateString.slice(5));
 
-    let title = '';
+    let title = `Details für ${formatDateWithWeekday(dateString)}`;
     let content = '';
     let buttons = [];
 
+    if (geburtstage.length > 0) {
+        content += `
+            <div class="mb-2">
+                <p class="font-bold text-pink-500"><i class="fas fa-birthday-cake mr-2"></i>Geburtstag(e)</p>
+                <p>${geburtstage.map(p => p.name).join(', ')}</p>
+            </div>
+        `;
+    }
+
     if (training) {
-        title = `Training am ${formatDateWithWeekday(dateString)}`;
-        content = `<p><strong>Zeit:</strong> ${training.time || 'Nicht festgelegt'}</p>`;
+        content += `
+            <div class="mb-2">
+                <p class="font-bold text-blue-500"><i class="fas fa-running mr-2"></i>Training</p>
+                <p>Zeit: ${training.time || 'Nicht festgelegt'}</p>
+            </div>
+        `;
         buttons.push({
-            text: 'Bearbeiten',
+            text: 'Training bearbeiten',
             class: 'bg-blue-600',
             onClick: () => callbacks.navigateTo('trainingDetail', dateString)
         });
     }
 
     if (match) {
-        title = `Match am ${formatDateWithWeekday(dateString)}`;
+        let matchDetails = `<strong>Gegner:</strong> ${match.gegner || '?'}`;
+        matchDetails += ` | <strong>Ort:</strong> ${match.spielort || '?'}`;
+        matchDetails += ` | <strong>Zeit:</strong> ${match.time || '?'}`;
+        if (match.toreHeim !== null && match.toreAuswaerts !== null) {
+            matchDetails += ` | <strong>Ergebnis:</strong> ${match.toreHeim}:${match.toreAuswaerts}`;
+        }
+
         content += `
-            <div class="mt-2">
-                <p><strong>Gegner:</strong> ${match.gegner || 'Unbekannt'}</p>
-                <p><strong>Spielort:</strong> ${match.spielort || 'Unbekannt'}</p>
-                <p><strong>Zeit:</strong> ${match.time || 'Nicht festgelegt'}</p>
-                ${(match.toreHeim !== null && match.toreAuswaerts !== null) ? `<p><strong>Ergebnis:</strong> ${match.toreHeim} : ${match.toreAuswaerts}</p>` : ''}
+            <div class="mb-2">
+                <p class="font-bold text-yellow-500"><i class="fas fa-futbol mr-2"></i>Match</p>
+                <p class="text-sm">${matchDetails}</p>
             </div>
         `;
         buttons.push({
-            text: 'Bearbeiten',
+            text: 'Match bearbeiten',
             class: 'bg-yellow-600',
             onClick: () => callbacks.navigateTo('matchtagDetail', dateString)
         });
-    }
-    
-    if (training && match) {
-        title = `Ereignisse am ${formatDateWithWeekday(dateString)}`;
     }
 
     buttons.push({ text: 'Schließen', class: 'bg-gray-500' });
