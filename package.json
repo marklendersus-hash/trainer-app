@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.873.0",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/postcss": "^4.1.12",
+    "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.21",
     "firebase": "^12.1.0",
     "postcss": "^8.5.6",
