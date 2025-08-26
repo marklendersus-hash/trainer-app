@@ -1,3 +1,105 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* KORREKTUR: Standard-Theme (hell) mit lesbaren Farben versehen */
+body, html {
+    font-family: 'Inter', sans-serif;
+    background-color: #1f2937; /* Heller Hintergrund */
+    color: #1f2937; /* Dunkle Schrift */
+}
+.dark body, .dark html {
+    background-color: #1f2937;
+    color: #f3f4f6;
+}
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.modal-backdrop.visible {
+    opacity: 1;
+}
+.modal-content {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 450px;
+    max-height: 90%;
+    overflow: auto;
+    position: relative;
+    z-index: 1001;
+}
+.dark .modal-content {
+    background-color: #374151;
+}
+.nav-shadow {
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+}
+.kalender-tag.heute {
+    border: 2px solid #22c55e;
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+.dark .kalender-tag.heute {
+    background-color: #15803d;
+    color: #dcfce7;
+}
+.kalender-tag:not(.heute) {
+    transition: background-color 0.2s;
+}
+.kalender-tag:not(.heute):hover {
+    background-color: #f3f4f6;
+}
+.dark .kalender-tag:not(.heute):hover {
+    background-color: #4b5563;
+}
+.profile-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+.profile-img-detail {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+.accordion-content.open {
+    max-height: 500px;
+}
+.accordion-header i {
+    transition: transform 0.3s ease;
+}
+.accordion-header.open i {
+    transform: rotate(180deg);
+}
+.btn {
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+#darkModeToggle {
+    background-color: #4b5563;
+}
+.dark #darkModeToggle {
+    background-color: #d1d5db;
+}
+#darkModeToggle span {
+    transform: translateX(1.25rem);
+}
+.dark #darkModeToggle span {
+    transform: translateX(0);
+}
