@@ -49,7 +49,7 @@ export const renderNavigationBar = () => {
         : navButton('home', 'fa-home', 'Home');
     return `
         <div class="fixed bottom-0 left-0 right-0 z-40 p-4">
-            <div class="bg-gradient-to-b from-gray-700 to-gray-800 border-2 border-green-500 shadow-lg rounded-full px-2 py-2 w-full max-w-sm mx-auto">
+            <div class="bg-gray-800 border-2 border-green-500 shadow-lg rounded-full px-2 py-2 w-full max-w-sm mx-auto">
                 <div class="flex justify-around items-center">
                     ${leftButtonHtml}
                     ${navButton('trainingUebersicht', 'fa-running', 'Training')}
