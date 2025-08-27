@@ -231,14 +231,16 @@ export const renderTrainingDetail = (callbacks) => {
         <div class="p-4 rounded-xl border border-gray-700">
             <div class="text-center mb-4">
                 <h2 class="text-xl font-bold">Anwesenheit</h2>
-                <p class="text-gray-400">${formatDateWithWeekday(state.currentId)}</p>
             </div>
 
-            <form id="trainingDetailForm" class="space-y-4">
+            <form id="trainingDetailForm">
                 <input type="hidden" name="id" value="${state.currentId}">
-                <div>
-                    <label for="trainingTime" class="font-semibold">Uhrzeit</label>
-                    <input id="trainingTime" type="time" name="time" value="${selectedTraining.time || ''}" class="w-full p-2 mt-1 bg-gray-700 text-gray-200 rounded-lg">
+                <div class="grid grid-cols-[auto,1fr] items-center gap-x-4 gap-y-2 p-3 rounded-lg bg-gray-800/50">
+                    <label for="trainingDate" class="font-semibold text-right">Datum</label>
+                    <input id="trainingDate" type="date" value="${state.currentId}" onchange="window.app.navigateTo('trainingDetail', this.value)" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
+                    
+                    <label for="trainingTime" class="font-semibold text-right">Uhrzeit</label>
+                    <input id="trainingTime" type="time" name="time" value="${selectedTraining.time || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                 </div>
             </form>
             
