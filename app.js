@@ -497,7 +497,7 @@ const appCallbacks = {
     updateSpielerMatchDetails: (datumString, spielerId, field, value) => updateSpielerMatchDetails(datumString, spielerId, field, value, appCallbacks),
     toggleMatchCancellation: (datumString) => toggleMatchCancellation(datumString, appCallbacks),
     deleteMatchtag: (datumString) => deleteMatchtag(datumString, appCallbacks),
-    saveMannschaftInfo: (form) => saveMannschaftInfo(form, appCallbacks),
+    saveMannschaftInfo: (form, wasMarkedForDeletion) => saveMannschaftInfo(form, wasMarkedForDeletion, appCallbacks),
     saveTrainingSchedule: (form) => saveTrainingSchedule(form, appCallbacks),
     generateRecurringTrainings: (schedule, endDateString) => generateRecurringTrainings(schedule, endDateString, appCallbacks),
     exportData: (type = 'all') => exportData(type, appCallbacks),
@@ -638,8 +638,27 @@ const appCallbacks = {
         if (mannschaftForm) {
             mannschaftForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const wasMarkedForDeletion = e.target.deleteEmblem.value === 'true';
-                appCallbacks.saveMannschaftInfo(e.target, wasMarkedForDeletion);
+                const form = e.target;
+                const wasMarkedForDeletion = form.deleteEmblem.value === 'true';
+
+                if (wasMarkedForDeletion) {
+                    showModal(
+                        "Emblem löschen?",
+                        "Möchten Sie das Emblem wirklich löschen? Diese Änderung wird zusammen mit den anderen Mannschaftsinformationen gespeichert.",
+                        [
+                            { text: 'Abbrechen', class: 'bg-gray-500' },
+                            { 
+                                text: 'Ja, speichern & löschen', 
+                                class: 'bg-red-600', 
+                                onClick: () => {
+                                    appCallbacks.saveMannschaftInfo(form, wasMarkedForDeletion);
+                                }
+                            }
+                        ]
+                    );
+                } else {
+                    appCallbacks.saveMannschaftInfo(form, wasMarkedForDeletion);
+                }
             });
         }
 
