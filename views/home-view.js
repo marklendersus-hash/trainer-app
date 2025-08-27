@@ -90,7 +90,7 @@ export const renderHome = (callbacks) => {
                 <button onclick="window.app.changeMonth(1)" class="px-4 py-2 bg-gray-700 rounded-lg btn"><i class="fas fa-chevron-right"></i></button>
             </div>
             <div class="grid grid-cols-7 gap-2 text-center">
-                ${'['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map(tag => `<div class="font-semibold">${tag}</div>`).join('')}
+                ${['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map(tag => `<div class="font-semibold">${tag}</div>`).join('')}
                 ${daysHtml}
             </div>
             <div class="flex justify-center flex-wrap gap-x-4 gap-y-2 mt-4 text-sm">
