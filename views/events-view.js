@@ -93,8 +93,8 @@ export const renderTrainingUebersicht = (callbacks) => {
     content += `
         <div class="p-4 rounded-xl border border-gray-700 mb-4">
             <div class="flex justify-between items-center gap-2">
-                <button id="show-all-trainings-btn" class="px-4 py-2 rounded-lg btn ${state.trainingListView === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Alle Trainingseinheiten</button>
-                <button id="show-top10-trainings-btn" class="px-4 py-2 rounded-lg btn ${state.trainingListView === 'top10' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Top 10 Training-Statistik</button>
+                <button id="show-all-trainings-btn" class="px-4 py-2 rounded-lg btn ${state.trainingListView === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Alle</button>
+                <button id="show-top10-trainings-btn" class="px-4 py-2 rounded-lg btn ${state.trainingListView === 'top10' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Top 10</button>
             </div>
         </div>
     `;
@@ -116,7 +116,7 @@ export const renderTrainingUebersicht = (callbacks) => {
     if (state.trainingListView === 'top10') {
         content += `
         <div class="p-4 rounded-xl border border-gray-700">
-            <h2 class="text-lg font-bold mb-4 text-center">Top 10 Training-Statistik</h2>
+            <h2 class="text-lg font-bold mb-4 text-center">Top 10</h2>
             <div class="space-y-2">
                 ${topTrainers.length > 0 ? topTrainers.map((spieler, index) => createTop10CardHtml(spieler, index, `${spieler.trainingCount}/${totalTrainings} (${totalTrainings > 0 ? Math.round((spieler.trainingCount / totalTrainings) * 100) : 0}%)`, 'bg-green-900/50')).join('') : `<p class="text-center text-gray-400">Noch keine Trainingsdaten vorhanden.</p>`}
             </div>
@@ -125,7 +125,7 @@ export const renderTrainingUebersicht = (callbacks) => {
     } else if (state.trainingListView === 'all') {
         content += `
         <div class="p-4 rounded-xl border border-gray-700">
-            <h2 class="text-lg font-bold mb-4 text-center">Alle Trainingseinheiten</h2>
+            <h2 class="text-lg font-bold mb-4 text-center">Alle Trainings</h2>
             <div class="space-y-2">
                 ${[...state.trainingseinheiten].sort((a, b) => a.id.localeCompare(b.id)).map(training => createTrainingCardHtml(training, aktiveSpielerCount)).join('')}
             </div>
@@ -148,8 +148,8 @@ export const renderMatchtagUebersicht = (callbacks) => {
     content += `
         <div class="p-4 rounded-xl border border-gray-700 mb-4">
             <div class="flex justify-between items-center gap-2">
-                <button id="show-all-matches-btn" class="px-4 py-2 rounded-lg btn ${state.matchtagListView === 'all' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Alle Matchtage</button>
-                <button id="show-top10-matches-btn" class="px-4 py-2 rounded-lg btn ${state.matchtagListView === 'top10' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Top 10 Match-Statistik</button>
+                <button id="show-all-matches-btn" class="px-4 py-2 rounded-lg btn ${state.matchtagListView === 'all' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Alle</button>
+                <button id="show-top10-matches-btn" class="px-4 py-2 rounded-lg btn ${state.matchtagListView === 'top10' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Top 10</button>
             </div>
         </div>
     `;
@@ -172,7 +172,7 @@ export const renderMatchtagUebersicht = (callbacks) => {
     if (state.matchtagListView === 'top10') {
         content += `
         <div class="p-4 rounded-xl border border-gray-700">
-            <h2 class="text-lg font-bold mb-4 text-center"> Top 10 Match-Statistik</h2>
+            <h2 class="text-lg font-bold mb-4 text-center">Top 10</h2>
             <div class="flex justify-center flex-wrap gap-2 mb-4">
                 <button id="filter-matches-btn" class="px-3 py-1 text-sm rounded-full btn ${state.statsFilter === 'matches' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Matches</button>
                 <button id="filter-minuten-btn" class="px-3 py-1 text-sm rounded-full btn ${state.statsFilter === 'minuten' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Minuten</button>
@@ -187,7 +187,7 @@ export const renderMatchtagUebersicht = (callbacks) => {
     } else if (state.matchtagListView === 'all') {
         content += `
         <div class="p-4 rounded-xl border border-gray-700">
-            <h2 class="text-lg font-bold mb-4 text-center">Alle Matchtage</h2>
+            <h2 class="text-lg font-bold mb-4 text-center">Alle Matches</h2>
             <div class="space-y-2">
                 ${[...state.matchtage].sort((a, b) => a.id.localeCompare(b.id)).map(matchtag => createMatchtagCardHtml(matchtag)).join('')}
                 ${state.matchtage.length === 0 ? '<p class="text-center text-gray-400">Noch keine Matchtage vorhanden.</p>' : ''}
