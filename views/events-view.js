@@ -81,20 +81,11 @@ const createTop10CardHtml = (spieler, index, statText, baseClass) => {
 };
 
 export const renderTrainingUebersicht = (callbacks) => {
-    const addButtonHtml = `<div class="p-4 rounded-xl border border-gray-700">
-        <button id="add-training-btn" class="w-full py-3 font-medium text-white uppercase bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 btn flex items-center justify-center gap-2">
-            <i class="fas fa-plus"></i>
-            Training hinzufügen
-        </button>
-    </div>`;
-
-    let content = addButtonHtml;
-
-    content += `
+    let content = `
         <div class="p-4 rounded-xl border border-gray-700 mb-4">
-            <div class="flex justify-between items-center gap-2">
-                <button id="show-all-trainings-btn" class="px-4 py-2 rounded-lg btn ${state.trainingListView === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Alle</button>
-                <button id="show-top10-trainings-btn" class="px-4 py-2 rounded-lg btn ${state.trainingListView === 'top10' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Top 10</button>
+            <div class="flex items-center gap-2">
+                <button id="show-all-trainings-btn" class="flex-1 px-4 py-2 rounded-lg btn ${state.trainingListView === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Alle</button>
+                <button id="show-top10-trainings-btn" class="flex-1 px-4 py-2 rounded-lg btn ${state.trainingListView === 'top10' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Top 10</button>
             </div>
         </div>
     `;
@@ -125,7 +116,12 @@ export const renderTrainingUebersicht = (callbacks) => {
     } else if (state.trainingListView === 'all') {
         content += `
         <div class="p-4 rounded-xl border border-gray-700">
-            <h2 class="text-lg font-bold mb-4 text-center">Alle Trainings</h2>
+            <div class="flex justify-center items-center gap-4 mb-4">
+                <h2 class="text-lg font-bold">Alle Trainings</h2>
+                <button id="add-training-btn" class="w-8 h-8 bg-blue-600 text-white rounded-full btn flex items-center justify-center flex-shrink-0" title="Training hinzufügen">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
             <div class="space-y-2">
                 ${[...state.trainingseinheiten].sort((a, b) => a.id.localeCompare(b.id)).map(training => createTrainingCardHtml(training, aktiveSpielerCount)).join('')}
             </div>
@@ -136,20 +132,11 @@ export const renderTrainingUebersicht = (callbacks) => {
 };
 
 export const renderMatchtagUebersicht = (callbacks) => {
-    const addButtonHtml = `<div class="p-4 rounded-xl border border-gray-700">
-        <button id="add-match-btn" class="w-full py-3 font-medium text-white uppercase bg-yellow-500 rounded-lg shadow-lg hover:bg-yellow-600 btn flex items-center justify-center gap-2">
-            <i class="fas fa-plus"></i>
-            Match hinzufügen
-        </button>
-    </div>`;
-    
-    let content = addButtonHtml;
-
-    content += `
+    let content = `
         <div class="p-4 rounded-xl border border-gray-700 mb-4">
-            <div class="flex justify-between items-center gap-2">
-                <button id="show-all-matches-btn" class="px-4 py-2 rounded-lg btn ${state.matchtagListView === 'all' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Alle</button>
-                <button id="show-top10-matches-btn" class="px-4 py-2 rounded-lg btn ${state.matchtagListView === 'top10' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Top 10</button>
+            <div class="flex items-center gap-2">
+                <button id="show-all-matches-btn" class="flex-1 px-4 py-2 rounded-lg btn ${state.matchtagListView === 'all' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Alle</button>
+                <button id="show-top10-matches-btn" class="flex-1 px-4 py-2 rounded-lg btn ${state.matchtagListView === 'top10' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Top 10</button>
             </div>
         </div>
     `;
@@ -187,7 +174,12 @@ export const renderMatchtagUebersicht = (callbacks) => {
     } else if (state.matchtagListView === 'all') {
         content += `
         <div class="p-4 rounded-xl border border-gray-700">
-            <h2 class="text-lg font-bold mb-4 text-center">Alle Matches</h2>
+            <div class="flex justify-center items-center gap-4 mb-4">
+                <h2 class="text-lg font-bold">Alle Matches</h2>
+                <button id="add-match-btn" class="w-8 h-8 bg-yellow-500 text-white rounded-full btn flex items-center justify-center flex-shrink-0" title="Match hinzufügen">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
             <div class="space-y-2">
                 ${[...state.matchtage].sort((a, b) => a.id.localeCompare(b.id)).map(matchtag => createMatchtagCardHtml(matchtag)).join('')}
                 ${state.matchtage.length === 0 ? '<p class="text-center text-gray-400">Noch keine Matchtage vorhanden.</p>' : ''}
