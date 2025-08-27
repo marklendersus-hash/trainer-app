@@ -511,6 +511,16 @@ const appCallbacks = {
     deleteMannschaftInfo: () => deleteMannschaftInfo(appCallbacks),
     deleteMannschaftEmblem: () => deleteMannschaftEmblem(appCallbacks),
     clearDateField: (inputId) => { document.getElementById(inputId).value = ''; },
+    markFotoForDeletion: () => {
+        document.getElementById('deleteFotoFlag').value = 'true';
+        const vorschau = document.getElementById('fotoVorschau');
+        vorschau.src = '#';
+        vorschau.classList.add('hidden');
+        const deleteButton = document.querySelector('[onclick="window.app.markFotoForDeletion()"]');
+        if (deleteButton) {
+            deleteButton.style.display = 'none';
+        }
+    },
     saveTrainingDetails: (datumString, data) => saveTrainingDetails(datumString, data, appCallbacks),
     handleCalendarDayClick: (dateString) => handleCalendarDayClick(dateString, appCallbacks),
     showAddEventModal: (type) => showAddEventModal(type, appCallbacks),
