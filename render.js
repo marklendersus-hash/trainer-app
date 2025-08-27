@@ -24,8 +24,8 @@ export const render = (callbacks) => {
                         <div class="bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg text-center">
                             <div class="flex justify-center mb-6">
                                 ${state.teamInfo.emblemUrl
-                                    ? `<img src="${state.teamInfo.emblemUrl}" class="w-20 h-20 rounded-full object-cover shadow-md" onerror="this.style.display='none';">`
-                                    : `<img src="icons/icon-192x192.png" class="w-20 h-20 rounded-full object-cover shadow-md">`
+                                    ? `<img src="${state.teamInfo.emblemUrl}" class="w-32 h-32 rounded-full object-cover shadow-md" onerror="this.style.display='none';">`
+                                    : `<img src="icons/icon-192x192.png" class="w-32 h-32 rounded-full object-cover shadow-md">`
                                 }
                             </div>
                             <h1 class="text-2xl font-bold text-gray-200 mb-2">Willkommen</h1>
