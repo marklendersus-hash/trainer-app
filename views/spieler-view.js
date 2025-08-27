@@ -125,7 +125,6 @@ export const renderSpielerDetail = (callbacks) => {
     return `
         <div class="p-6 rounded-xl text-center border border-gray-700">
             ${fotoDetailHtml}
-            ${spieler.fotoUrl ? `<button onclick="window.app.deleteSpielerFoto('${spieler.id}')" class="mt-2 text-sm text-red-500 hover:text-red-400 btn"><i class="fas fa-trash-alt"></i> Foto löschen</button>` : ''}
             <h2 class="text-2xl font-bold mt-4">${spieler.name} #${spieler.nummer || '?'}</h2>
             <p class="text-gray-400">${spieler.position}</p>
             <div class="mt-2 flex justify-center items-center space-x-2">
@@ -170,9 +169,13 @@ export const renderSpielerForm = (callbacks) => {
             <div class="p-6 rounded-xl space-y-3 border border-gray-700">
                 <h2 class="text-xl font-bold text-center">Stammdaten</h2>
                 <input type="hidden" name="id" value="${spielerToEdit.id || ''}">
+                <input type="hidden" id="deleteFotoFlag" name="deleteFoto" value="false">
                 <div>
                     <label class="font-semibold">Profilfoto</label>
-                    ${fotoVorschauHtml}
+                    <div class="relative w-24 h-24 mx-auto">
+                        ${fotoVorschauHtml}
+                        ${spielerToEdit.fotoUrl ? `<button type="button" onclick="window.app.markFotoForDeletion()" class="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center btn" title="Foto löschen"><i class="fas fa-times"></i></button>` : ''}
+                    </div>
                     <input type="file" name="foto" id="fotoUpload" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 mt-2 dark:text-gray-400 dark:file:bg-gray-700 dark:file:text-gray-300 dark:hover:file:bg-gray-600">
                 </div>
                 <div>

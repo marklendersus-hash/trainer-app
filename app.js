@@ -555,6 +555,10 @@ const appCallbacks = {
                 Object.keys(data).forEach(key => {
                     if (data[key] === '') data[key] = null;
                 });
+                if (data.deleteFoto === 'true') {
+                    data.fotoUrl = null;
+                }
+                delete data.deleteFoto;
                 if (data.nummer) data.nummer = parseInt(data.nummer);
                 appCallbacks.saveSpieler(data, id, file);
             });
