@@ -229,7 +229,10 @@ export const renderTrainingDetail = (callbacks) => {
 
     return `
         <div class="p-4 rounded-xl border border-gray-700">
-            <h2 class="text-xl font-bold text-center">Anwesenheit am ${formatDateWithWeekday(state.currentId)}</h2>
+            <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+                <h2 class="text-xl font-bold">Anwesenheit</h2>
+                <input type="date" value="${state.currentId}" onchange="window.app.navigateTo('trainingDetail', this.value)" class="p-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600">
+            </div>
             <form id="trainingDetailForm" class="space-y-4">
                 <input type="hidden" name="id" value="${state.currentId}">
                 <div>
