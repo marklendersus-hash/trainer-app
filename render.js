@@ -25,7 +25,7 @@ export const render = (callbacks) => {
                             <div class="flex justify-center mb-6">
                                 ${state.teamInfo.emblemUrl
                                     ? `<img src="${state.teamInfo.emblemUrl}" class="w-20 h-20 rounded-full object-cover shadow-md" onerror="this.style.display='none';">`
-                                    : `<div class="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center text-4xl text-gray-500 shadow-md"></div>`
+                                    : `<img src="icons/icon-192x192.png" class="w-20 h-20 rounded-full object-cover shadow-md">`
                                 }
                             </div>
                             <h1 class="text-2xl font-bold text-gray-200 mb-2">Willkommen</h1>
