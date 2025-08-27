@@ -344,9 +344,21 @@ export const renderMatchtagDetail = (callbacks) => {
 
     return `
         <div class="p-4 rounded-xl border border-gray-700">
-            <h2 class="text-xl font-bold mb-4">Matchdaten für ${formatDateWithWeekday(state.currentId)}</h2>
+            <div class="text-center mb-4">
+                <h2 class="text-xl font-bold">Matchdetails</h2>
+            </div>
+
             <form id="matchtagForm" class="space-y-4">
                 <input type="hidden" name="id" value="${state.currentId}">
+                
+                <div class="grid grid-cols-[auto,1fr] items-center gap-x-4 gap-y-2 p-3 rounded-lg bg-gray-800/50">
+                    <label for="matchDate" class="font-semibold text-right">Datum</label>
+                    <input id="matchDate" type="date" value="${state.currentId}" onchange="window.app.navigateTo('matchtagDetail', this.value)" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
+                    
+                    <label for="matchTime" class="font-semibold text-right">Uhrzeit</label>
+                    <input id="matchTime" type="time" name="time" value="${matchtag.time || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
+                </div>
+
                 <div>
                     <label class="font-semibold">Spielort</label>
                     <div class="flex gap-2 mt-1">
@@ -371,10 +383,6 @@ export const renderMatchtagDetail = (callbacks) => {
                     </div>
                 </div>
                 <div>
-                    <label class="font-semibold">Uhrzeit</label>
-                    <input type="time" name="time" value="${matchtag.time || ''}" class="w-full p-2 mt-1 bg-gray-700 text-gray-200 rounded-lg">
-                </div>
-                <div>
                     <label class="font-semibold">Matchart</label>
                     <select name="spielArt" class="w-full p-2 mt-1 bg-gray-700 text-gray-200 rounded-lg">
                         <option value="Ligamatch" ${matchtag.spielArt === 'Ligamatch' || matchtag.spielArt === 'Ligaspiel' ? 'selected' : ''}>Ligamatch</option>
@@ -382,7 +390,6 @@ export const renderMatchtagDetail = (callbacks) => {
                         <option value="Pokalmatch" ${matchtag.spielArt === 'Pokalmatch' || matchtag.spielArt === 'Pokalspiel' ? 'selected' : ''}>Pokalmatch</option>
                     </select>
                 </div>
-                <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg btn">Matchdaten speichern</button>
             </form>
         </div>
         
@@ -392,9 +399,13 @@ export const renderMatchtagDetail = (callbacks) => {
             ${kaderKategorieHtml('Nicht im Kader', kader.nichtImKader)}
             ${Array.isArray(kader.nichtVerfuegbar) && kader.nichtVerfuegbar.length > 0 ? kaderKategorieHtml('Nicht verfügbar', kader.nichtVerfuegbar, false) : ''}
         </div>
-        <div class="flex space-x-2 mt-6">
-            <button id="toggle-match-cancellation" class="flex-1 py-2 ${matchtag.cancelled ? 'bg-green-500' : 'bg-yellow-500'} text-white rounded-lg btn">${matchtag.cancelled ? 'Match reaktivieren' : 'Match absagen'}</button>
-            <button id="delete-match-btn" class="flex-1 py-2 bg-red-600 text-white rounded-lg btn">Matchtag löschen</button>
+
+        <div class="space-y-2 mt-6">
+            <button type="submit" form="matchtagForm" class="w-full py-2 bg-blue-600 text-white rounded-lg btn">Match speichern</button>
+            <div class="flex space-x-2">
+                <button id="toggle-match-cancellation" class="flex-1 py-2 ${matchtag.cancelled ? 'bg-green-500' : 'bg-yellow-500'} text-white rounded-lg btn">${matchtag.cancelled ? 'Match reaktivieren' : 'Match absagen'}</button>
+                <button id="delete-match-btn" class="flex-1 py-2 bg-red-600 text-white rounded-lg btn">Matchtag löschen</button>
+            </div>
         </div>
     `;
 };
