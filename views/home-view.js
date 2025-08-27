@@ -54,35 +54,29 @@ export const renderHome = (callbacks) => {
     const todayString = formatDate(new Date());
     const allEvents = [];
     state.trainingseinheiten.forEach(t => {
-        if (!t.cancelled && t.id >= todayString) allEvents.push({ date: t.id, type: 'Training', title: t.time ? `Training (${t.time})` : 'Training' });
+        if (!t.cancelled && t.id >= todayString) allEvents.push({ date: t.id, type: 'Training', title: t.time ? `Training (${t.time})` : 'Training', eventType: 'trainingDetail' });
     });
     state.matchtage.forEach(s => {
-        if (!s.cancelled && s.id >= todayString) allEvents.push({ date: s.id, type: 'Match', title: `Match gegen ${s.gegner || 'Unbekannt'}` });
+        if (!s.cancelled && s.id >= todayString) allEvents.push({ date: s.id, type: 'Match', title: `Match gegen ${s.gegner || 'Unbekannt'}`, eventType: 'matchtagDetail' });
     });
     state.spieler.forEach(p => {
         if (p.geburtstag) {
             const geburtstagThisYear = `${new Date().getFullYear()}-${p.geburtstag.slice(5)}`;
             if (geburtstagThisYear >= todayString) {
-                allEvents.push({ date: geburtstagThisYear, type: 'Geburtstag', title: p.name });
+                allEvents.push({ date: geburtstagThisYear, type: 'Geburtstag', title: p.name, eventType: 'spielerDetail', id: p.id });
             }
         }
     });
     const sortedEvents = allEvents.sort((a, b) => a.date.localeCompare(b.date));
 
-    const groupedEvents = {};
-    sortedEvents.forEach(event => {
-        if ((event.type === 'Training' && !state.showTrainingsOnHomeCalendar) ||
-            (event.type === 'Match' && !state.showMatchesOnHomeCalendar) ||
-            (event.type === 'Geburtstag' && !state.showGeburtstageOnHomeCalendar)) {
-            return;
-        }
-        if (!groupedEvents[event.date]) {
-            groupedEvents[event.date] = [];
-        }
-        groupedEvents[event.date].push(event);
+    const filteredEvents = sortedEvents.filter(event => {
+        if (event.type === 'Training' && !state.showTrainingsOnHomeCalendar) return false;
+        if (event.type === 'Match' && !state.showMatchesOnHomeCalendar) return false;
+        if (event.type === 'Geburtstag' && !state.showGeburtstageOnHomeCalendar) return false;
+        return true;
     });
 
-    const nextEventGroups = Object.entries(groupedEvents).slice(0, 10);
+    const nextEvents = filteredEvents.slice(0, 10);
     const isCurrentMonth = new Date().getMonth() === month && new Date().getFullYear() === year;
 
     return `
@@ -96,7 +90,7 @@ export const renderHome = (callbacks) => {
                 <button onclick="window.app.changeMonth(1)" class="px-4 py-2 bg-gray-700 rounded-lg btn"><i class="fas fa-chevron-right"></i></button>
             </div>
             <div class="grid grid-cols-7 gap-2 text-center">
-                ${['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map(tag => `<div class="font-semibold">${tag}</div>`).join('')}
+                ${'['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map(tag => `<div class="font-semibold">${tag}</div>`).join('')}
                 ${daysHtml}
             </div>
             <div class="flex justify-center flex-wrap gap-x-4 gap-y-2 mt-4 text-sm">
@@ -123,43 +117,32 @@ export const renderHome = (callbacks) => {
         <div class="p-4 rounded-xl border border-gray-700">
             <h2 class="text-lg font-bold mb-2 text-center"><i class="fas fa-calendar-alt mr-2"></i>Nächste Termine</h2>
             <div class="space-y-2">
-                ${nextEventGroups.length > 0 ? nextEventGroups.map(([date, events]) => {
-                    const eventDate = parseDateString(date);
-                    const isToday = formatDate(new Date()) === date;
+                ${nextEvents.length > 0 ? nextEvents.map(event => {
+                    const eventDate = parseDateString(event.date);
+                    const isToday = formatDate(new Date()) === event.date;
+                    const dateText = eventDate.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: 'short' });
+                    
+                    let icon;
+                    let navId = event.type === 'Geburtstag' ? event.id : event.date;
+                    let navPage = event.eventType;
+
+                    switch (event.type) {
+                        case 'Training': icon = '<i class="fas fa-running text-blue-500"></i>'; break;
+                        case 'Match': icon = '<i class="fas fa-futbol text-yellow-500"></i>'; break;
+                        case 'Geburtstag': icon = '<i class="fas fa-birthday-cake text-pink-500"></i>'; break;
+                        default: icon = '<span></span>';
+                    }
+
                     return `
-                    <div class="flex items-center py-1 px-2 rounded-lg hover:bg-gray-700/50 cursor-pointer" onclick="window.app.showEventDetailModal('${date}')">
-                        <div class="text-center mr-4 flex-shrink-0 w-16">
-                            <p class="font-bold ${isToday ? 'text-green-400' : ''}">${eventDate.toLocaleDateString('de-DE', { weekday: 'short' })}</p>
-                            <p class="text-2xl font-bold ${isToday ? 'text-green-400' : ''}">${eventDate.getDate()}</p>
-                            <p class="text-sm text-gray-400">${eventDate.toLocaleDateString('de-DE', { month: 'short' })}</p>
+                    <button onclick="window.app.navigateTo('${navPage}', '${navId}')" class="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-gray-700/50 text-left btn">
+                        <div class="flex-shrink-0 text-center w-20 ${isToday ? 'text-green-400 font-bold' : 'text-gray-400'}">
+                            ${dateText}
                         </div>
-                        <div class="flex-grow border-l dark:border-gray-600 pl-4">
-                            ${events.map(event => {
-                                let icon;
-                                switch (event.type) {
-                                    case 'Training':
-                                        icon = '<i class="fas fa-running text-blue-500"></i>';
-                                        break;
-                                    case 'Match':
-                                        icon = '<i class="fas fa-futbol text-yellow-500"></i>';
-                                        break;
-                                    case 'Geburtstag':
-                                        icon = '<i class="fas fa-birthday-cake text-pink-500"></i>';
-                                        break;
-                                    default:
-                                        icon = '<span></span>';
-                                }
-                                return `
-                                <div class="flex items-center gap-3 mb-2">
-                                    <span class="text-xl w-6 text-center">${icon}</span>
-                                    <p class="font-semibold text-gray-200">${event.title}</p>
-                                </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
+                        <div class="flex-shrink-0 w-6 text-center text-xl">${icon}</div>
+                        <div class="flex-grow font-semibold text-gray-200 truncate" title="${event.title}">${event.title}</div>
+                    </button>
                     `;
-                }).join('<hr class="my-2 dark:border-gray-700">') : '<p class="text-center text-gray-400">Keine anstehenden Termine.</p>'}
+                }).join('') : '<p class="text-center text-gray-400">Keine anstehenden Termine.</p>'}
             </div>
         </div>
     `;
