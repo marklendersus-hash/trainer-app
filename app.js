@@ -521,6 +521,18 @@ const appCallbacks = {
             deleteButton.style.display = 'none';
         }
     },
+    markEmblemForDeletion: () => {
+        document.getElementById('deleteEmblemFlag').value = 'true';
+        const vorschau = document.getElementById('emblemVorschau');
+        if (vorschau) {
+            vorschau.src = '#';
+            vorschau.classList.add('hidden');
+        }
+        const deleteButton = document.querySelector('[onclick="window.app.markEmblemForDeletion()"]');
+        if (deleteButton) {
+            deleteButton.style.display = 'none';
+        }
+    },
     saveTrainingDetails: (datumString, data) => saveTrainingDetails(datumString, data, appCallbacks),
     handleCalendarDayClick: (dateString) => handleCalendarDayClick(dateString, appCallbacks),
     showAddEventModal: (type) => showAddEventModal(type, appCallbacks),
