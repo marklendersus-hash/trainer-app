@@ -552,15 +552,20 @@ const appCallbacks = {
                 const file = data.foto;
                 delete data.id;
                 delete data.foto;
+                const wasMarkedForDeletion = data.deleteFoto === 'true';
+                delete data.deleteFoto;
+
                 Object.keys(data).forEach(key => {
                     if (data[key] === '') data[key] = null;
                 });
-                if (data.deleteFoto === 'true') {
+
+                if (wasMarkedForDeletion) {
                     data.fotoUrl = null;
                 }
-                delete data.deleteFoto;
+
                 if (data.nummer) data.nummer = parseInt(data.nummer);
-                appCallbacks.saveSpieler(data, id, file);
+                
+                appCallbacks.saveSpieler(data, id, wasMarkedForDeletion ? null : file);
             });
         }
         const matchtagForm = document.getElementById('matchtagForm');
