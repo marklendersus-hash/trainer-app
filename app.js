@@ -626,7 +626,8 @@ const appCallbacks = {
         if (mannschaftForm) {
             mannschaftForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                appCallbacks.saveMannschaftInfo(e.target);
+                const wasMarkedForDeletion = e.target.deleteEmblem.value === 'true';
+                appCallbacks.saveMannschaftInfo(e.target, wasMarkedForDeletion);
             });
         }
 

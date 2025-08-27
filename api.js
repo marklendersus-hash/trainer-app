@@ -4,7 +4,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth
 import { state } from './state.js';
 import { firebaseConfig } from './config.js';
 
-export const APP_VERSION = `Version 2025-08-27-1545`;
+export const APP_VERSION = `Version 2025-08-27-1550`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 export const app = initializeApp(firebaseConfig);
@@ -43,7 +43,7 @@ export const saveSpieler = async (data, id, file, callbacks) => {
     }
 };
 
-export const saveMannschaftInfo = async (form, callbacks) => {
+export const saveMannschaftInfo = async (form, wasMarkedForDeletion, callbacks) => {
     callbacks.showModal("Speichern...", '<div class="animate-pulse">Mannschaftsinfo wird gespeichert...</div>', []);
     const formData = new FormData(form);
     const teamData = {
@@ -56,8 +56,9 @@ export const saveMannschaftInfo = async (form, callbacks) => {
         const configDoc = doc(db, `artifacts/${appId}/public/data/config/team`);
 
         if (file && file.size > 0) {
-            // Emblem direkt als Base64-String speichern
             teamData.emblemUrl = await fileToBase64(file);
+        } else if (wasMarkedForDeletion) {
+            teamData.emblemUrl = null;
         }
         
         await setDoc(configDoc, teamData, { merge: true });

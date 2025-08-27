@@ -22,9 +22,12 @@ export const renderEinstellungen = () => {
                 </div>
                 <div>
                     <label class="font-semibold text-sm">Vereinsemblem</label>
-                    ${emblemVorschauHtml}
+                    <input type="hidden" id="deleteEmblemFlag" name="deleteEmblem" value="false">
+                    <div class="relative w-24 h-24 mx-auto">
+                        ${emblemVorschauHtml}
+                        ${state.teamInfo.emblemUrl ? `<button type="button" onclick="window.app.markEmblemForDeletion()" class="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center btn" title="Emblem löschen"><i class="fas fa-times"></i></button>` : ''}
+                    </div>
                     <input type="file" name="emblem" id="emblemUpload" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-700 file:text-gray-300 hover:file:bg-gray-600 mt-2">
-                    ${state.teamInfo.emblemUrl ? `<button type="button" onclick="window.app.deleteMannschaftEmblem()" class="w-full py-2 mt-2 font-medium text-white uppercase bg-red-600 rounded-lg shadow-lg hover:bg-red-700 btn">Emblem löschen</button>` : ''}
                 </div>
                 <button type="submit" class="w-full py-3 mt-4 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">Mannschaftsinfo Speichern</button>
             </form>
