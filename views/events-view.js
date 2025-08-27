@@ -229,17 +229,17 @@ export const renderTrainingDetail = (callbacks) => {
 
     return `
         <div class="p-4 rounded-xl border border-gray-700">
-            <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+            <div class="text-center mb-4">
                 <h2 class="text-xl font-bold">Anwesenheit</h2>
-                <input type="date" value="${state.currentId}" onchange="window.app.navigateTo('trainingDetail', this.value)" class="p-2 bg-gray-700 text-gray-200 rounded-lg border border-gray-600">
+                <p class="text-gray-400">${formatDateWithWeekday(state.currentId)}</p>
             </div>
+
             <form id="trainingDetailForm" class="space-y-4">
                 <input type="hidden" name="id" value="${state.currentId}">
                 <div>
-                    <label class="font-semibold">Uhrzeit</label>
-                    <input type="time" name="time" value="${selectedTraining.time || ''}" class="w-full p-2 mt-1 bg-gray-700 text-gray-200 rounded-lg">
+                    <label for="trainingTime" class="font-semibold">Uhrzeit</label>
+                    <input id="trainingTime" type="time" name="time" value="${selectedTraining.time || ''}" class="w-full p-2 mt-1 bg-gray-700 text-gray-200 rounded-lg">
                 </div>
-                <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg btn">Trainingsdetails speichern</button>
             </form>
             
             <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center mb-4 text-xs mt-4 border-t border-gray-700 pt-4">
@@ -269,9 +269,12 @@ export const renderTrainingDetail = (callbacks) => {
                     `;
                 }).join('')}
             </div>
-            <div class="flex space-x-2 mt-6">
-                <button id="toggle-training-cancellation" class="flex-1 py-2 ${selectedTraining.cancelled ? 'bg-green-500' : 'bg-yellow-500'} text-white rounded-lg btn">${selectedTraining.cancelled ? 'Training Reaktivieren' : 'Training Absagen'}</button>
-                <button id="delete-training-btn" class="flex-1 py-2 bg-red-600 text-white rounded-lg btn">Training löschen</button>
+            <div class="space-y-2 mt-6">
+                <button type="submit" form="trainingDetailForm" class="w-full py-2 bg-blue-600 text-white rounded-lg btn">Training speichern</button>
+                <div class="flex space-x-2">
+                    <button id="toggle-training-cancellation" class="flex-1 py-2 ${selectedTraining.cancelled ? 'bg-green-500' : 'bg-yellow-500'} text-white rounded-lg btn">${selectedTraining.cancelled ? 'Training Reaktivieren' : 'Training Absagen'}</button>
+                    <button id="delete-training-btn" class="flex-1 py-2 bg-red-600 text-white rounded-lg btn">Training löschen</button>
+                </div>
             </div>
         </div>
     `;
