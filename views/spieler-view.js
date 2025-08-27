@@ -125,6 +125,7 @@ export const renderSpielerDetail = (callbacks) => {
     return `
         <div class="p-6 rounded-xl text-center border border-gray-700">
             ${fotoDetailHtml}
+            ${spieler.fotoUrl ? `<button onclick="window.app.deleteSpielerFoto('${spieler.id}')" class="mt-2 text-sm text-red-500 hover:text-red-400 btn"><i class="fas fa-trash-alt"></i> Foto löschen</button>` : ''}
             <h2 class="text-2xl font-bold mt-4">${spieler.name} #${spieler.nummer || '?'}</h2>
             <p class="text-gray-400">${spieler.position}</p>
             <div class="mt-2 flex justify-center items-center space-x-2">

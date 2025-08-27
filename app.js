@@ -489,6 +489,7 @@ const appCallbacks = {
     },
     saveSpieler: (data, id, file) => saveSpieler(data, id, file, appCallbacks),
     deleteSpieler: (id) => deleteSpieler(id, appCallbacks),
+    deleteSpielerFoto: (id) => deleteSpielerFoto(id, appCallbacks),
     setAnwesenheit: (datumString, spielerId, status) => setAnwesenheit(datumString, spielerId, status, appCallbacks),
     toggleTrainingCancellation: (datumString) => toggleTrainingCancellation(datumString, appCallbacks),
     deleteTraining: (datumString) => deleteTraining(datumString, appCallbacks),
