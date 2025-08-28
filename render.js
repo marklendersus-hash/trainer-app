@@ -65,7 +65,7 @@ export const render = (callbacks) => {
     if (state.currentPage === 'login') {
         appContainer.innerHTML = pageContent;
     } else {
-        appContainer.innerHTML = `${renderHeader(pageTitle)}${renderNavigationBar()}<main class="p-4 space-y-4 pb-24 pt-20">${pageContent}</main>`;
+        appContainer.innerHTML = `${renderHeader(pageTitle)}${renderNavigationBar()}<main class="p-4 space-y-4 pb-16 pt-20">${pageContent}</main>`;
     }
     
     callbacks.addEventListeners();

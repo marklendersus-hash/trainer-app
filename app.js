@@ -821,7 +821,7 @@ const appCallbacks = {
                 let validationError = false;
                 for (const voterId in votes) {
                     const playerVotes = votes[voterId];
-                    if (playerVotes.length !== 2) {
+                    if (playerVotes.length !== 2 || playerVotes.includes("")) {
                         showModal("Fehler", "Jeder Spieler muss genau 2 Stimmen abgeben.", [{text: 'OK', class: 'bg-red-500'}]);
                         validationError = true;
                         break;
@@ -834,7 +834,28 @@ const appCallbacks = {
                 }
 
                 if (!validationError) {
-                    appCallbacks.saveSpielfuehrerWahl(votes);
+                    const allVotes = Object.values(votes).flat();
+                    const voteCounts = allVotes.reduce((acc, id) => {
+                        acc[id] = (acc[id] || 0) + 1;
+                        return acc;
+                    }, {});
+
+                    const sortedResults = Object.entries(voteCounts).sort(([,a],[,b]) => b-a);
+
+                    let resultHtml = '<div class="text-left">';
+                    sortedResults.forEach(([playerId, count]) => {
+                        const player = state.spieler.find(p => p.id === playerId);
+                        if (player) {
+                            resultHtml += `<p>${player.name}: ${count} Stimme(n)</p>`;
+                        }
+                    });
+                    resultHtml += '</div>';
+
+                    showModal("Wahlergebnis", resultHtml, [
+                        {text: 'OK', class: 'bg-green-500', onClick: () => {
+                            appCallbacks.saveSpielfuehrerWahl(votes);
+                        }}
+                    ]);
                 }
             });
         }
