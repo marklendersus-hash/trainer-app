@@ -510,6 +510,7 @@ const appCallbacks = {
     deleteCollectionData: (collectionRef, collectionName) => deleteCollectionData(collectionRef, collectionName, appCallbacks),
     deleteMannschaftInfo: () => deleteMannschaftInfo(appCallbacks),
     deleteMannschaftEmblem: () => deleteMannschaftEmblem(appCallbacks),
+    saveSpielfuehrerWahl: (votes) => saveSpielfuehrerWahl(votes, appCallbacks),
     clearDateField: (inputId) => { document.getElementById(inputId).value = ''; },
     markFotoForDeletion: () => {
         document.getElementById('deleteFotoFlag').value = 'true';
@@ -802,6 +803,40 @@ const appCallbacks = {
         const deleteMatchBtn = document.getElementById('delete-match-btn');
         if (deleteMatchBtn) {
             deleteMatchBtn.addEventListener('click', () => appCallbacks.deleteMatchtag(state.currentId));
+        }
+
+        const wahlForm = document.getElementById('spielfuehrerWahlForm');
+        if (wahlForm) {
+            wahlForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(wahlForm);
+                const votes = {};
+                for (const [key, value] of formData.entries()) {
+                    if (!votes[key]) {
+                        votes[key] = [];
+                    }
+                    votes[key].push(value);
+                }
+
+                let validationError = false;
+                for (const voterId in votes) {
+                    const playerVotes = votes[voterId];
+                    if (playerVotes.length !== 2) {
+                        showModal("Fehler", "Jeder Spieler muss genau 2 Stimmen abgeben.", [{text: 'OK', class: 'bg-red-500'}]);
+                        validationError = true;
+                        break;
+                    }
+                    if (playerVotes[0] === playerVotes[1]) {
+                        showModal("Fehler", "Ein Spieler kann nicht zweimal für denselben Spieler stimmen.", [{text: 'OK', class: 'bg-red-500'}]);
+                        validationError = true;
+                        break;
+                    }
+                }
+
+                if (!validationError) {
+                    appCallbacks.saveSpielfuehrerWahl(votes);
+                }
+            });
         }
     }
 };

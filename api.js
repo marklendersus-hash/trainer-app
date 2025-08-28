@@ -4,7 +4,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth
 import { state } from './state.js';
 import { firebaseConfig } from './config.js';
 
-export const APP_VERSION = `Version 2025-08-28-1055`;
+export const APP_VERSION = `Version 2025-08-28-1101`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 export const app = initializeApp(firebaseConfig);
@@ -470,4 +470,18 @@ export const deleteMannschaftEmblem = async (callbacks) => {
             }
         ]
     );
+};
+
+export const saveSpielfuehrerWahl = async (votes, callbacks) => {
+    callbacks.showModal("Speichern...", '<div class="animate-pulse">Spielführerwahl wird gespeichert...</div>', []);
+    try {
+        const wahlCollection = collection(db, `artifacts/${appId}/public/data/spielfuehrerwahlen`);
+        const date = new Date().toISOString().slice(0, 10);
+        const docRef = doc(wahlCollection, date);
+        await setDoc(docRef, { votes });
+        callbacks.showModal("Gespeichert", "Spielführerwahl wurde erfolgreich gespeichert.", [{text: 'OK', class: 'bg-green-500'}]);
+    } catch (error) {
+        console.error("saveSpielfuehrerWahl: FEHLER beim Speichern:", error);
+        callbacks.showModal("Fehler", `Fehler beim Speichern der Spielführerwahl: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
 };

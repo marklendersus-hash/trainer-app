@@ -4,6 +4,7 @@ import { renderHome } from './views/home-view.js';
 import { renderSpielerUebersicht, renderSpielerDetail, renderSpielerForm } from './views/spieler-view.js';
 import { renderTrainingUebersicht, renderMatchtagUebersicht, renderTrainingDetail, renderMatchtagDetail } from './views/events-view.js';
 import { renderEinstellungen } from './views/einstellungen-view.js';
+import { renderSpielfuehrerWahl } from './views/spielfuehrer-wahl-view.js';
 
 const appContainer = document.getElementById('app-container');
 
@@ -57,6 +58,7 @@ export const render = (callbacks) => {
         case 'matchtagUebersicht': pageTitle = 'Matchtage'; pageContent = renderMatchtagUebersicht(callbacks); break;
         case 'matchtagDetail': pageTitle = 'Matchtag Details'; pageContent = renderMatchtagDetail(callbacks); break;
         case 'einstellungen': pageTitle = 'Einstellungen'; pageContent = renderEinstellungen(callbacks); break;
+        case 'spielfuehrerWahl': pageTitle = 'Spielführerwahl'; pageContent = renderSpielfuehrerWahl(callbacks); break;
         default: pageTitle = 'Fehler'; pageContent = `<p>Seite nicht gefunden.</p>`;
     }
 

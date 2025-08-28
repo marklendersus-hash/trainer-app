@@ -22,7 +22,8 @@ export let state = {
     showGeburtstageOnHomeCalendar: true,
     isModalOpen: false, 
     trainingListView: 'all', 
-    matchtagListView: 'all'
+    matchtagListView: 'all',
+    spielfuehrerWahl: {}
 };
 
 export let userId;

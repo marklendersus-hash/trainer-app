@@ -39,9 +39,14 @@ export const renderSpielerUebersicht = (callbacks) => {
     return `
         <div class="flex justify-between items-center p-4 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold">Spielerdatenbank</h2>
-            <button onclick="window.app.navigateTo('spielerForm')" class="w-10 h-10 bg-green-600 text-white rounded-full btn flex items-center justify-center">
-                <i class="fas fa-plus"></i>
-            </button>
+            <div class="flex items-center gap-2">
+                <button onclick="window.app.navigateTo('spielfuehrerWahl')" class="w-10 h-10 bg-blue-600 text-white rounded-full btn flex items-center justify-center" title="Spielführerwahl">
+                    <i class="fas fa-user-shield"></i>
+                </button>
+                <button onclick="window.app.navigateTo('spielerForm')" class="w-10 h-10 bg-green-600 text-white rounded-full btn flex items-center justify-center" title="Spieler hinzufügen">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
         </div>
         <div class="space-y-3 mt-4">
             ${filteredSpieler.length > 0 ? filteredSpieler.map(spieler => createSpielerCardHtml(spieler, totalTrainings)).join('') : `
