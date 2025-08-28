@@ -11,7 +11,9 @@ export const renderHeader = (title) => {
 
     return `
     <header class="bg-gray-800 text-gray-200 p-4 fixed top-0 left-0 right-0 z-50 flex items-end justify-between text-center h-32 border-b-2 border-green-500">
-        ${state.isLoggedIn ? `<button onclick="window.app.navigateTo('einstellungen', null, true)" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-gray-700 transition-colors absolute top-2 left-2" title="Einstellungen"><i class="fas fa-cog text-xl"></i></button>` : ''}
+        <div class="w-12 h-12">
+        ${state.isLoggedIn ? `<button onclick="window.app.navigateTo('einstellungen', null, true)" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-gray-700 transition-colors" title="Einstellungen"><i class="fas fa-cog text-xl"></i></button>` : ''}
+        </div>
         <div class="flex items-center justify-center flex-grow">
             ${emblemHtml}
             <div>
@@ -19,7 +21,9 @@ export const renderHeader = (title) => {
                 ${displayTitle2 ? `<h2 class="text-sm text-gray-400 leading-tight whitespace-nowrap">${displayTitle2}</h2>` : ''}
             </div>
         </div>
-        ${state.isLoggedIn ? `<button onclick="window.app.logout()" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-gray-700 transition-colors absolute top-2 right-2" title="Ausloggen"><i class="fas fa-sign-out-alt text-xl"></i></button>` : ''}
+        <div class="w-12 h-12">
+        ${state.isLoggedIn ? `<button onclick="window.app.logout()" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-gray-700 transition-colors" title="Ausloggen"><i class="fas fa-sign-out-alt text-xl"></i></button>` : ''}
+        </div>
     </header>`;
 };
 
