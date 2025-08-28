@@ -126,19 +126,19 @@
       /* KORREKTUR 2: Dein scrollbarer Container ist #app-container, nicht .main-content.
          Dieser Container bekommt jetzt die Abstände für Header/Footer.
          Der Header/Footer selbst wird über JavaScript eingefügt, daher stylen wir die allgemeinen Tags. */
-      /* #app-container {
+       #app-container {
           height: 100%;
           overflow-y: auto;
           -webkit-overflow-scrolling: touch;
           /* Diese Abstände sorgen dafür, dass der Inhalt nicht unter die fixierten Leisten rutscht.
              Passe die Werte an die exakte Höhe deiner Leisten an. */
-        /*  padding-top: 100px; 
+          padding-top: 100px; 
           padding-bottom: 60px;
           box-sizing: border-box; /* Wichtig, damit padding die Höhe nicht vergrößert */
-     /* }
+      }
 
-      /* Diese Regeln gelten für die Header/Footer-Elemente, die dein JS generiert */
-      /*header {
+       Diese Regeln gelten für die Header/Footer-Elemente, die dein JS generiert */
+      header {
         padding-top: env(safe-area-inset-top);
       }
       
