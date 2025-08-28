@@ -342,7 +342,7 @@ export const renderMatchtagDetail = (callbacks) => {
 
             <form id="matchtagForm">
                 <input type="hidden" name="id" value="${state.currentId}">
-                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4 gap-y-4 p-3 rounded-lg bg-gray-800/50">
+                <div class="grid grid-cols-[150px,1fr] items-center gap-x-2 gap-y-4 p-3 rounded-lg bg-gray-800/50">
                     <label for="matchDate" class="font-semibold text-left">Datum</label>
                     <input id="matchDate" type="date" value="${state.currentId}" onchange="window.app.navigateTo('matchtagDetail', this.value)" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                     
