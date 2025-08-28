@@ -174,14 +174,18 @@ export const renderSpielerForm = (callbacks) => {
                 </div>
                 <div class="grid grid-cols-[80px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Urlaub</label>
-                    <div class="grid grid-cols-2 gap-4">
-                        <input type="date" name="urlaubVon" value="${spielerToEdit.urlaubVon || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Von">
-                        <input type="date" name="urlaubBis" value="${spielerToEdit.urlaubBis || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Bis">
+                    <div class="flex items-center gap-2">
+                        <input type="date" name="urlaubVon" id="urlaubVonInput" value="${spielerToEdit.urlaubVon || ''}" class="w-20 p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Von">
+                        <input type="date" name="urlaubBis" id="urlaubBisInput" value="${spielerToEdit.urlaubBis || ''}" class="w-20 p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Bis">
+                        <button type="button" onclick="window.app.clearDateField('urlaubVonInput'); window.app.clearDateField('urlaubBisInput')" class="p-2 bg-red-600 text-white rounded-lg btn" title="Datum löschen"><i class="fas fa-times"></i></button>
                     </div>
                 </div>
                 <div class="grid grid-cols-[80px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Verletzt</label>
-                    <input type="date" name="verletztBis" value="${spielerToEdit.verletztBis || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
+                    <div class="flex items-center gap-2">
+                        <input type="date" name="verletztBis" id="verletztBisInput" value="${spielerToEdit.verletztBis || ''}" class="w-20 p-2 bg-gray-700 text-gray-200 rounded-lg">
+                        <button type="button" onclick="window.app.clearDateField('verletztBisInput')" class="p-2 bg-red-600 text-white rounded-lg btn" title="Datum löschen"><i class="fas fa-times"></i></button>
+                    </div>
                 </div>
             </div>
 
