@@ -116,52 +116,47 @@ export const renderSpielerForm = (callbacks) => {
     const spielerToEdit = isEditing ? state.spieler.find(s => s.id === state.currentId) : {};
     const fotoVorschauHtml = spielerToEdit.fotoUrl
         ? `<img id="fotoVorschau" src="${spielerToEdit.fotoUrl}" class="w-24 h-24 rounded-full mx-auto object-cover">`
-        : `<img id="fotoVorschau" src="#" alt="Vorschau" class="w-24 h-24 rounded-full mx-auto object-cover hidden">`;
+        : `<div class="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center text-4xl text-gray-400"><i class="fas fa-plus"></i></div>`;
 
     return `
         <form id="spielerForm">
-            <div class="p-6 rounded-xl space-y-3 border border-gray-700">
-                <h2 class="text-xl font-bold text-center">Stammdaten</h2>
+            <div class="p-6 rounded-xl space-y-4 border border-gray-700">
+                <h2 class="text-xl font-bold text-center">Spielerprofil</h2>
                 <input type="hidden" name="id" value="${spielerToEdit.id || ''}">
                 <input type="hidden" id="deleteFotoFlag" name="deleteFoto" value="false">
-                <div>
-                    <label class="font-semibold">Profilfoto</label>
-                    <div class="relative w-24 h-24 mx-auto">
-                        ${fotoVorschauHtml}
-                        ${spielerToEdit.fotoUrl ? `<button type="button" onclick="window.app.markFotoForDeletion()" class="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center btn" title="Foto löschen"><i class="fas fa-times"></i></button>` : ''}
-                    </div>
-                    <input type="file" name="foto" id="fotoUpload" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 mt-2 dark:text-gray-400 dark:file:bg-gray-700 dark:file:text-gray-300 dark:hover:file:bg-gray-600">
-                </div>
-                <div class="grid grid-cols-[1fr,auto] items-center gap-x-4">
-                    <input type="text" name="name" value="${spielerToEdit.name || ''}" class="w-full p-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg" required>
+                
+                <label for="fotoUpload" class="cursor-pointer">
+                    ${fotoVorschauHtml}
+                </label>
+                <input type="file" name="foto" id="fotoUpload" accept="image/*" class="hidden">
+
+                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Name</label>
+                    <input type="text" name="name" value="${spielerToEdit.name || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" required>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="grid grid-cols-[1fr,auto] items-center gap-x-4">
-                        <input type="number" name="nummer" value="${spielerToEdit.nummer || ''}" class="w-full p-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
-                        <label class="font-semibold">Nummer</label>
-                    </div>
-                    <div class="grid grid-cols-[1fr,auto] items-center gap-x-4">
-                        <input type="date" name="geburtstag" value="${spielerToEdit.geburtstag || ''}" class="w-full p-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
-                        <label class="font-semibold">Geburtstag</label>
-                    </div>
+                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
+                    <label class="font-semibold">Geburtsdatum</label>
+                    <input type="date" name="geburtstag" value="${spielerToEdit.geburtstag || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                 </div>
-                <div class="grid grid-cols-[1fr,auto] items-center gap-x-4">
-                    <select name="position" class="w-full p-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
-                        <option value="Torwart" ${spielerToEdit.position === 'Torwart' ? 'selected' : ''}>Torwart</option>
-                        <option value="Abwehr" ${spielerToEdit.position === 'Abwehr' ? 'selected' : ''}>Abwehr</option>
-                        <option value="Mittelfeld" ${spielerToEdit.position === 'Mittelfeld' ? 'selected' : ''}>Mittelfeld</option>
-                        <option value="Sturm" ${spielerToEdit.position === 'Sturm' ? 'selected' : ''}>Sturm</option>
-                    </select>
-                    <label class="font-semibold">Position</label>
+                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
+                    <label class="font-semibold">Nummer & Position</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="number" name="nummer" value="${spielerToEdit.nummer || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Nr.">
+                        <select name="position" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
+                            <option value="Torwart" ${spielerToEdit.position === 'Torwart' ? 'selected' : ''}>Torwart</option>
+                            <option value="Abwehr" ${spielerToEdit.position === 'Abwehr' ? 'selected' : ''}>Abwehr</option>
+                            <option value="Mittelfeld" ${spielerToEdit.position === 'Mittelfeld' ? 'selected' : ''}>Mittelfeld</option>
+                            <option value="Sturm" ${spielerToEdit.position === 'Sturm' ? 'selected' : ''}>Sturm</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div class="p-6 rounded-xl space-y-3 border border-gray-700">
+            <div class="p-6 rounded-xl space-y-4 border border-gray-700 mt-4">
                 <h2 class="text-xl font-bold text-center">Status & Abwesenheiten</h2>
-                <div>
+                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Manueller Status</label>
-                    <select name="status" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
+                    <select name="status" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                         <option value="Aktiv" ${spielerToEdit.status === 'Aktiv' ? 'selected' : ''}>Aktiv</option>
                         <option value="Inaktiv" ${spielerToEdit.status === 'Inaktiv' ? 'selected' : ''}>Inaktiv</option>
                         <option value="Gesperrt" ${spielerToEdit.status === 'Gesperrt' ? 'selected' : ''}>Gesperrt</option>
@@ -170,35 +165,23 @@ export const renderSpielerForm = (callbacks) => {
                         <option value="Verletzt" ${spielerToEdit.status === 'Verletzt' ? 'selected' : ''}>Verletzt</option>
                     </select>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-sm">Urlaub von</label>
-                        <div class="flex items-center gap-2">
-                            <input type="date" name="urlaubVon" id="urlaubVonInput" value="${spielerToEdit.urlaubVon || ''}" class="flex-grow p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
-                            <button type="button" onclick="window.app.clearDateField('urlaubVonInput')" class="p-2 mt-1 bg-red-100 text-red-600 rounded-lg btn" title="Datum löschen"><i class="fas fa-times"></i></button>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="text-sm">Urlaub bis</label>
-                        <div class="flex items-center gap-2">
-                            <input type="date" name="urlaubBis" id="urlaubBisInput" value="${spielerToEdit.urlaubBis || ''}" class="flex-grow p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
-                            <button type="button" onclick="window.app.clearDateField('urlaubBisInput')" class="p-2 mt-1 bg-red-100 text-red-600 rounded-lg btn" title="Datum löschen"><i class="fas fa-times"></i></button>
-                        </div>
+                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
+                    <label class="font-semibold">Urlaub</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="date" name="urlaubVon" value="${spielerToEdit.urlaubVon || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Von">
+                        <input type="date" name="urlaubBis" value="${spielerToEdit.urlaubBis || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Bis">
                     </div>
                 </div>
-                <div class="mt-2">
+                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Verletzt bis</label>
-                    <div class="flex items-center gap-2">
-                        <input type="date" name="verletztBis" id="verletztBisInput" value="${spielerToEdit.verletztBis || ''}" class="flex-grow p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
-                        <button type="button" onclick="window.app.clearDateField('verletztBisInput')" class="p-2 mt-1 bg-red-100 text-red-600 rounded-lg btn" title="Datum löschen"><i class="fas fa-times"></i></button>
-                        </div>
+                    <input type="date" name="verletztBis" value="${spielerToEdit.verletztBis || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                 </div>
             </div>
 
-            <div class="p-6 rounded-xl space-y-3 border border-gray-700">
+            <div class="p-6 rounded-xl space-y-3 border border-gray-700 mt-4">
                 <h2 class="text-xl font-bold text-center">Notizen</h2>
                 <div>
-                    <textarea name="notiz" rows="3" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">${spielerToEdit.notiz || ''}</textarea>
+                    <textarea name="notiz" rows="3" class="w-full p-2 mt-1 bg-gray-700 text-gray-200 rounded-lg">${spielerToEdit.notiz || ''}</textarea>
                 </div>
             </div>
             <button type="submit" class="w-full py-3 mt-4 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">Speichern</button>
