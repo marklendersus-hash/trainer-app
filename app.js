@@ -399,7 +399,15 @@ const appCallbacks = {
                 state.currentDate = new Date();
             }
             render(appCallbacks);
-            window.scrollTo(0, 0);
+            if (page === 'wahlergebnis') {
+                const saveWahlBtn = document.getElementById('saveWahl');
+                if (saveWahlBtn) {
+                    saveWahlBtn.addEventListener('click', () => {
+                        appCallbacks.saveSpielfuehrerWahl(state.spielfuehrerWahl.votes);
+                    });
+                }
+            }
+            document.getElementById('app-container').scrollTo(0, 0);
         };
         if (!['spielerForm'].includes(state.currentPage)) {
             doNavigation();
@@ -426,7 +434,7 @@ const appCallbacks = {
                 state.currentPage = previous.page;
                 state.currentId = previous.id;
                 render(appCallbacks);
-                window.scrollTo(0, 0);
+                document.getElementById('app-container').scrollTo(0, 0);
             } else {
                 appCallbacks.navigateTo('home', null, true);
             }
