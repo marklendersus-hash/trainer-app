@@ -816,6 +816,7 @@ const appCallbacks = {
         const saveWahlBtn = document.getElementById('saveWahl');
         if (saveWahlBtn) {
             saveWahlBtn.addEventListener('click', () => {
+                console.log('saveWahlBtn clicked');
                 appCallbacks.saveSpielfuehrerWahl(state.spielfuehrerWahl.votes);
             });
         }
