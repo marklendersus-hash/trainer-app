@@ -82,7 +82,13 @@ const createTop10CardHtml = (spieler, index, statText, baseClass) => {
 
 export const renderTrainingUebersicht = (callbacks) => {
     let content = `
-        <div class="p-4 rounded-xl border border-gray-700 mb-4">
+        <div class="flex justify-between items-center p-4 rounded-xl border border-gray-700">
+            <h2 class="text-xl font-bold">Trainings</h2>
+            <button id="add-training-btn" class="w-10 h-10 bg-blue-600 text-white rounded-full btn flex items-center justify-center">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="p-4 rounded-xl border border-gray-700 mb-4 mt-4">
             <div class="flex items-center gap-2">
                 <button id="show-all-trainings-btn" class="flex-1 px-4 py-2 rounded-lg btn ${state.trainingListView === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Alle</button>
                 <button id="show-top10-trainings-btn" class="flex-1 px-4 py-2 rounded-lg btn ${state.trainingListView === 'top10' ? 'bg-blue-600 text-white' : 'bg-gray-700'}">Top 10</button>
@@ -116,12 +122,6 @@ export const renderTrainingUebersicht = (callbacks) => {
     } else if (state.trainingListView === 'all') {
         content += `
         <div class="p-4 rounded-xl border border-gray-700">
-            <div class="flex justify-center items-center gap-4 mb-4">
-                <h2 class="text-lg font-bold">Alle Trainings</h2>
-                <button id="add-training-btn" class="w-8 h-8 bg-blue-600 text-white rounded-full btn flex items-center justify-center flex-shrink-0" title="Training hinzufügen">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
             <div class="space-y-2">
                 ${[...state.trainingseinheiten].sort((a, b) => a.id.localeCompare(b.id)).map(training => createTrainingCardHtml(training, aktiveSpielerCount)).join('')}
             </div>
@@ -133,7 +133,13 @@ export const renderTrainingUebersicht = (callbacks) => {
 
 export const renderMatchtagUebersicht = (callbacks) => {
     let content = `
-        <div class="p-4 rounded-xl border border-gray-700 mb-4">
+        <div class="flex justify-between items-center p-4 rounded-xl border border-gray-700">
+            <h2 class="text-xl font-bold">Matches</h2>
+            <button id="add-match-btn" class="w-10 h-10 bg-yellow-500 text-white rounded-full btn flex items-center justify-center">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="p-4 rounded-xl border border-gray-700 mb-4 mt-4">
             <div class="flex items-center gap-2">
                 <button id="show-all-matches-btn" class="flex-1 px-4 py-2 rounded-lg btn ${state.matchtagListView === 'all' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Alle</button>
                 <button id="show-top10-matches-btn" class="flex-1 px-4 py-2 rounded-lg btn ${state.matchtagListView === 'top10' ? 'bg-yellow-500 text-white' : 'bg-gray-700'}">Top 10</button>
@@ -174,12 +180,6 @@ export const renderMatchtagUebersicht = (callbacks) => {
     } else if (state.matchtagListView === 'all') {
         content += `
         <div class="p-4 rounded-xl border border-gray-700">
-            <div class="flex justify-center items-center gap-4 mb-4">
-                <h2 class="text-lg font-bold">Alle Matches</h2>
-                <button id="add-match-btn" class="w-8 h-8 bg-yellow-500 text-white rounded-full btn flex items-center justify-center flex-shrink-0" title="Match hinzufügen">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
             <div class="space-y-2">
                 ${[...state.matchtage].sort((a, b) => a.id.localeCompare(b.id)).map(matchtag => createMatchtagCardHtml(matchtag)).join('')}
                 ${state.matchtage.length === 0 ? '<p class="text-center text-gray-400">Noch keine Matchtage vorhanden.</p>' : ''}

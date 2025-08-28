@@ -15,12 +15,8 @@ const createSpielerCardHtml = (spieler, totalTrainings) => {
         <div onclick="window.app.navigateTo('spielerDetail', '${spieler.id}')" class="p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:bg-gray-700/50 card border border-gray-700">
             ${fotoHtml}
             <div class="flex-grow">
-                <p class="font-bold">${spieler.name} <span class="text-gray-400 font-normal">#${spieler.nummer || '?'}</span></p>
+                <p class="font-bold flex items-center">${getStatusIndicator(getAktuellerStatus(spieler))} <span class="ml-2">${spieler.name}</span><span class="text-gray-400 font-normal ml-2">#${spieler.nummer || '?'}</span></p>
                 <div class="text-sm text-gray-400 mt-1">
-                    <p class="flex items-center space-x-2">
-                        ${getStatusIndicator(getAktuellerStatus(spieler))}
-                        <span>${getAktuellerStatus(spieler)}</span>
-                    </p>
                     <p class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm items-center">
                         <span title="Trainingseinheiten" class="flex items-center gap-1"><i class="fas fa-running text-blue-500"></i> ${attendedTrainings}/${totalTrainings} (${percentage}%)</span>
                         <span title="Matches" class="flex items-center gap-1"><i class="fas fa-futbol text-yellow-500"></i> ${getMatchAnzahlGesamt(spieler.id, state)}</span>
