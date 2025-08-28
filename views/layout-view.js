@@ -12,7 +12,7 @@ export const renderHeader = (title) => {
     return `
     <header class="bg-gray-800 text-gray-200 p-3 fixed left-0 right-0 z-50 flex items-end justify-between text-center h-32 border-b-2 border-green-500" style="top: -8px;">
         <div class="w-12 h-12">
-        ${state.isLoggedIn ? `<button onclick="window.app.navigateTo('einstellungen', null, true)" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-gray-700 transition-colors" title="Einstellungen"><i class="fas fa-cog text-xl"></i></button>` : ''}
+        ${state.isLoggedIn ? `<button onclick="window.app.navigateTo('einstellungen', null, true)" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-transparent transition-colors" title="Einstellungen"><i class="fas fa-cog text-xl"></i></button>` : ''}
         </div>
         <div class="flex items-center justify-center flex-grow">
             ${emblemHtml}
@@ -22,7 +22,7 @@ export const renderHeader = (title) => {
             </div>
         </div>
         <div class="w-12 h-12">
-        ${state.isLoggedIn ? `<button onclick="window.app.logout()" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-gray-700 transition-colors" title="Ausloggen"><i class="fas fa-sign-out-alt text-xl"></i></button>` : ''}
+        ${state.isLoggedIn ? `<button onclick="window.app.logout()" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-transparent transition-colors" title="Ausloggen"><i class="fas fa-sign-out-alt text-xl"></i></button>` : ''}
         </div>
     </header>`;
 };
@@ -42,17 +42,17 @@ export const renderNavigationBar = () => {
         const isActive = activePages[page]?.includes(state.currentPage);
         const activeClass = 'text-green-400';
         return `<div class="flex-1 flex justify-center items-center">
-                    <button onclick="window.app.navigateTo('${page}', null, true)" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 ${buttonSizeClass} rounded-full hover:bg-gray-700 transition-colors ${isActive ? activeClass : ''}" title="${title}">
+                    <button onclick="window.app.navigateTo('${page}', null, true)" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 ${buttonSizeClass} rounded-full hover:bg-transparent transition-colors ${isActive ? activeClass : ''}" title="${title}">
                         <i class="fas ${icon} text-xl"></i>
                         <span class="text-xs mt-1">${title}</span>
                     </button>
                 </div>`;
     };
     let leftButtonHtml = showBack
-        ? `<div class="flex-1 flex justify-center items-center"><button onclick="window.app.goBack()" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 ${buttonSizeClass} rounded-full hover:bg-gray-700 transition-colors" title="Zurück"><i class="fas fa-arrow-left text-xl"></i><span class="text-xs mt-1">Zurück</span></button></div>`
+        ? `<div class="flex-1 flex justify-center items-center"><button onclick="window.app.goBack()" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 ${buttonSizeClass} rounded-full hover:bg-transparent transition-colors" title="Zurück"><i class="fas fa-arrow-left text-xl"></i><span class="text-xs mt-1">Zurück</span></button></div>`
         : navButton('home', 'fa-home', 'Home');
     return `
-        <div class="fixed bottom-0 left-0 right-0 z-40 px-4 pt-2" style="padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));">
+        <div class="fixed bottom-0 left-0 right-0 z-40 px-4" style="padding-bottom: env(safe-area-inset-bottom);">
             <div class="bg-gray-800 border-2 border-green-500 shadow-lg rounded-full px-2 py-2 w-full max-w-sm mx-auto">
                 <div class="flex justify-around items-center">
                     ${leftButtonHtml}
