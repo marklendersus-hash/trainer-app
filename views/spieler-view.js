@@ -132,28 +132,28 @@ export const renderSpielerForm = (callbacks) => {
                     </div>
                     <input type="file" name="foto" id="fotoUpload" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 mt-2 dark:text-gray-400 dark:file:bg-gray-700 dark:file:text-gray-300 dark:hover:file:bg-gray-600">
                 </div>
-                <div>
+                <div class="grid grid-cols-[1fr,auto] items-center gap-x-4">
+                    <input type="text" name="name" value="${spielerToEdit.name || ''}" class="w-full p-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg" required>
                     <label class="font-semibold">Name</label>
-                    <input type="text" name="name" value="${spielerToEdit.name || ''}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg" required>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
+                    <div class="grid grid-cols-[1fr,auto] items-center gap-x-4">
+                        <input type="number" name="nummer" value="${spielerToEdit.nummer || ''}" class="w-full p-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
                         <label class="font-semibold">Nummer</label>
-                        <input type="number" name="nummer" value="${spielerToEdit.nummer || ''}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
                     </div>
-                    <div>
+                    <div class="grid grid-cols-[1fr,auto] items-center gap-x-4">
+                        <input type="date" name="geburtstag" value="${spielerToEdit.geburtstag || ''}" class="w-full p-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
                         <label class="font-semibold">Geburtstag</label>
-                        <input type="date" name="geburtstag" value="${spielerToEdit.geburtstag || ''}" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
                     </div>
                 </div>
-                <div>
-                    <label class="font-semibold">Position</label>
-                    <select name="position" class="w-full p-2 mt-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
+                <div class="grid grid-cols-[1fr,auto] items-center gap-x-4">
+                    <select name="position" class="w-full p-2 bg-gray-100 dark:bg-gray-700 dark:text-gray-200 rounded-lg">
                         <option value="Torwart" ${spielerToEdit.position === 'Torwart' ? 'selected' : ''}>Torwart</option>
                         <option value="Abwehr" ${spielerToEdit.position === 'Abwehr' ? 'selected' : ''}>Abwehr</option>
                         <option value="Mittelfeld" ${spielerToEdit.position === 'Mittelfeld' ? 'selected' : ''}>Mittelfeld</option>
                         <option value="Sturm" ${spielerToEdit.position === 'Sturm' ? 'selected' : ''}>Sturm</option>
                     </select>
+                    <label class="font-semibold">Position</label>
                 </div>
             </div>
 
