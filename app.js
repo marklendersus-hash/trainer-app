@@ -805,6 +805,13 @@ const appCallbacks = {
             deleteMatchBtn.addEventListener('click', () => appCallbacks.deleteMatchtag(state.currentId));
         }
 
+        const saveWahlBtn = document.getElementById('saveWahl');
+        if (saveWahlBtn) {
+            saveWahlBtn.addEventListener('click', () => {
+                appCallbacks.saveSpielfuehrerWahl(state.spielfuehrerWahl.votes);
+            });
+        }
+
         const wahlForm = document.getElementById('spielfuehrerWahlForm');
         if (wahlForm) {
             wahlForm.addEventListener('submit', (e) => {
@@ -841,21 +848,10 @@ const appCallbacks = {
                     }, {});
 
                     const sortedResults = Object.entries(voteCounts).sort(([,a],[,b]) => b-a);
-
-                    let resultHtml = '<div class="text-left">';
-                    sortedResults.forEach(([playerId, count]) => {
-                        const player = state.spieler.find(p => p.id === playerId);
-                        if (player) {
-                            resultHtml += `<p>${player.name}: ${count} Stimme(n)</p>`;
-                        }
-                    });
-                    resultHtml += '</div>';
-
-                    showModal("Wahlergebnis", resultHtml, [
-                        {text: 'OK', class: 'bg-green-500', onClick: () => {
-                            appCallbacks.saveSpielfuehrerWahl(votes);
-                        }}
-                    ]);
+                    
+                    state.wahlergebnis = sortedResults;
+                    state.spielfuehrerWahl.votes = votes;
+                    appCallbacks.navigateTo('wahlergebnis');
                 }
             });
         }

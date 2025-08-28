@@ -5,6 +5,7 @@ import { renderSpielerUebersicht, renderSpielerDetail, renderSpielerForm } from 
 import { renderTrainingUebersicht, renderMatchtagUebersicht, renderTrainingDetail, renderMatchtagDetail } from './views/events-view.js';
 import { renderEinstellungen } from './views/einstellungen-view.js';
 import { renderSpielfuehrerWahl } from './views/spielfuehrer-wahl-view.js';
+import { renderWahlergebnis } from './views/wahlergebnis-view.js';
 
 const appContainer = document.getElementById('app-container');
 
@@ -59,13 +60,14 @@ export const render = (callbacks) => {
         case 'matchtagDetail': pageTitle = 'Matchtag Details'; pageContent = renderMatchtagDetail(callbacks); break;
         case 'einstellungen': pageTitle = 'Einstellungen'; pageContent = renderEinstellungen(callbacks); break;
         case 'spielfuehrerWahl': pageTitle = 'Spielführerwahl'; pageContent = renderSpielfuehrerWahl(callbacks); break;
+        case 'wahlergebnis': pageTitle = 'Wahlergebnis'; pageContent = renderWahlergebnis(callbacks); break;
         default: pageTitle = 'Fehler'; pageContent = `<p>Seite nicht gefunden.</p>`;
     }
 
     if (state.currentPage === 'login') {
         appContainer.innerHTML = pageContent;
     } else {
-        appContainer.innerHTML = `${renderHeader(pageTitle)}${renderNavigationBar()}<main class="p-4 space-y-4 pb-16 pt-20">${pageContent}</main>`;
+        appContainer.innerHTML = `${renderHeader(pageTitle)}${renderNavigationBar()}<main class="p-4 space-y-4 pt-20">${pageContent}</main>`;
     }
     
     callbacks.addEventListeners();

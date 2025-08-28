@@ -10,7 +10,7 @@ export const renderHeader = (title) => {
     const titleClass = (displayTitle.length > 15) ? 'text-base font-bold' : 'text-lg font-bold';
 
     return `
-    <header class="bg-gray-800 text-gray-200 p-3 fixed left-0 right-0 z-50 flex items-end justify-between text-center h-32 border-b-2 border-green-500" style="top: -5px;">
+    <header class="bg-gray-800 text-gray-200 p-3 fixed left-0 right-0 z-50 flex items-end justify-between text-center h-32 border-b-2 border-green-500" style="top: -8px;">
         <div class="w-12 h-12">
         ${state.isLoggedIn ? `<button onclick="window.app.navigateTo('einstellungen', null, true)" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 w-12 h-12 rounded-full hover:bg-gray-700 transition-colors" title="Einstellungen"><i class="fas fa-cog text-xl"></i></button>` : ''}
         </div>

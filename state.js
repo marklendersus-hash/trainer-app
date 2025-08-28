@@ -23,7 +23,8 @@ export let state = {
     isModalOpen: false, 
     trainingListView: 'all', 
     matchtagListView: 'all',
-    spielfuehrerWahl: {}
+    spielfuehrerWahl: {},
+    wahlergebnis: null
 };
 
 export let userId;
