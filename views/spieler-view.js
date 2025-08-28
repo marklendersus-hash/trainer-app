@@ -36,60 +36,18 @@ const createSpielerCardHtml = (spieler, totalTrainings) => {
 export const renderSpielerUebersicht = (callbacks) => {
     let filteredSpieler = state.spieler.filter(s => s.name.toLowerCase().includes(state.filter.toLowerCase()));
     
-    const statusOrder = { 'Aktiv': 1, 'Verletzt': 2, 'Gesperrt': 3, 'Urlaub': 4, 'Krank': 5, 'Inaktiv': 6 };
-    filteredSpieler.sort((a, b) => {
-        let valA, valB;
-        switch(state.sortBy) {
-            case 'name':
-                valA = a.name.toLowerCase();
-                valB = b.name.toLowerCase();
-                return state.sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
-            case 'status':
-                valA = statusOrder[getAktuellerStatus(a)] || 99;
-                valB = statusOrder[getAktuellerStatus(b)] || 99;
-                break;
-            case 'matches':
-                valA = getMatchAnzahlGesamt(a.id, state);
-                valB = getMatchAnzahlGesamt(b.id, state);
-                break;
-            case 'training':
-                valA = getTrainingsAnzahlGesamt(a.id, state);
-                valB = getTrainingsAnzahlGesamt(b.id, state);
-                break;
-        }
-        if (valA === valB) {
-            return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-        }
-        return state.sortAsc ? valA - valB : valB - valA;
-    });
-
-    const sortButton = (key, text) => {
-        const isActive = state.sortBy === key;
-        const icon = isActive ? (state.sortAsc ? '' : '') : '';
-        return `<button onclick="window.app.setSort('${key}')" class="px-3 py-1 text-sm rounded-full btn ${isActive ? 'bg-green-600 text-white' : 'bg-gray-700'}">${text} ${icon}</button>`;
-    };
-
     const todayStringForTotal = formatDate(new Date());
     const pastTrainingsForTotal = state.trainingseinheiten.filter(t => !t.cancelled && t.id <= todayStringForTotal);
     const totalTrainings = pastTrainingsForTotal.length;
 
     return `
-        <div class="p-4 rounded-xl border border-gray-700">
-            <button onclick="window.app.navigateTo('spielerForm')" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn flex items-center justify-center gap-2">
+        <div class="flex justify-between items-center p-4 rounded-xl border border-gray-700">
+            <h2 class="text-xl font-bold">Spielerdatenbank</h2>
+            <button onclick="window.app.navigateTo('spielerForm')" class="w-10 h-10 bg-green-600 text-white rounded-full btn flex items-center justify-center">
                 <i class="fas fa-plus"></i>
-                Neuen Spieler hinzufügen
             </button>
         </div>
-        <div class="p-4 rounded-xl border border-gray-700">
-            <h3 class="text-sm font-bold text-gray-400 mb-2">Sortieren nach:</h3>
-            <div class="flex justify-center flex-wrap gap-2">
-                ${sortButton('name', 'Name')}
-                ${sortButton('status', 'Status')}
-                ${sortButton('matches', 'Matches')}
-                ${sortButton('training', 'Training')}
-            </div>
-        </div>
-        <div class="space-y-3">
+        <div class="space-y-3 mt-4">
             ${filteredSpieler.length > 0 ? filteredSpieler.map(spieler => createSpielerCardHtml(spieler, totalTrainings)).join('') : `
             <div class="p-6 rounded-xl text-center text-gray-400 border border-gray-700">
                 <p>Noch keine Spieler vorhanden.</p>
