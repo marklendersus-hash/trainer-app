@@ -115,7 +115,7 @@ export const renderSpielerForm = (callbacks) => {
     const isEditing = !!state.currentId;
     const spielerToEdit = isEditing ? state.spieler.find(s => s.id === state.currentId) : {};
     const fotoVorschauHtml = spielerToEdit.fotoUrl
-        ? `<img id="fotoVorschau" src="${spielerToEdit.fotoUrl}" class="w-24 h-24 rounded-full mx-auto object-cover">`
+        ? `<img id="fotoVorschau" src="${spielerToEdit.fotoUrl}" class="w-24 h-24 rounded-full object-cover">`
         : `<div class="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center text-4xl text-gray-400"><i class="fas fa-plus"></i></div>`;
 
     return `
@@ -125,37 +125,41 @@ export const renderSpielerForm = (callbacks) => {
                 <input type="hidden" name="id" value="${spielerToEdit.id || ''}">
                 <input type="hidden" id="deleteFotoFlag" name="deleteFoto" value="false">
                 
-                <label for="fotoUpload" class="cursor-pointer">
-                    ${fotoVorschauHtml}
-                </label>
-                <input type="file" name="foto" id="fotoUpload" accept="image/*" class="hidden">
+                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                    <label class="font-semibold">Profilfoto</label>
+                    <label for="fotoUpload" class="cursor-pointer flex justify-center">
+                        ${fotoVorschauHtml}
+                    </label>
+                    <input type="file" name="foto" id="fotoUpload" accept="image/*" class="hidden">
+                </div>
 
-                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
+                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Name</label>
                     <input type="text" name="name" value="${spielerToEdit.name || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" required>
                 </div>
-                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
-                    <label class="font-semibold">Geburtsdatum</label>
+                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                    <label class="font-semibold">geb. am</label>
                     <input type="date" name="geburtstag" value="${spielerToEdit.geburtstag || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                 </div>
-                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
-                    <label class="font-semibold">Nummer & Position</label>
-                    <div class="grid grid-cols-2 gap-4">
-                        <input type="number" name="nummer" value="${spielerToEdit.nummer || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Nr.">
-                        <select name="position" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
-                            <option value="Torwart" ${spielerToEdit.position === 'Torwart' ? 'selected' : ''}>Torwart</option>
-                            <option value="Abwehr" ${spielerToEdit.position === 'Abwehr' ? 'selected' : ''}>Abwehr</option>
-                            <option value="Mittelfeld" ${spielerToEdit.position === 'Mittelfeld' ? 'selected' : ''}>Mittelfeld</option>
-                            <option value="Sturm" ${spielerToEdit.position === 'Sturm' ? 'selected' : ''}>Sturm</option>
-                        </select>
-                    </div>
+                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                    <label class="font-semibold">Nummer</label>
+                    <input type="number" name="nummer" value="${spielerToEdit.nummer || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Nr.">
+                </div>
+                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                    <label class="font-semibold">Position</label>
+                    <select name="position" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
+                        <option value="Torwart" ${spielerToEdit.position === 'Torwart' ? 'selected' : ''}>Torwart</option>
+                        <option value="Abwehr" ${spielerToEdit.position === 'Abwehr' ? 'selected' : ''}>Abwehr</option>
+                        <option value="Mittelfeld" ${spielerToEdit.position === 'Mittelfeld' ? 'selected' : ''}>Mittelfeld</option>
+                        <option value="Sturm" ${spielerToEdit.position === 'Sturm' ? 'selected' : ''}>Sturm</option>
+                    </select>
                 </div>
             </div>
 
             <div class="p-6 rounded-xl space-y-4 border border-gray-700 mt-4">
                 <h2 class="text-xl font-bold text-center">Status & Abwesenheiten</h2>
-                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
-                    <label class="font-semibold">Manueller Status</label>
+                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                    <label class="font-semibold">Spielerstatus</label>
                     <select name="status" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                         <option value="Aktiv" ${spielerToEdit.status === 'Aktiv' ? 'selected' : ''}>Aktiv</option>
                         <option value="Inaktiv" ${spielerToEdit.status === 'Inaktiv' ? 'selected' : ''}>Inaktiv</option>
@@ -165,14 +169,14 @@ export const renderSpielerForm = (callbacks) => {
                         <option value="Verletzt" ${spielerToEdit.status === 'Verletzt' ? 'selected' : ''}>Verletzt</option>
                     </select>
                 </div>
-                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
+                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Urlaub</label>
                     <div class="grid grid-cols-2 gap-4">
                         <input type="date" name="urlaubVon" value="${spielerToEdit.urlaubVon || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Von">
                         <input type="date" name="urlaubBis" value="${spielerToEdit.urlaubBis || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Bis">
                     </div>
                 </div>
-                <div class="grid grid-cols-[150px,1fr] items-center gap-x-4">
+                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Verletzt bis</label>
                     <input type="date" name="verletztBis" value="${spielerToEdit.verletztBis || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                 </div>
