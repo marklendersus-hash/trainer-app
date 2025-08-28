@@ -121,31 +121,34 @@ export const renderSpielerForm = (callbacks) => {
     return `
         <form id="spielerForm">
             <div class="p-6 rounded-xl space-y-4 border border-gray-700">
-                <h2 class="text-xl font-bold text-center">Spielerprofil</h2>
+                <h2 class="text-xl font-bold text-center">Spielerformular</h2>
                 <input type="hidden" name="id" value="${spielerToEdit.id || ''}">
                 <input type="hidden" id="deleteFotoFlag" name="deleteFoto" value="false">
                 
-                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                <div class="grid grid-cols-[80px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Profilfoto</label>
-                    <label for="fotoUpload" class="cursor-pointer flex justify-center">
-                        ${fotoVorschauHtml}
-                    </label>
+                    <div class="relative w-24 h-24">
+                        <label for="fotoUpload" class="cursor-pointer">
+                            ${fotoVorschauHtml}
+                        </label>
+                        ${spielerToEdit.fotoUrl ? `<button type="button" onclick="window.app.markFotoForDeletion()" class="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center btn" title="Foto löschen"><i class="fas fa-times"></i></button>` : ''}
+                    </div>
                     <input type="file" name="foto" id="fotoUpload" accept="image/*" class="hidden">
                 </div>
 
-                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                <div class="grid grid-cols-[80px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Name</label>
                     <input type="text" name="name" value="${spielerToEdit.name || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" required>
                 </div>
-                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                <div class="grid grid-cols-[80px,1fr] items-center gap-x-4">
                     <label class="font-semibold">geb. am</label>
                     <input type="date" name="geburtstag" value="${spielerToEdit.geburtstag || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                 </div>
-                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                <div class="grid grid-cols-[80px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Nummer</label>
                     <input type="number" name="nummer" value="${spielerToEdit.nummer || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Nr.">
                 </div>
-                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                <div class="grid grid-cols-[80px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Position</label>
                     <select name="position" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                         <option value="Torwart" ${spielerToEdit.position === 'Torwart' ? 'selected' : ''}>Torwart</option>
@@ -158,8 +161,8 @@ export const renderSpielerForm = (callbacks) => {
 
             <div class="p-6 rounded-xl space-y-4 border border-gray-700 mt-4">
                 <h2 class="text-xl font-bold text-center">Status & Abwesenheiten</h2>
-                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
-                    <label class="font-semibold">Spielerstatus</label>
+                <div class="grid grid-cols-[80px,1fr] items-center gap-x-4">
+                    <label class="font-semibold">Status</label>
                     <select name="status" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                         <option value="Aktiv" ${spielerToEdit.status === 'Aktiv' ? 'selected' : ''}>Aktiv</option>
                         <option value="Inaktiv" ${spielerToEdit.status === 'Inaktiv' ? 'selected' : ''}>Inaktiv</option>
@@ -169,15 +172,15 @@ export const renderSpielerForm = (callbacks) => {
                         <option value="Verletzt" ${spielerToEdit.status === 'Verletzt' ? 'selected' : ''}>Verletzt</option>
                     </select>
                 </div>
-                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
+                <div class="grid grid-cols-[80px,1fr] items-center gap-x-4">
                     <label class="font-semibold">Urlaub</label>
                     <div class="grid grid-cols-2 gap-4">
                         <input type="date" name="urlaubVon" value="${spielerToEdit.urlaubVon || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Von">
                         <input type="date" name="urlaubBis" value="${spielerToEdit.urlaubBis || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" placeholder="Bis">
                     </div>
                 </div>
-                <div class="grid grid-cols-[100px,1fr] items-center gap-x-4">
-                    <label class="font-semibold">Verletzt bis</label>
+                <div class="grid grid-cols-[80px,1fr] items-center gap-x-4">
+                    <label class="font-semibold">Verletzt</label>
                     <input type="date" name="verletztBis" value="${spielerToEdit.verletztBis || ''}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
                 </div>
             </div>
