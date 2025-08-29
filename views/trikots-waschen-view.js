@@ -1,18 +1,31 @@
 import { state } from '../state.js';
 import { formatDateWithWeekday } from '../utils.js';
 
+const capitalize = (s) => {
+    if (typeof s !== 'string' || !s) return '';
+    return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+};
+
 export const renderTrikotsWaschen = (callbacks) => {
-    const spielerOptions = state.spieler.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    const waschCount = state.matchtage.reduce((acc, match) => {
+        if (match.trikotwaescher) {
+            acc[match.trikotwaescher] = (acc[match.trikotwaescher] || 0) + 1;
+        }
+        return acc;
+    }, {});
 
     const matchRows = state.matchtage.map(match => `
         <div class="flex justify-between items-center p-3 rounded-lg border border-gray-700">
             <div>
-                <p class="font-semibold">${formatDateWithWeekday(match.id)} vs ${match.gegner}</p>
+                <p class="font-semibold">${formatDateWithWeekday(match.id)} ${capitalize(match.gegner)}</p>
             </div>
             <div>
                 <select data-match-id="${match.id}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg trikot-select">
                     <option value="">Wähle Spieler</option>
-                    ${state.spieler.map(s => `<option value="${s.id}" ${match.trikotwaescher === s.id ? 'selected' : ''}>${s.name}</option>`).join('')}
+                    ${state.spieler.map(s => {
+                        const count = waschCount[s.id] || 0;
+                        return `<option value="${s.id}" ${match.trikotwaescher === s.id ? 'selected' : ''}>${s.name} (${count}x)</option>`;
+                    }).join('')}
                 </select>
             </div>
         </div>
