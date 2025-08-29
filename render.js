@@ -23,7 +23,7 @@ export const render = (callbacks) => {
             pageContent = `
                 <div class="min-h-screen flex flex-col justify-center items-center p-4 bg-gray-900">
                     <div class="w-full max-w-md">
-                        <div class="bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg text-center">
+                        <div class="bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-3d text-center">
                             <div class="flex justify-center mb-6">
                                 ${state.teamInfo.emblemUrl
                                     ? `<img src="${state.teamInfo.emblemUrl}" class="w-32 h-32 rounded-full object-cover shadow-md" onerror="this.style.display='none';">`
@@ -54,9 +54,9 @@ export const render = (callbacks) => {
         case 'spielerUebersicht': pageTitle = 'Spielerübersicht'; pageContent = renderSpielerUebersicht(callbacks); break;
         case 'spielerDetail': pageTitle = 'Spieler Detail'; pageContent = renderSpielerDetail(callbacks); break;
         case 'spielerForm': pageTitle = 'Spieler bearbeiten'; pageContent = renderSpielerForm(callbacks); break;
-        case 'trainingUebersicht': pageTitle = 'Training'; pageContent = renderTrainingUebersicht(callbacks); break;
+        case 'trainingUebersicht': pageTitle = 'Übersicht Trainingseinheiten'; pageContent = renderTrainingUebersicht(callbacks); break;
         case 'trainingDetail': pageTitle = 'Training Details'; pageContent = renderTrainingDetail(callbacks); break;
-        case 'matchtagUebersicht': pageTitle = 'Matchtage'; pageContent = renderMatchtagUebersicht(callbacks); break;
+        case 'matchtagUebersicht': pageTitle = 'Übersicht Matches'; pageContent = renderMatchtagUebersicht(callbacks); break;
         case 'matchtagDetail': pageTitle = 'Matchtag Details'; pageContent = renderMatchtagDetail(callbacks); break;
         case 'einstellungen': pageTitle = 'Einstellungen'; pageContent = renderEinstellungen(callbacks); break;
         case 'spielfuehrerWahl': pageTitle = 'Spielführerwahl'; pageContent = renderSpielfuehrerWahl(callbacks); break;
