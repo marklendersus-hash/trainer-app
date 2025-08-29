@@ -1,5 +1,5 @@
 import { state, setupDbRefs, setFilter, setStatsFilter, setSort, setHomeCalendarFilter, setTrainingListView, setMatchtagListView } from './state.js';
-import { db, auth, APP_VERSION, saveSpieler, deleteSpieler, setAnwesenheit, toggleTrainingCancellation, deleteTraining, saveMatchtag, updateSpielerMatchDetails, toggleMatchCancellation, deleteMatchtag, saveMannschaftInfo, deleteMannschaftEmblem, saveTrainingSchedule, generateRecurringTrainings, exportData, importJSONData, deleteAllData, deleteCollectionData, deleteMannschaftInfo, saveTrainingDetails, appId } from './api.js';
+import { db, auth, APP_VERSION, saveSpieler, deleteSpieler, setAnwesenheit, toggleTrainingCancellation, deleteTraining, saveMatchtag, updateSpielerMatchDetails, toggleMatchCancellation, deleteMatchtag, saveMannschaftInfo, deleteMannschaftEmblem, saveTrainingSchedule, generateRecurringTrainings, exportData, importJSONData, deleteAllData, deleteCollectionData, deleteMannschaftInfo, saveTrainingDetails, appId, saveVoteInPlayerProfile } from './api.js';
 import { render } from './render.js';
 import { fetchHolidaysForYear, formatDateWithWeekday, berechneAlter, parseDateString, getAktuellerStatus, getStatusIndicator, formatDate } from './utils.js';
 import * as firestoreModule from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -398,10 +398,10 @@ const appCallbacks = {
             if (page === 'home') {
                 state.currentDate = new Date();
             }
-            render(appCallbacks);
             if (page === 'wahlergebnis') {
-                // The save button is no longer needed, as the election is saved automatically.
+                appCallbacks.calculateWahlergebnis();
             }
+            render(appCallbacks);
             document.getElementById('app-container').scrollTo(0, 0);
         };
         if (!['spielerForm'].includes(state.currentPage)) {
@@ -513,6 +513,18 @@ const appCallbacks = {
     deleteCollectionData: (collectionRef, collectionName) => deleteCollectionData(collectionRef, collectionName, appCallbacks),
     deleteMannschaftInfo: () => deleteMannschaftInfo(appCallbacks),
     deleteMannschaftEmblem: () => deleteMannschaftEmblem(appCallbacks),
+    calculateWahlergebnis: () => {
+        const allVotes = state.spieler.map(s => s.spielfuehrerStimmen || []).flat();
+        const voteCounts = allVotes.reduce((acc, id) => {
+            if (id) { // only count valid votes
+                acc[id] = (acc[id] || 0) + 1;
+            }
+            return acc;
+        }, {});
+
+        const sortedResults = Object.entries(voteCounts).sort(([,a],[,b]) => b-a);
+        state.wahlergebnis = sortedResults;
+    },
     updateSpielfuehrerWahl: (voterId, voteIndex, selectedSpielerId) => {
         if (!state.spielfuehrerWahl.votes[voterId]) {
             state.spielfuehrerWahl.votes[voterId] = ["", ""];
@@ -535,10 +547,9 @@ const appCallbacks = {
             clearTimeout(window.saveWahlTimeout);
         }
         window.saveWahlTimeout = setTimeout(() => {
-            appCallbacks.saveSpielfuehrerWahl(state.spielfuehrerWahl.votes);
+            saveVoteInPlayerProfile(voterId, state.spielfuehrerWahl.votes[voterId], appCallbacks);
         }, 1000);
     },
-    saveSpielfuehrerWahl: (votes) => saveSpielfuehrerWahl(votes, appCallbacks),
     clearDateField: (inputId) => { document.getElementById(inputId).value = ''; },
     markFotoForDeletion: () => {
         document.getElementById('deleteFotoFlag').value = 'true';

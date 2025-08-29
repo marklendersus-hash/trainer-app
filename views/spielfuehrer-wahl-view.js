@@ -13,7 +13,7 @@ export const renderSpielfuehrerWahl = (callbacks) => {
         <div class="p-4 mt-4 rounded-xl border border-gray-700">
             ${state.spieler.filter(s => s.status === 'Aktiv').map(spieler => `
                 <div class="grid grid-cols-[1fr,1fr,1fr] items-center gap-x-4 mb-2">
-                    <span class="font-semibold">${spieler.name}</span>
+                    <a href="#" onclick="window.app.navigateTo('spielerDetail', '${spieler.id}'); return false;" class="font-semibold text-green-400 hover:underline">${spieler.name}</a>
                     <select name="${spieler.id}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" onchange="window.app.updateSpielfuehrerWahl('${spieler.id}', 0, this.value)">
                         <option value="">1. Stimme</option>
                         ${spielerOptions(spieler.id)}

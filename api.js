@@ -4,7 +4,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth
 import { state } from './state.js';
 import { firebaseConfig } from './config.js';
 
-export const APP_VERSION = `Version 2025-08-29-1655`;
+export const APP_VERSION = `Version 2025-08-29-1700`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 export const app = initializeApp(firebaseConfig);
@@ -472,19 +472,14 @@ export const deleteMannschaftEmblem = async (callbacks) => {
     );
 };
 
-export const saveSpielfuehrerWahl = async (votes, callbacks) => {
-    console.log('Saving votes:', votes);
-    // Do not show modal for every update
-    // callbacks.showModal("Speichern...", '<div class="animate-pulse">Spielführerwahl wird gespeichert...</div>', []);
+export const saveVoteInPlayerProfile = async (voterId, votes, callbacks) => {
     try {
-        const wahlCollection = collection(db, `artifacts/${appId}/public/data/spielfuehrerwahlen`);
-        const date = new Date().toISOString().slice(0, 10);
-        const docRef = doc(wahlCollection, date);
-        await setDoc(docRef, { votes }, { merge: true });
-        // Do not show modal for every update
-        // callbacks.showModal("Gespeichert", "Spielführerwahl wurde erfolgreich gespeichert.", [{text: 'OK', class: 'bg-green-500'}]);
+        const spielerDocRef = doc(db, `artifacts/${appId}/public/data/spieler`, voterId);
+        await updateDoc(spielerDocRef, {
+            spielfuehrerStimmen: votes
+        });
     } catch (error) {
-        console.error("saveSpielfuehrerWahl: FEHLER beim Speichern:", error);
-        callbacks.showModal("Fehler", `Fehler beim Speichern der Spielführerwahl: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+        console.error("saveVoteInPlayerProfile: FEHLER beim Speichern:", error);
+        callbacks.showModal("Fehler", `Fehler beim Speichern der Stimme: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
     }
 };
