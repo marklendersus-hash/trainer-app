@@ -1,4 +1,4 @@
-import { state, setupDbRefs, setFilter, setStatsFilter, setSort, setHomeCalendarFilter, setTrainingListView, setMatchtagListView } from './state.js';
+import { state, setupDbRefs, setFilter, setStatsFilter, setSort, setHomeCalendarFilter, setTrainingListView, setMatchtagListView, setSpielerFilter } from './state.js';
 import { db, auth, APP_VERSION, saveSpieler, deleteSpieler, setAnwesenheit, toggleTrainingCancellation, deleteTraining, saveMatchtag, updateSpielerMatchDetails, toggleMatchCancellation, deleteMatchtag, saveMannschaftInfo, deleteMannschaftEmblem, saveTrainingSchedule, generateRecurringTrainings, exportData, importJSONData, deleteAllData, deleteCollectionData, deleteMannschaftInfo, saveTrainingDetails, appId, saveVoteInPlayerProfile, saveTrikotwaescher } from './api.js';
 import { render } from './render.js';
 import { fetchHolidaysForYear, formatDateWithWeekday, berechneAlter, parseDateString, getAktuellerStatus, getStatusIndicator, formatDate } from './utils.js';
@@ -497,6 +497,10 @@ const appCallbacks = {
         setMatchtagListView(view);
         render(appCallbacks);
     },
+    setSpielerFilter: (filter) => {
+        setSpielerFilter(filter);
+        render(appCallbacks);
+    },
     saveSpieler: (data, id, file) => saveSpieler(data, id, file, appCallbacks),
     deleteSpieler: (id) => deleteSpieler(id, appCallbacks),
     deleteSpielerFoto: (id) => deleteSpielerFoto(id, appCallbacks),
@@ -815,6 +819,27 @@ const appCallbacks = {
         const filterVorlagenBtn = document.getElementById('filter-vorlagen-btn');
         if (filterVorlagenBtn) {
             filterVorlagenBtn.addEventListener('click', () => appCallbacks.setStatsFilter('vorlagen'));
+        }
+
+        const filterAlleBtn = document.getElementById('filter-alle-btn');
+        if (filterAlleBtn) {
+            filterAlleBtn.addEventListener('click', () => appCallbacks.setSpielerFilter('Alle'));
+        }
+        const filterAktivBtn = document.getElementById('filter-aktiv-btn');
+        if (filterAktivBtn) {
+            filterAktivBtn.addEventListener('click', () => appCallbacks.setSpielerFilter('Aktiv'));
+        }
+        const filterVerletztBtn = document.getElementById('filter-verletzt-btn');
+        if (filterVerletztBtn) {
+            filterVerletztBtn.addEventListener('click', () => appCallbacks.setSpielerFilter('Verletzt'));
+        }
+        const filterUrlaubBtn = document.getElementById('filter-urlaub-btn');
+        if (filterUrlaubBtn) {
+            filterUrlaubBtn.addEventListener('click', () => appCallbacks.setSpielerFilter('Urlaub'));
+        }
+        const filterInaktivBtn = document.getElementById('filter-inaktiv-btn');
+        if (filterInaktivBtn) {
+            filterInaktivBtn.addEventListener('click', () => appCallbacks.setSpielerFilter('Inaktiv'));
         }
 
         document.querySelectorAll('.training-card').forEach(card => {

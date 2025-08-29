@@ -23,6 +23,7 @@ export let state = {
     isModalOpen: false, 
     trainingListView: 'all', 
     matchtagListView: 'all',
+    spielerFilter: 'Alle',
     spielfuehrerWahl: { votes: {} },
     wahlergebnis: null
 };
@@ -74,6 +75,10 @@ export const setTrainingListView = (view) => {
 
 export const setMatchtagListView = (view) => {
     state.matchtagListView = view;
+};
+
+export const setSpielerFilter = (filter) => {
+    state.spielerFilter = filter;
 };
 
 

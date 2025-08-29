@@ -4,23 +4,6 @@ import { getAktuellerStatus, getStatusIndicator, formatDate, getTrainingsAnzahlG
 const placeholderBg = () => '475569';
 const placeholderText = () => 'E2E8F0';
 
-const getStatusDate = (spieler) => {
-    const status = getAktuellerStatus(spieler);
-    if (status === 'Verletzt' && spieler.verletztBis) {
-        const verletztBisDate = parseDateString(spieler.verletztBis);
-        if (verletztBisDate) {
-            return verletztBisDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        }
-    }
-    if (status === 'Urlaub' && spieler.urlaubBis) {
-        const urlaubBisDate = parseDateString(spieler.urlaubBis);
-        if (urlaubBisDate) {
-            return urlaubBisDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        }
-    }
-    return '';
-};
-
 const createSpielerCardHtml = (spieler, totalTrainings) => {
     const attendedTrainings = getTrainingsAnzahlGesamt(spieler.id, state);
     const percentage = totalTrainings > 0 ? Math.round((attendedTrainings / totalTrainings) * 100) : 0;
@@ -28,14 +11,12 @@ const createSpielerCardHtml = (spieler, totalTrainings) => {
         ? `<img src="${spieler.fotoUrl}" class="profile-img rounded-full" onerror="this.src='https://placehold.co/48x48/${placeholderBg()}/${placeholderText()}?text=${spieler.name.charAt(0)}';">`
         : `<div class="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-2xl">${spieler.position === 'Torwart' ? '' : ''}</div>`;
     const status = getAktuellerStatus(spieler);
-    const statusDate = getStatusDate(spieler);
 
     return `
         <div onclick="window.app.navigateTo('spielerDetail', '${spieler.id}')" class="p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:bg-gray-700/50 card border border-gray-700">
             ${fotoHtml}
             <div class="flex-grow">
-                <p class="font-bold flex items-center">${spieler.name} <span class="text-gray-400 font-normal ml-2">#${spieler.nummer || '?'}</span> <span class="ml-2">${getStatusIndicator(status)}</span></p>
-                <p class="text-sm text-gray-400 mt-1">${status} ${statusDate}</p>
+                <p class="font-bold flex items-center">${getStatusIndicator(status)} <span class="ml-2">${spieler.name}</span><span class="text-gray-400 font-normal ml-2">#${spieler.nummer || '?'}</span></p>
                 <div class="text-sm text-gray-400 mt-1">
                     <p class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm items-center">
                         <span title="Trainingseinheiten" class="flex items-center gap-1"><i class="fas fa-running text-blue-500"></i> ${attendedTrainings}/${totalTrainings} (${percentage}%)</span>
@@ -50,7 +31,19 @@ const createSpielerCardHtml = (spieler, totalTrainings) => {
 };
 
 export const renderSpielerUebersicht = (callbacks) => {
-    let filteredSpieler = state.spieler.filter(s => s.name.toLowerCase().includes(state.filter.toLowerCase()));
+    const statusCounts = {
+        Alle: state.spieler.length,
+        Aktiv: state.spieler.filter(s => getAktuellerStatus(s) === 'Aktiv').length,
+        Verletzt: state.spieler.filter(s => getAktuellerStatus(s) === 'Verletzt').length,
+        Urlaub: state.spieler.filter(s => getAktuellerStatus(s) === 'Urlaub').length,
+        Inaktiv: state.spieler.filter(s => getAktuellerStatus(s) === 'Inaktiv').length
+    };
+
+    let filteredSpieler = state.spieler.filter(s => {
+        if (state.spielerFilter === 'Alle') return true;
+        return getAktuellerStatus(s) === state.spielerFilter;
+    });
+    filteredSpieler = filteredSpieler.filter(s => s.name.toLowerCase().includes(state.filter.toLowerCase()));
     filteredSpieler.sort((a, b) => (a.nummer || 999) - (b.nummer || 999));
     
     const todayStringForTotal = formatDate(new Date());
@@ -67,6 +60,15 @@ export const renderSpielerUebersicht = (callbacks) => {
                 <button onclick="window.app.navigateTo('spielerForm')" class="w-10 h-10 bg-green-600 text-white rounded-full btn flex items-center justify-center" title="Spieler hinzufügen">
                     <i class="fas fa-plus"></i>
                 </button>
+            </div>
+        </div>
+        <div class="p-4 rounded-xl border border-gray-700 mb-4 mt-4">
+            <div class="flex items-center gap-2 flex-wrap">
+                <button id="filter-alle-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Alle' ? 'bg-orange-500 text-white' : 'bg-gray-700'}">Alle (${statusCounts.Alle})</button>
+                <button id="filter-aktiv-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Aktiv' ? 'bg-orange-500 text-white' : 'bg-gray-700'}">Aktiv (${statusCounts.Aktiv})</button>
+                <button id="filter-verletzt-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Verletzt' ? 'bg-orange-500 text-white' : 'bg-gray-700'}">Verletzt (${statusCounts.Verletzt})</button>
+                <button id="filter-urlaub-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Urlaub' ? 'bg-orange-500 text-white' : 'bg-gray-700'}">Urlaub (${statusCounts.Urlaub})</button>
+                <button id="filter-inaktiv-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Inaktiv' ? 'bg-orange-500 text-white' : 'bg-gray-700'}">Inaktiv (${statusCounts.Inaktiv})</button>
             </div>
         </div>
         <div class="space-y-3 mt-4">
