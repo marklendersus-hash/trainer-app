@@ -322,6 +322,13 @@ const appCallbacks = {
 
         onSnapshot(query(window.spielerCollection, orderBy("name")), (snapshot) => {
             state.spieler = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            // Populate spielfuehrerWahl.votes from the loaded players
+            state.spielfuehrerWahl.votes = state.spieler.reduce((acc, spieler) => {
+                if (spieler.spielfuehrerStimmen) {
+                    acc[spieler.id] = spieler.spielfuehrerStimmen;
+                }
+                return acc;
+            }, {});
             if(state.isLoggedIn) render(appCallbacks);
         });
         onSnapshot(query(window.trainingCollection), (snapshot) => {
