@@ -4,21 +4,21 @@ import { getAktuellerStatus, getStatusIndicator, formatDate, getTrainingsAnzahlG
 const placeholderBg = () => '475569';
 const placeholderText = () => 'E2E8F0';
 
-const getStatusText = (spieler) => {
+const getStatusDate = (spieler) => {
     const status = getAktuellerStatus(spieler);
     if (status === 'Verletzt' && spieler.verletztBis) {
         const verletztBisDate = parseDateString(spieler.verletztBis);
         if (verletztBisDate) {
-            return `bis: ${verletztBisDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
+            return verletztBisDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
         }
     }
     if (status === 'Urlaub' && spieler.urlaubBis) {
         const urlaubBisDate = parseDateString(spieler.urlaubBis);
         if (urlaubBisDate) {
-            return `bis: ${urlaubBisDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
+            return urlaubBisDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
         }
     }
-    return status;
+    return '';
 };
 
 const createSpielerCardHtml = (spieler, totalTrainings) => {
@@ -27,13 +27,15 @@ const createSpielerCardHtml = (spieler, totalTrainings) => {
     const fotoHtml = spieler.fotoUrl 
         ? `<img src="${spieler.fotoUrl}" class="profile-img rounded-full" onerror="this.src='https://placehold.co/48x48/${placeholderBg()}/${placeholderText()}?text=${spieler.name.charAt(0)}';">`
         : `<div class="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-2xl">${spieler.position === 'Torwart' ? '' : ''}</div>`;
+    const status = getAktuellerStatus(spieler);
+    const statusDate = getStatusDate(spieler);
 
     return `
         <div onclick="window.app.navigateTo('spielerDetail', '${spieler.id}')" class="p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:bg-gray-700/50 card border border-gray-700">
             ${fotoHtml}
             <div class="flex-grow">
-                <p class="font-bold flex items-center">${getStatusIndicator(getAktuellerStatus(spieler))} <span class="ml-2">${spieler.name}</span><span class="text-gray-400 font-normal ml-2">#${spieler.nummer || '?'}</span></p>
-                <p class="text-sm text-gray-400 mt-1">${getStatusText(spieler)}</p>
+                <p class="font-bold flex items-center">${spieler.name} <span class="text-gray-400 font-normal ml-2">#${spieler.nummer || '?'}</span> <span class="ml-2">${getStatusIndicator(status)}</span></p>
+                <p class="text-sm text-gray-400 mt-1">${status} ${statusDate}</p>
                 <div class="text-sm text-gray-400 mt-1">
                     <p class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm items-center">
                         <span title="Trainingseinheiten" class="flex items-center gap-1"><i class="fas fa-running text-blue-500"></i> ${attendedTrainings}/${totalTrainings} (${percentage}%)</span>
