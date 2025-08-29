@@ -52,7 +52,7 @@ export const renderNavigationBar = () => {
         ? `<div class="flex-1 flex justify-center items-center"><button onclick="window.app.goBack()" class="flex flex-col items-center justify-center text-gray-400 hover:text-green-400 ${buttonSizeClass} rounded-full hover:bg-transparent transition-colors" title="Zurück"><i class="fas fa-arrow-left text-xl"></i><span class="text-xs mt-1">Zurück</span></button></div>`
         : navButton('home', 'fa-home', 'Home');
     return `
-        <div class="fixed left-0 right-0 z-40 px-4" style="bottom: 15px; padding-bottom: env(safe-area-inset-bottom);">
+        <div class="fixed left-0 right-0 z-40 px-4" style="bottom: 20px; padding-bottom: env(safe-area-inset-bottom);">
             <div class="bg-gray-800 border-2 border-green-500 shadow-lg rounded-full px-2 py-2 w-full max-w-sm mx-auto">
                 <div class="flex justify-around items-center">
                     ${leftButtonHtml}
