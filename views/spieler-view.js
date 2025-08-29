@@ -21,12 +21,26 @@ const createSpielerCardHtml = (spieler, totalTrainings) => {
         ? `<img src="${spieler.fotoUrl}" class="profile-img rounded-full" onerror="this.src='https://placehold.co/48x48/${placeholderBg()}/${placeholderText()}?text=${spieler.name.charAt(0)}';">`
         : `<div class="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-2xl">${spieler.position === 'Torwart' ? '' : ''}</div>`;
     const status = getAktuellerStatus(spieler);
+    let statusText = '';
+    if (status === 'Verletzt' && spieler.verletztBis) {
+        const verletztBisDate = parseDateString(spieler.verletztBis);
+        if (verletztBisDate) {
+            statusText = `bis ${verletztBisDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
+        }
+    }
+    if (status === 'Urlaub' && spieler.urlaubBis) {
+        const urlaubBisDate = parseDateString(spieler.urlaubBis);
+        if (urlaubBisDate) {
+            statusText = `bis ${urlaubBisDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
+        }
+    }
 
     return `
         <div onclick="window.app.navigateTo('spielerDetail', '${spieler.id}')" class="p-4 rounded-xl flex items-center space-x-4 cursor-pointer hover:bg-gray-700/50 card border border-gray-700">
             ${fotoHtml}
             <div class="flex-grow">
                 <p class="font-bold flex items-center">${getStatusIndicator(status)} <span class="ml-2">${spieler.name}</span><span class="text-gray-400 font-normal ml-2">#${spieler.nummer || '?'}</span></p>
+                ${statusText ? `<p class="text-sm text-gray-400 mt-1">${statusText}</p>` : ''}
                 <div class="text-sm text-gray-400 mt-1">
                     <p class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm items-center">
                         <span title="Trainingseinheiten" class="flex items-center gap-1"><i class="fas fa-running text-blue-500"></i> ${attendedTrainings}/${totalTrainings} (${percentage}%)</span>
@@ -73,7 +87,7 @@ export const renderSpielerUebersicht = (callbacks) => {
             </div>
         </div>
         <div class="p-4 rounded-xl border border-gray-700 mb-4 mt-4">
-            <div class="flex items-center gap-2 flex-wrap">
+            <div class="flex items-center gap-2 flex-wrap justify-center">
                 <button id="filter-alle-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Alle' ? `bg-${getStatusColor('Alle')}-500 text-white` : 'bg-gray-700'}">Alle (${statusCounts.Alle})</button>
                 <button id="filter-aktiv-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Aktiv' ? `bg-${getStatusColor('Aktiv')}-500 text-white` : 'bg-gray-700'}">Aktiv (${statusCounts.Aktiv})</button>
                 <button id="filter-verletzt-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Verletzt' ? `bg-${getStatusColor('Verletzt')}-500 text-white` : 'bg-gray-700'}">Verletzt (${statusCounts.Verletzt})</button>
