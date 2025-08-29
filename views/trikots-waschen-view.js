@@ -1,11 +1,6 @@
 import { state } from '../state.js';
 import { formatDateWithWeekday } from '../utils.js';
 
-const capitalize = (s) => {
-    if (typeof s !== 'string' || !s) return '';
-    return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-};
-
 export const renderTrikotsWaschen = (callbacks) => {
     const waschCount = state.matchtage.reduce((acc, match) => {
         if (match.trikotwaescher) {
@@ -17,7 +12,8 @@ export const renderTrikotsWaschen = (callbacks) => {
     const matchRows = state.matchtage.map(match => `
         <div class="flex justify-between items-center p-3 rounded-lg border border-gray-700">
             <div>
-                <p class="font-semibold">${formatDateWithWeekday(match.id)} ${capitalize(match.gegner)}</p>
+                <p class="font-semibold">${formatDateWithWeekday(match.id)}</p>
+                <p class="text-sm text-gray-400">${match.gegner}</p>
             </div>
             <div>
                 <select data-match-id="${match.id}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg trikot-select">
