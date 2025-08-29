@@ -4,6 +4,16 @@ import { getAktuellerStatus, getStatusIndicator, formatDate, getTrainingsAnzahlG
 const placeholderBg = () => '475569';
 const placeholderText = () => 'E2E8F0';
 
+const getStatusColor = (status) => {
+    switch (status) {
+        case 'Aktiv': return 'green';
+        case 'Verletzt': return 'red';
+        case 'Urlaub': return 'blue';
+        case 'Inaktiv': return 'gray';
+        default: return 'orange';
+    }
+};
+
 const createSpielerCardHtml = (spieler, totalTrainings) => {
     const attendedTrainings = getTrainingsAnzahlGesamt(spieler.id, state);
     const percentage = totalTrainings > 0 ? Math.round((attendedTrainings / totalTrainings) * 100) : 0;
@@ -44,7 +54,7 @@ export const renderSpielerUebersicht = (callbacks) => {
         return getAktuellerStatus(s) === state.spielerFilter;
     });
     filteredSpieler = filteredSpieler.filter(s => s.name.toLowerCase().includes(state.filter.toLowerCase()));
-    filteredSpieler.sort((a, b) => (a.nummer || 999) - (b.nummer || 999));
+    filteredSpieler.sort((a, b) => a.name.localeCompare(b.name));
     
     const todayStringForTotal = formatDate(new Date());
     const pastTrainingsForTotal = state.trainingseinheiten.filter(t => !t.cancelled && t.id <= todayStringForTotal);
@@ -64,11 +74,11 @@ export const renderSpielerUebersicht = (callbacks) => {
         </div>
         <div class="p-4 rounded-xl border border-gray-700 mb-4 mt-4">
             <div class="flex items-center gap-2 flex-wrap">
-                <button id="filter-alle-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Alle' ? 'bg-orange-500 text-white' : 'bg-gray-700'}">Alle (${statusCounts.Alle})</button>
-                <button id="filter-aktiv-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Aktiv' ? 'bg-orange-500 text-white' : 'bg-gray-700'}">Aktiv (${statusCounts.Aktiv})</button>
-                <button id="filter-verletzt-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Verletzt' ? 'bg-orange-500 text-white' : 'bg-gray-700'}">Verletzt (${statusCounts.Verletzt})</button>
-                <button id="filter-urlaub-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Urlaub' ? 'bg-orange-500 text-white' : 'bg-gray-700'}">Urlaub (${statusCounts.Urlaub})</button>
-                <button id="filter-inaktiv-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Inaktiv' ? 'bg-orange-500 text-white' : 'bg-gray-700'}">Inaktiv (${statusCounts.Inaktiv})</button>
+                <button id="filter-alle-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Alle' ? `bg-${getStatusColor('Alle')}-500 text-white` : 'bg-gray-700'}">Alle (${statusCounts.Alle})</button>
+                <button id="filter-aktiv-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Aktiv' ? `bg-${getStatusColor('Aktiv')}-500 text-white` : 'bg-gray-700'}">Aktiv (${statusCounts.Aktiv})</button>
+                <button id="filter-verletzt-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Verletzt' ? `bg-${getStatusColor('Verletzt')}-500 text-white` : 'bg-gray-700'}">Verletzt (${statusCounts.Verletzt})</button>
+                <button id="filter-urlaub-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Urlaub' ? `bg-${getStatusColor('Urlaub')}-500 text-white` : 'bg-gray-700'}">Urlaub (${statusCounts.Urlaub})</button>
+                <button id="filter-inaktiv-btn" class="px-3 py-1 text-sm rounded-full btn ${state.spielerFilter === 'Inaktiv' ? `bg-${getStatusColor('Inaktiv')}-500 text-white` : 'bg-gray-700'}">Inaktiv (${statusCounts.Inaktiv})</button>
             </div>
         </div>
         <div class="space-y-3 mt-4">
@@ -91,8 +101,9 @@ export const renderSpielerDetail = (callbacks) => {
         ? `<img id="fotoDetail" src="${spieler.fotoUrl}" class="profile-img-detail rounded-full mx-auto" onerror="this.src='https://placehold.co/120x120/${placeholderBg()}/${placeholderText()}?text=${spieler.name.charAt(0)}';">`
         : `<div class="w-32 h-32 rounded-full bg-gray-700 flex items-center justify-center text-6xl mx-auto">${spieler.position === 'Torwart' ? '' : ''}</div>`;
     
-    let abwesenheitInfo = '';
     const aktuellerStatus = getAktuellerStatus(spieler);
+    const showStats = !['Verletzt', 'Urlaub'].includes(aktuellerStatus);
+    let abwesenheitInfo = '';
     if (aktuellerStatus === 'Verletzt' && spieler.verletztBis) {
         const verletztBisDate = parseDateString(spieler.verletztBis);
         if (verletztBisDate) abwesenheitInfo = `<p class="text-red-500 text-sm mt-1">Verletzt bis: ${verletztBisDate.toLocaleDateString('de-DE')}</p>`;
@@ -124,6 +135,7 @@ export const renderSpielerDetail = (callbacks) => {
             <p><strong>Notizen:</strong></p>
             <p class="bg-gray-700 p-3 rounded-lg">${spieler.notiz || 'Keine Notizen.'}</p>
         </div>
+        ${showStats ? `
         <div class="p-6 rounded-xl space-y-3 border border-gray-700">
             <h3 class="font-bold text-lg border-b dark:border-gray-700 pb-2">Statistiken</h3>
             <p><strong>Trainings:</strong> ${getTrainingsAnzahlGesamt(spieler.id, state)}</p>
@@ -132,6 +144,7 @@ export const renderSpielerDetail = (callbacks) => {
             <p><strong>Tore:</strong> ${getToreGesamt(spieler.id, state)}</p>
             <p><strong>Vorlagen:</strong> ${getVorlagenGesamt(spieler.id, state)}</p>
         </div>
+        ` : ''}
         <div class="flex space-x-4 mt-4">
             <button onclick="window.app.navigateTo('spielerForm', '${spieler.id}')" class="flex-1 py-3 font-medium text-white uppercase bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 btn">Bearbeiten</button>
             <button onclick="window.app.deleteSpieler('${spieler.id}')" class="flex-1 py-3 font-medium text-white uppercase bg-red-600 rounded-lg shadow-lg hover:bg-red-700 btn">Löschen</button>
