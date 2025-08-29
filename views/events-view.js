@@ -135,9 +135,14 @@ export const renderMatchtagUebersicht = (callbacks) => {
     let content = `
         <div class="flex justify-between items-center p-4 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold">Matches</h2>
-            <button id="add-match-btn" class="w-10 h-10 bg-yellow-500 text-white rounded-full btn flex items-center justify-center">
-                <i class="fas fa-plus"></i>
-            </button>
+            <div class="flex items-center gap-2">
+                <button id="wash-jerseys-btn" class="w-10 h-10 bg-blue-600 text-white rounded-full btn flex items-center justify-center" title="Trikots waschen">
+                    <i class="fas fa-tshirt"></i>
+                </button>
+                <button id="add-match-btn" class="w-10 h-10 bg-yellow-500 text-white rounded-full btn flex items-center justify-center">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
         </div>
         <div class="p-4 rounded-xl border border-gray-700 mb-4 mt-4">
             <div class="flex items-center gap-2">

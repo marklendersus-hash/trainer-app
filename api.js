@@ -4,7 +4,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth
 import { state } from './state.js';
 import { firebaseConfig } from './config.js';
 
-export const APP_VERSION = `Version 2025-08-29-2223`;
+export const APP_VERSION = `Version 2025-08-29-2228`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 export const app = initializeApp(firebaseConfig);
@@ -481,5 +481,15 @@ export const saveVoteInPlayerProfile = async (voterId, votes, callbacks) => {
     } catch (error) {
         console.error("saveVoteInPlayerProfile: FEHLER beim Speichern:", error);
         callbacks.showModal("Fehler", `Fehler beim Speichern der Stimme: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
+    }
+};
+
+export const saveTrikotwaescher = async (matchId, spielerId, callbacks) => {
+    const matchtageCollection = collection(db, `artifacts/${appId}/public/data/spieltage`);
+    const docRef = doc(matchtageCollection, matchId);
+    try {
+        await updateDoc(docRef, { trikotwaescher: spielerId });
+    } catch (error) {
+        callbacks.showModal("Fehler", `Fehler beim Speichern des Trikotwäschers: ${error.message || 'Unbekannter Fehler'}.`, [{text: 'OK', class: 'bg-red-500'}]);
     }
 };

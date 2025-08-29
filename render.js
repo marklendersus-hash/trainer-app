@@ -6,6 +6,7 @@ import { renderTrainingUebersicht, renderMatchtagUebersicht, renderTrainingDetai
 import { renderEinstellungen } from './views/einstellungen-view.js';
 import { renderSpielfuehrerWahl } from './views/spielfuehrer-wahl-view.js';
 import { renderWahlergebnis } from './views/wahlergebnis-view.js';
+import { renderTrikotsWaschen } from './views/trikots-waschen-view.js';
 
 const appContainer = document.getElementById('app-container');
 
@@ -61,6 +62,7 @@ export const render = (callbacks) => {
         case 'einstellungen': pageTitle = 'Einstellungen'; pageContent = renderEinstellungen(callbacks); break;
         case 'spielfuehrerWahl': pageTitle = 'Spielführerwahl'; pageContent = renderSpielfuehrerWahl(callbacks); break;
         case 'wahlergebnis': pageTitle = 'Wahlergebnis'; pageContent = renderWahlergebnis(callbacks); break;
+        case 'trikotsWaschen': pageTitle = 'Trikots waschen'; pageContent = renderTrikotsWaschen(callbacks); break;
         default: pageTitle = 'Fehler'; pageContent = `<p>Seite nicht gefunden.</p>`;
     }
 

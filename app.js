@@ -1,5 +1,5 @@
 import { state, setupDbRefs, setFilter, setStatsFilter, setSort, setHomeCalendarFilter, setTrainingListView, setMatchtagListView } from './state.js';
-import { db, auth, APP_VERSION, saveSpieler, deleteSpieler, setAnwesenheit, toggleTrainingCancellation, deleteTraining, saveMatchtag, updateSpielerMatchDetails, toggleMatchCancellation, deleteMatchtag, saveMannschaftInfo, deleteMannschaftEmblem, saveTrainingSchedule, generateRecurringTrainings, exportData, importJSONData, deleteAllData, deleteCollectionData, deleteMannschaftInfo, saveTrainingDetails, appId, saveVoteInPlayerProfile } from './api.js';
+import { db, auth, APP_VERSION, saveSpieler, deleteSpieler, setAnwesenheit, toggleTrainingCancellation, deleteTraining, saveMatchtag, updateSpielerMatchDetails, toggleMatchCancellation, deleteMatchtag, saveMannschaftInfo, deleteMannschaftEmblem, saveTrainingSchedule, generateRecurringTrainings, exportData, importJSONData, deleteAllData, deleteCollectionData, deleteMannschaftInfo, saveTrainingDetails, appId, saveVoteInPlayerProfile, saveTrikotwaescher } from './api.js';
 import { render } from './render.js';
 import { fetchHolidaysForYear, formatDateWithWeekday, berechneAlter, parseDateString, getAktuellerStatus, getStatusIndicator, formatDate } from './utils.js';
 import * as firestoreModule from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -599,6 +599,7 @@ const appCallbacks = {
         }
     },
     saveTrainingDetails: (datumString, data) => saveTrainingDetails(datumString, data, appCallbacks),
+    saveTrikotwaescher: (matchId, spielerId) => saveTrikotwaescher(matchId, spielerId, appCallbacks),
     handleCalendarDayClick: (dateString) => handleCalendarDayClick(dateString, appCallbacks),
     showAddEventModal: (type) => showAddEventModal(type, appCallbacks),
     closeModal: () => closeModal(),
@@ -868,6 +869,19 @@ const appCallbacks = {
         if (deleteMatchBtn) {
             deleteMatchBtn.addEventListener('click', () => appCallbacks.deleteMatchtag(state.currentId));
         }
+
+        const washJerseysBtn = document.getElementById('wash-jerseys-btn');
+        if (washJerseysBtn) {
+            washJerseysBtn.addEventListener('click', () => appCallbacks.navigateTo('trikotsWaschen'));
+        }
+
+        document.querySelectorAll('.trikot-select').forEach(select => {
+            select.addEventListener('change', (e) => {
+                const matchId = e.target.dataset.matchId;
+                const spielerId = e.target.value;
+                appCallbacks.saveTrikotwaescher(matchId, spielerId);
+            });
+        });
 
         const saveWahlBtn = document.getElementById('saveWahl');
         if (saveWahlBtn) {
