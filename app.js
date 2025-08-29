@@ -531,6 +531,15 @@ const appCallbacks = {
         }
         state.spielfuehrerWahl.votes[voterId][voteIndex] = selectedSpielerId;
         
+        // Update the local state immediately for instant feedback
+        const spieler = state.spieler.find(s => s.id === voterId);
+        if (spieler) {
+            if (!spieler.spielfuehrerStimmen) {
+                spieler.spielfuehrerStimmen = ["", ""];
+            }
+            spieler.spielfuehrerStimmen[voteIndex] = selectedSpielerId;
+        }
+
         const allVotes = Object.values(state.spielfuehrerWahl.votes).flat();
         const voteCounts = allVotes.reduce((acc, id) => {
             if (id) { // only count valid votes
