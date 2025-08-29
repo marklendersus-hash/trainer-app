@@ -1,9 +1,9 @@
 import { state } from '../state.js';
 
 export const renderSpielfuehrerWahl = (callbacks) => {
-    const spielerOptions = (excludeId) => state.spieler
+    const spielerOptions = (excludeId, selectedId) => state.spieler
         .filter(s => s.status === 'Aktiv' && s.id !== excludeId)
-        .map(s => `<option value="${s.id}">${s.name}</option>`)
+        .map(s => `<option value="${s.id}" ${s.id === selectedId ? 'selected' : ''}>${s.name}</option>`)
         .join('');
 
     return `
@@ -16,11 +16,11 @@ export const renderSpielfuehrerWahl = (callbacks) => {
                     <a href="#" onclick="window.app.navigateTo('spielerDetail', '${spieler.id}'); return false;" class="font-semibold text-green-400 hover:underline">${spieler.name}</a>
                     <select name="${spieler.id}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" onchange="window.app.updateSpielfuehrerWahl('${spieler.id}', 0, this.value)">
                         <option value="">1. Stimme</option>
-                        ${spielerOptions(spieler.id)}
+                        ${spielerOptions(spieler.id, state.spielfuehrerWahl.votes[spieler.id]?.[0])}
                     </select>
                     <select name="${spieler.id}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" onchange="window.app.updateSpielfuehrerWahl('${spieler.id}', 1, this.value)">
                         <option value="">2. Stimme</option>
-                        ${spielerOptions(spieler.id)}
+                        ${spielerOptions(spieler.id, state.spielfuehrerWahl.votes[spieler.id]?.[1])}
                     </select>
                 </div>
             `).join('')}
