@@ -10,27 +10,25 @@ export const renderSpielfuehrerWahl = (callbacks) => {
         <div class="p-4 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold text-center">Spielführerwahl</h2>
         </div>
-        <form id="spielfuehrerWahlForm">
-            <div class="p-4 mt-4 rounded-xl border border-gray-700">
-                ${state.spieler.filter(s => s.status === 'Aktiv').map(spieler => `
-                    <div class="grid grid-cols-[1fr,1fr,1fr] items-center gap-x-4 mb-2">
-                        <span class="font-semibold">${spieler.name}</span>
-                        <select name="${spieler.id}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
-                            <option value="">1. Stimme</option>
-                            ${spielerOptions(spieler.id)}
-                        </select>
-                        <select name="${spieler.id}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg">
-                            <option value="">2. Stimme</option>
-                            ${spielerOptions(spieler.id)}
-                        </select>
-                    </div>
-                `).join('')}
-            </div>
-            <div class="p-4 mt-4 rounded-xl border border-gray-700">
-                <button type="submit" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">
-                    Wahl auswerten
-                </button>
-            </div>
-        </form>
+        <div class="p-4 mt-4 rounded-xl border border-gray-700">
+            ${state.spieler.filter(s => s.status === 'Aktiv').map(spieler => `
+                <div class="grid grid-cols-[1fr,1fr,1fr] items-center gap-x-4 mb-2">
+                    <span class="font-semibold">${spieler.name}</span>
+                    <select name="${spieler.id}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" onchange="window.app.updateSpielfuehrerWahl('${spieler.id}', 0, this.value)">
+                        <option value="">1. Stimme</option>
+                        ${spielerOptions(spieler.id)}
+                    </select>
+                    <select name="${spieler.id}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg" onchange="window.app.updateSpielfuehrerWahl('${spieler.id}', 1, this.value)">
+                        <option value="">2. Stimme</option>
+                        ${spielerOptions(spieler.id)}
+                    </select>
+                </div>
+            `).join('')}
+        </div>
+        <div class="p-4 mt-4 rounded-xl border border-gray-700">
+            <button onclick="window.app.navigateTo('wahlergebnis')" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">
+                Ergebnis anzeigen
+            </button>
+        </div>
     `;
 };

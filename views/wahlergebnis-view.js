@@ -22,10 +22,6 @@ export const renderWahlergebnis = (callbacks) => {
         <div class="p-4 mt-4 rounded-xl border border-gray-700">
             ${resultHtml}
         </div>
-        <div class="p-4 mt-4 rounded-xl border border-gray-700">
-            <button id="saveWahl" class="w-full py-3 font-medium text-white uppercase bg-green-600 rounded-lg shadow-lg hover:bg-green-700 btn">
-                Wahl speichern
-            </button>
-        </div>
+        
     `;
 };

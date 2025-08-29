@@ -400,12 +400,7 @@ const appCallbacks = {
             }
             render(appCallbacks);
             if (page === 'wahlergebnis') {
-                const saveWahlBtn = document.getElementById('saveWahl');
-                if (saveWahlBtn) {
-                    saveWahlBtn.addEventListener('click', () => {
-                        appCallbacks.saveSpielfuehrerWahl(state.spielfuehrerWahl.votes);
-                    });
-                }
+                // The save button is no longer needed, as the election is saved automatically.
             }
             document.getElementById('app-container').scrollTo(0, 0);
         };
@@ -518,6 +513,31 @@ const appCallbacks = {
     deleteCollectionData: (collectionRef, collectionName) => deleteCollectionData(collectionRef, collectionName, appCallbacks),
     deleteMannschaftInfo: () => deleteMannschaftInfo(appCallbacks),
     deleteMannschaftEmblem: () => deleteMannschaftEmblem(appCallbacks),
+    updateSpielfuehrerWahl: (voterId, voteIndex, selectedSpielerId) => {
+        if (!state.spielfuehrerWahl.votes[voterId]) {
+            state.spielfuehrerWahl.votes[voterId] = ["", ""];
+        }
+        state.spielfuehrerWahl.votes[voterId][voteIndex] = selectedSpielerId;
+        
+        const allVotes = Object.values(state.spielfuehrerWahl.votes).flat();
+        const voteCounts = allVotes.reduce((acc, id) => {
+            if (id) { // only count valid votes
+                acc[id] = (acc[id] || 0) + 1;
+            }
+            return acc;
+        }, {});
+
+        const sortedResults = Object.entries(voteCounts).sort(([,a],[,b]) => b-a);
+        state.wahlergebnis = sortedResults;
+
+        // Debounced save
+        if (window.saveWahlTimeout) {
+            clearTimeout(window.saveWahlTimeout);
+        }
+        window.saveWahlTimeout = setTimeout(() => {
+            appCallbacks.saveSpielfuehrerWahl(state.spielfuehrerWahl.votes);
+        }, 1000);
+    },
     saveSpielfuehrerWahl: (votes) => saveSpielfuehrerWahl(votes, appCallbacks),
     clearDateField: (inputId) => { document.getElementById(inputId).value = ''; },
     markFotoForDeletion: () => {
@@ -821,49 +841,7 @@ const appCallbacks = {
             });
         }
 
-        const wahlForm = document.getElementById('spielfuehrerWahlForm');
-        if (wahlForm) {
-            wahlForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const formData = new FormData(wahlForm);
-                const votes = {};
-                for (const [key, value] of formData.entries()) {
-                    if (!votes[key]) {
-                        votes[key] = [];
-                    }
-                    votes[key].push(value);
-                }
-
-                let validationError = false;
-                for (const voterId in votes) {
-                    const playerVotes = votes[voterId];
-                    if (playerVotes.length !== 2 || playerVotes.includes("")) {
-                        showModal("Fehler", "Jeder Spieler muss genau 2 Stimmen abgeben.", [{text: 'OK', class: 'bg-red-500'}]);
-                        validationError = true;
-                        break;
-                    }
-                    if (playerVotes[0] === playerVotes[1]) {
-                        showModal("Fehler", "Ein Spieler kann nicht zweimal für denselben Spieler stimmen.", [{text: 'OK', class: 'bg-red-500'}]);
-                        validationError = true;
-                        break;
-                    }
-                }
-
-                if (!validationError) {
-                    const allVotes = Object.values(votes).flat();
-                    const voteCounts = allVotes.reduce((acc, id) => {
-                        acc[id] = (acc[id] || 0) + 1;
-                        return acc;
-                    }, {});
-
-                    const sortedResults = Object.entries(voteCounts).sort(([,a],[,b]) => b-a);
-                    
-                    state.wahlergebnis = sortedResults;
-                    state.spielfuehrerWahl.votes = votes;
-                    appCallbacks.navigateTo('wahlergebnis');
-                }
-            });
-        }
+        // The wahlForm is no longer used, as the votes are saved on change.
     }
 };
 
