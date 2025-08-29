@@ -62,7 +62,7 @@ export const renderNavigationBar = () => {
     const color = getPageThemeColor(state.currentPage);
     const hexColor = getHexColor(color);
     const gray800 = '#1f2937';
-    const gradientStyle = `background: radial-gradient(ellipse at center, ${gray800} 50%, ${hexColor} 100%);`;
+    const gradientStyle = `background: radial-gradient(ellipse at center, ${gray800} 50%, ${hexColor} 100%); box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.5), 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);`;
 
     const navButton = (page, icon, title) => {
         const activePages = {
@@ -91,7 +91,7 @@ export const renderNavigationBar = () => {
 
     return `
         <div class="fixed left-0 right-0 z-40 px-4" style="bottom: 20px; padding-bottom: env(safe-area-inset-bottom);">
-            <div class="border-2 border-${color}-500 shadow-lg rounded-full px-2 py-2 w-full max-w-sm mx-auto" style="${gradientStyle}">
+            <div class="border-2 border-${color}-500 rounded-full px-2 py-2 w-full max-w-sm mx-auto" style="${gradientStyle}">
                 <div class="flex justify-around items-center">
                     ${leftButtonHtml}
                     ${navButton('trainingUebersicht', 'fa-running', 'Training')}

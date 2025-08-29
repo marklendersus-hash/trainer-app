@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { getPageThemeColor, renderHeader, renderNavigationBar } from './views/layout-view.js';
+import { renderHeader, renderNavigationBar } from './views/layout-view.js';
 import { renderHome } from './views/home-view.js';
 import { renderSpielerUebersicht, renderSpielerDetail, renderSpielerForm } from './views/spieler-view.js';
 import { renderTrainingUebersicht, renderMatchtagUebersicht, renderTrainingDetail, renderMatchtagDetail } from './views/events-view.js';
@@ -64,11 +64,10 @@ export const render = (callbacks) => {
         default: pageTitle = 'Fehler'; pageContent = `<p>Seite nicht gefunden.</p>`;
     }
 
-    const color = getPageThemeColor(state.currentPage);
     if (state.currentPage === 'login') {
         appContainer.innerHTML = pageContent;
     } else {
-        appContainer.innerHTML = `${renderHeader(pageTitle)}${renderNavigationBar()}<main class="p-4 space-y-4 pt-20 border-2 border-${color}-500 rounded-lg">${pageContent}</main>`;
+        appContainer.innerHTML = `${renderHeader(pageTitle)}${renderNavigationBar()}<main class="p-4 space-y-4 pt-20">${pageContent}</main>`;
     }
     
     callbacks.addEventListeners();
