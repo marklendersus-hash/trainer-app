@@ -2,7 +2,7 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=auto" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -126,12 +126,12 @@
           overflow-y: auto;
           -webkit-overflow-scrolling: touch;
           padding-top: 70px; 
-          padding-bottom: env(safe-area-inset-bottom);
+          padding-bottom: 0;
           box-sizing: border-box;
       }
 
       header {
-        padding-top: env(safe-area-inset-top);
+        padding-top: 0;
       }
       
       footer {
