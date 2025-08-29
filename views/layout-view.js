@@ -1,8 +1,9 @@
 import { state } from '../state.js';
 
-const getPageThemeColor = (page) => {
+export const getPageThemeColor = (page) => {
     const trainingPages = ['trainingUebersicht', 'trainingDetail'];
     const matchPages = ['matchtagUebersicht', 'matchtagDetail'];
+    const spielerPages = ['spielerUebersicht', 'spielerDetail', 'spielerForm'];
 
     if (trainingPages.includes(page)) {
         return 'blue';
@@ -10,7 +11,20 @@ const getPageThemeColor = (page) => {
     if (matchPages.includes(page)) {
         return 'yellow';
     }
+    if (spielerPages.includes(page)) {
+        return 'orange';
+    }
     return 'green';
+};
+
+const getHexColor = (colorName) => {
+    switch (colorName) {
+        case 'blue': return '#3b82f6';
+        case 'yellow': return '#eab308';
+        case 'green': return '#22c55e';
+        case 'orange': return '#f97316';
+        default: return '#22c55e';
+    }
 };
 
 export const renderHeader = (title) => {
@@ -46,6 +60,9 @@ export const renderNavigationBar = () => {
     const showBack = state.navigationStack.length > 0 && state.currentPage !== 'home';
     const buttonSizeClass = 'w-16 h-16';
     const color = getPageThemeColor(state.currentPage);
+    const hexColor = getHexColor(color);
+    const gray800 = '#1f2937';
+    const gradientStyle = `background: radial-gradient(ellipse at center, ${gray800} 50%, ${hexColor} 100%);`;
 
     const navButton = (page, icon, title) => {
         const activePages = {
@@ -74,7 +91,7 @@ export const renderNavigationBar = () => {
 
     return `
         <div class="fixed left-0 right-0 z-40 px-4" style="bottom: 20px; padding-bottom: env(safe-area-inset-bottom);">
-            <div class="bg-gray-800 border-2 border-${color}-500 shadow-lg rounded-full px-2 py-2 w-full max-w-sm mx-auto">
+            <div class="border-2 border-${color}-500 shadow-lg rounded-full px-2 py-2 w-full max-w-sm mx-auto" style="${gradientStyle}">
                 <div class="flex justify-around items-center">
                     ${leftButtonHtml}
                     ${navButton('trainingUebersicht', 'fa-running', 'Training')}
