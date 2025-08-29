@@ -81,7 +81,7 @@ export const renderSpielerUebersicht = (callbacks) => {
                 <button onclick="window.app.navigateTo('spielfuehrerWahl')" class="w-10 h-10 bg-blue-600 text-white rounded-full btn flex items-center justify-center" title="Spielführerwahl">
                     <i class="fas fa-user-shield"></i>
                 </button>
-                <button onclick="window.app.navigateTo('spielerForm')" class="w-10 h-10 bg-green-600 text-white rounded-full btn flex items-center justify-center" title="Spieler hinzufügen">
+                <button onclick="window.app.navigateTo('spielerForm')" class="w-10 h-10 bg-orange-500 text-white rounded-full btn flex items-center justify-center" title="Spieler hinzufügen">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -99,7 +99,7 @@ export const renderSpielerUebersicht = (callbacks) => {
             ${filteredSpieler.length > 0 ? filteredSpieler.map(spieler => createSpielerCardHtml(spieler, totalTrainings)).join('') : `
             <div class="p-6 rounded-xl text-center text-gray-400 border border-gray-700">
                 <p>Noch keine Spieler vorhanden.</p>
-                <p class="mt-2">Fügen Sie einen neuen Spieler über den <span class="inline-block mx-1 px-2 py-1 bg-green-900 text-green-300 rounded-md font-bold">+</span> Button hinzu oder importieren Sie Daten in den Einstellungen.</p>
+                <p class="mt-2">Fügen Sie einen neuen Spieler über den <span class="inline-block mx-1 px-2 py-1 bg-orange-500 text-white rounded-md font-bold">+</span> Button hinzu oder importieren Sie Daten in den Einstellungen.</p>
             </div>
             `}
         </div>

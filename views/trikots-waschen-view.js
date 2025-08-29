@@ -15,7 +15,7 @@ export const renderTrikotsWaschen = (callbacks) => {
                 <p class="font-semibold">${formatDateWithWeekday(match.id)}</p>
                 <p class="text-sm text-gray-400">${match.gegner}</p>
             </div>
-            <div>
+            <div class="w-48">
                 <select data-match-id="${match.id}" class="w-full p-2 bg-gray-700 text-gray-200 rounded-lg trikot-select">
                     <option value="">Wähle Spieler</option>
                     ${state.spieler.map(s => {
