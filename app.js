@@ -529,6 +529,15 @@ const appCallbacks = {
         if (!state.spielfuehrerWahl.votes[voterId]) {
             state.spielfuehrerWahl.votes[voterId] = ["", ""];
         }
+
+        const otherVoteIndex = voteIndex === 0 ? 1 : 0;
+        if (state.spielfuehrerWahl.votes[voterId][otherVoteIndex] === selectedSpielerId && selectedSpielerId !== "") {
+            showModal("Fehler", "Ein Spieler kann nicht zweimal für denselben Spieler stimmen.", [{text: 'OK', class: 'bg-red-500'}]);
+            // Re-render to reset the dropdown
+            render(appCallbacks);
+            return;
+        }
+
         state.spielfuehrerWahl.votes[voterId][voteIndex] = selectedSpielerId;
         
         // Update the local state immediately for instant feedback
