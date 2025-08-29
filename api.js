@@ -4,7 +4,7 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth
 import { state } from './state.js';
 import { firebaseConfig } from './config.js';
 
-export const APP_VERSION = `Version 2025-08-29-2056`;
+export const APP_VERSION = `Version 2025-08-29-2130`;
 export const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 export const app = initializeApp(firebaseConfig);
@@ -309,7 +309,7 @@ export const generateRecurringTrainings = async (schedule, endDateString, traini
     startDate.setHours(0,0,0,0);
     const endDate = new Date(endDateString);
     endDate.setHours(0,0,0,0);
-    const dayMapping = { 0: 'Sonntag', 1: 'Montag', 2: 'Dienstag', 3: 'Mittwoch', 4: 'Donnerstag', 5: 'Freitag', 6: 'Samstag' };
+    const dayMapping = { 1: 'Montag', 2: 'Dienstag', 3: 'Mittwoch', 4: 'Donnerstag', 5: 'Freitag' };
     let currentDate = startDate;
     
     while (currentDate <= endDate) {
