@@ -22,7 +22,7 @@ export const render = (callbacks) => {
     switch (state.currentPage) {
         case 'login':
             pageContent = `
-                <div class="min-h-screen flex flex-col justify-center items-center p-4 bg-gray-900">
+                <div class="min-h-screen h-screen overflow-hidden flex flex-col justify-center items-center p-4 bg-gray-900">
                     <div class="w-full max-w-md">
                         <div class="bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-3d text-center">
                             <div class="flex justify-center mb-6">
