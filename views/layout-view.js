@@ -22,8 +22,8 @@ export const renderHeader = (title) => {
     const displayTitle2 = state.teamInfo.name2 || '';
     const emblemHtml = state.teamInfo.emblemUrl
         ? `<img src="${state.teamInfo.emblemUrl}" class="w-8 h-8 rounded-full object-cover mr-3 flex-shrink-0" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-           <div class="w-8 h-8 rounded-full bg-gray-500 flex-shrink-0 mr-3 hidden items-center justify-center"></div>`
-        : `<div class="w-8 h-8 rounded-full bg-gray-500 flex-shrink-0 mr-3 flex items-center justify-center"></div>`;
+           <div class="w-12 h-12 flex-shrink-0 mr-3 hidden items-center justify-center"></div>`
+        : `<div class="w-12 h-12 flex-shrink-0 mr-3 flex items-center justify-center"></div>`;
     const titleClass = (displayTitle.length > 15) ? 'text-base font-bold' : 'text-lg font-bold';
     const color = getPageThemeColor(state.currentPage);
 
