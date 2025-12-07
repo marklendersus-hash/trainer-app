@@ -1,0 +1,30 @@
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 0.5s ease-out forwards;
+}
+
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }
+
+/* Make the spinner a bit smaller to fit in the button */
+.btn-spinner {
+    border-top-color: transparent;
+    border-right-color: transparent;
+    animation: spin 0.4s linear infinite;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-width: 2px;
+}

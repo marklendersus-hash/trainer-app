@@ -347,8 +347,21 @@ const appCallbacks = {
         });
     },
     login: async (email, password) => {
+        const loginButton = document.getElementById('loginButton');
+        const loginButtonText = document.getElementById('loginButtonText');
+        const loginSpinner = document.getElementById('loginSpinner');
+
+        if (loginButton) {
+            loginButton.disabled = true;
+            loginButtonText.classList.add('hidden');
+            loginSpinner.classList.remove('hidden');
+        }
+
         const BENUTZER_EMAIL = 'trainer@demo.com';
         const PASSWORT = '1234';
+
+        // Simulate a network request
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
         if (email === BENUTZER_EMAIL && password === PASSWORT) {
             sessionStorage.setItem('trainerAppLoggedIn', 'true');
@@ -362,6 +375,11 @@ const appCallbacks = {
             render(appCallbacks);
         } else {
             showModal("Anmeldung fehlgeschlagen", "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.", [{text: 'OK', class: 'bg-red-500'}]);
+            if (loginButton) {
+                loginButton.disabled = false;
+                loginButtonText.classList.remove('hidden');
+                loginSpinner.classList.add('hidden');
+            }
         }
     },
     logout: () => {
@@ -617,6 +635,18 @@ const appCallbacks = {
                 const password = e.target.password.value;
                 appCallbacks.login(email, password);
             });
+
+            const togglePassword = document.getElementById('togglePassword');
+            if (togglePassword) {
+                togglePassword.addEventListener('click', () => {
+                    const passwordInput = document.getElementById('password');
+                    const icon = togglePassword.querySelector('i');
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    icon.classList.toggle('fa-eye');
+                    icon.classList.toggle('fa-eye-slash');
+                });
+            }
         }
         const spielerForm = document.getElementById('spielerForm');
         if (spielerForm) {
