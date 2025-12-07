@@ -48,7 +48,7 @@ export const render = (callbacks) => {
                             </form>
                         </div>
                         <p class="text-center text-gray-400 text-xs mt-4">${callbacks.getCurrentVersion()}</p>
-                        <p class="text-center text-gray-400 text-xs">Made in Germany</p>
+                        <p class="text-center text-gray-400 text-xs">Made in Blackforest</p>
                     </div>
                 `;
             break;
