@@ -1,4 +1,5 @@
 export let state = {
+    showWelcomeScreen: false,
     isLoggedIn: false,
     spieler: [],
     trainingseinheiten: [],

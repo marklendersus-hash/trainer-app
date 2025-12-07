@@ -366,13 +366,19 @@ const appCallbacks = {
         if (email === BENUTZER_EMAIL && password === PASSWORT) {
             sessionStorage.setItem('trainerAppLoggedIn', 'true');
             state.isLoggedIn = true;
-            state.currentPage = 'home';
-            state.loading = true;
+            state.showWelcomeScreen = true;
             render(appCallbacks);
-            appCallbacks.setupListeners();
-            await fetchHolidaysForYear(new Date().getFullYear(), state);
-            state.loading = false;
-            render(appCallbacks);
+
+            setTimeout(async () => {
+                state.showWelcomeScreen = false;
+                state.currentPage = 'home';
+                state.loading = true;
+                render(appCallbacks);
+                appCallbacks.setupListeners();
+                await fetchHolidaysForYear(new Date().getFullYear(), state);
+                state.loading = false;
+                render(appCallbacks);
+            }, 1500);
         } else {
             showModal("Anmeldung fehlgeschlagen", "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Eingaben.", [{text: 'OK', class: 'bg-red-500'}]);
             if (loginButton) {

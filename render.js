@@ -13,6 +13,15 @@ const appContainer = document.getElementById('app-container');
 export const render = (callbacks) => {
     appContainer.innerHTML = '';
 
+    if (state.showWelcomeScreen) {
+        appContainer.innerHTML = `
+            <div class="min-h-screen h-screen overflow-hidden flex flex-col justify-center items-center p-4 bg-gradient-to-br from-gray-900 to-gray-800">
+                <h1 class="text-4xl font-bold text-white animate-welcome-text">Willkommen, Trainer!</h1>
+            </div>
+        `;
+        return;
+    }
+
     if (state.loading) {
         appContainer.innerHTML = `<div class="flex justify-center items-center h-screen"><div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-green-500"></div></div>`;
         return;
